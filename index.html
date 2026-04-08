@@ -164,6 +164,33 @@ img { max-width:100%; display:block; }
 .stat-value { font-family:var(--serif); font-weight:300; font-size:40px; color:var(--violet); line-height:1; margin-bottom:8px; }
 .stat-label { font-size:11px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--stone); }
 
+/* ===== ABOUT DEEP SECTIONS ===== */
+.about-block { margin-top:80px; }
+.about-block-label { font-size:10px; font-weight:500; letter-spacing:0.4em; text-transform:uppercase; color:var(--violet); margin-bottom:16px; }
+.about-block-title { font-family:var(--serif); font-weight:300; font-size:clamp(24px,3vw,36px); color:var(--black); margin-bottom:20px; line-height:1.3; }
+.about-block-text { font-size:15px; font-weight:300; color:var(--smoke); line-height:1.9; max-width:700px; margin-bottom:16px; }
+.about-products-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:32px; }
+.about-product { padding:32px; background:var(--off); border:1px solid var(--fog); }
+.about-product-name { font-family:var(--serif); font-weight:400; font-size:20px; margin-bottom:4px; }
+.about-product-name.praix { color:var(--terra); }
+.about-product-name.cortex { color:var(--teal); }
+.about-product-sub { font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--stone); margin-bottom:12px; }
+.about-product-text { font-size:14px; font-weight:300; color:var(--smoke); line-height:1.8; }
+.about-more { margin-top:24px; padding:24px 32px; background:rgba(107,76,154,0.04); border:1px solid var(--fog); }
+.about-more p { font-size:14px; font-weight:300; color:var(--smoke); line-height:1.8; }
+.about-more strong { font-weight:500; color:var(--violet); }
+.about-build-list { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:24px; }
+.about-build-item { padding:24px; background:var(--off); border:1px solid var(--fog); }
+.about-build-item h4 { font-family:var(--serif); font-weight:400; font-size:18px; color:var(--black); margin-bottom:8px; }
+.about-build-item p { font-size:13px; font-weight:300; color:var(--stone); line-height:1.8; }
+.about-vision { margin-top:80px; padding:48px; background:rgba(107,76,154,0.04); border:1px solid var(--fog); text-align:center; }
+.about-vision p { font-family:var(--serif); font-style:italic; font-weight:300; font-size:clamp(18px,2.5vw,24px); color:var(--smoke); line-height:1.6; max-width:700px; margin:0 auto 16px; }
+.about-vision p:last-child { font-family:var(--sans); font-style:normal; font-size:14px; font-weight:400; color:var(--violet); letter-spacing:0.05em; }
+@media (max-width:768px) {
+  .about-products-grid { grid-template-columns:1fr; }
+  .about-build-list { grid-template-columns:1fr; }
+}
+
 /* ===== PRODUCTS ===== */
 .products-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:60px; }
 .product-card {
@@ -345,7 +372,6 @@ textarea.form-input { min-height:120px; resize:vertical; }
       <div class="mission-text">
         <p>Tigris Tech Labs is an AI-native product company. Every product we ship is built from the ground up with intelligence at its core — not bolted on as a feature.</p>
         <p>We go deep into industries that others skim. Insurance. Biotech. Domains where precision isn't a nice-to-have — it's the difference between a product that works and one that gets ignored.</p>
-        <p>Our name comes from the Tigris river — the origin of civilization. We believe the next wave of applied AI will be just as foundational.</p>
       </div>
       <div class="mission-stats">
         <div class="stat-card">
@@ -366,6 +392,70 @@ textarea.form-input { min-height:120px; resize:vertical; }
         </div>
       </div>
     </div>
+
+    <!-- THE NAME -->
+    <div class="about-block reveal">
+      <div class="about-block-label">The Name</div>
+      <div class="about-block-title">Where the name comes from</div>
+      <p class="about-block-text">Tigris takes its name from the Tigris River — one of the two rivers that cradled Mesopotamia, the birthplace of civilization. It was there, between the Tigris and the Euphrates, that humanity first built systems — language, law, agriculture, trade. The foundations that everything after was built on.</p>
+      <p class="about-block-text">We chose that name because we believe AI is at a similar inflection point. Not AI as a novelty or a feature — AI as infrastructure. The kind that reshapes entire industries from the ground up. Tigris Tech Labs exists to build that foundation.</p>
+    </div>
+
+    <!-- WHAT WE DO -->
+    <div class="about-block reveal">
+      <div class="about-block-label">What We Do</div>
+      <div class="about-block-title">AI-native products for industries that demand precision</div>
+      <p class="about-block-text">Tigris Tech Labs is an AI-native product company. We don't consult. We don't build generic tools. We build software products — each one purpose-built for a specific industry, trained on its language, and designed for the professionals who actually work in it.</p>
+      <p class="about-block-text">Every product we ship has intelligence at its core, not bolted on as an afterthought. We go deep into industries that others skim — because surface-level AI doesn't survive contact with real-world complexity.</p>
+    </div>
+
+    <!-- OUR PRODUCTS -->
+    <div class="about-block reveal">
+      <div class="about-block-label">Our Products</div>
+      <div class="about-block-title">Purpose-built intelligence</div>
+      <div class="about-products-grid">
+        <div class="about-product">
+          <div class="about-product-name praix">PRAIX</div>
+          <div class="about-product-sub">Insurance Prospecting Intelligence</div>
+          <p class="about-product-text">PRAIX is built for insurance professionals who are tired of cold lists and gut-feel prospecting. It uses AI to score, prioritize, and surface leads based on real risk signals — renewal cycles, market shifts, and coverage gaps that humans miss at scale. PRAIX doesn't replace the broker's instinct. It sharpens it.</p>
+        </div>
+        <div class="about-product">
+          <div class="about-product-name cortex">Peptide Cortex</div>
+          <div class="about-product-sub">Peptide Protocol Intelligence</div>
+          <p class="about-product-text">Cortex brings AI into peptide research and protocol design. It reads the literature, understands mechanisms of action, and helps researchers build protocols faster — without cutting corners on science. From dosing frameworks to interaction analysis, Cortex turns hours of manual research into minutes of guided intelligence.</p>
+        </div>
+      </div>
+      <div class="about-more">
+        <p><strong>And more to come.</strong> We're actively exploring new verticals where domain expertise is fragmented, decision-making is high-stakes, and AI can do more than automate — it can elevate. Every new product follows the same principle: go deep, earn trust, build precision.</p>
+      </div>
+    </div>
+
+    <!-- HOW WE BUILD -->
+    <div class="about-block reveal">
+      <div class="about-block-label">How We Build</div>
+      <div class="about-block-title">Our principles</div>
+      <div class="about-build-list">
+        <div class="about-build-item">
+          <h4>Domain First</h4>
+          <p>We immerse ourselves in the industry before writing a single line of code. We talk to practitioners, read the research, and learn the pain points firsthand.</p>
+        </div>
+        <div class="about-build-item">
+          <h4>Precision Over Features</h4>
+          <p>We'd rather do three things perfectly than thirty things adequately. Every feature ships when it's ready to be trusted by professionals whose livelihoods depend on accuracy.</p>
+        </div>
+        <div class="about-build-item">
+          <h4>Intelligence, Not Automation</h4>
+          <p>Our products don't replace experts. They make experts more expert. We build tools that enhance human judgment, not tools that bypass it.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE VISION -->
+    <div class="about-vision reveal">
+      <p>The best AI products don't feel like AI products. They feel like the tool you always wished existed — one that speaks your language, understands your workflow, and makes you better at what you already do.</p>
+      <p>That's what we're building at Tigris Tech Labs. One industry at a time.</p>
+    </div>
+
   </div>
 </section>
 
