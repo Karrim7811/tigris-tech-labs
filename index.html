@@ -371,12 +371,12 @@ textarea.form-input { min-height:120px; resize:vertical; }
     <div class="mission-grid reveal">
       <div class="mission-text">
         <p>Tigris Tech Labs is an AI-native product company. Every product we ship is built from the ground up with intelligence at its core — not bolted on as a feature.</p>
-        <p>We go deep into industries that others skim. Insurance. Biotech. Domains where precision isn't a nice-to-have — it's the difference between a product that works and one that gets ignored.</p>
+        <p>We go deep into industries that others skim. Biotech. Domains where precision isn't a nice-to-have — it's the difference between a product that works and one that gets ignored.</p>
       </div>
       <div class="mission-stats">
         <div class="stat-card">
-          <div class="stat-value">2</div>
-          <div class="stat-label">Products Live</div>
+          <div class="stat-value">1</div>
+          <div class="stat-label">Product Live</div>
         </div>
         <div class="stat-card">
           <div class="stat-value">AI</div>
@@ -413,12 +413,7 @@ textarea.form-input { min-height:120px; resize:vertical; }
     <div class="about-block reveal">
       <div class="about-block-label">Our Products</div>
       <div class="about-block-title">Purpose-built intelligence</div>
-      <div class="about-products-grid">
-        <div class="about-product">
-          <div class="about-product-name praix">PRAIX</div>
-          <div class="about-product-sub">Insurance Prospecting Intelligence</div>
-          <p class="about-product-text">PRAIX is built for insurance professionals who are tired of cold lists and gut-feel prospecting. It uses AI to score, prioritize, and surface leads based on real risk signals — renewal cycles, market shifts, and coverage gaps that humans miss at scale. PRAIX doesn't replace the broker's instinct. It sharpens it.</p>
-        </div>
+      <div class="about-products-grid" style="grid-template-columns:1fr;max-width:560px">
         <div class="about-product">
           <div class="about-product-name cortex">Peptide Cortex</div>
           <div class="about-product-sub">Peptide Protocol Intelligence</div>
@@ -466,26 +461,11 @@ textarea.form-input { min-height:120px; resize:vertical; }
       <div class="section-tag-line"></div>
       <div class="section-tag-text">Products</div>
     </div>
-    <div class="section-title">Two products.<br><em>Two industries. One standard.</em></div>
-    <div class="section-desc">Each product goes deep into a single domain. Same engineering philosophy, same obsession with precision, completely different worlds.</div>
+    <div class="section-title">One product.<br><em>One standard.</em></div>
+    <div class="section-desc">A single domain, deeply built. Engineering philosophy and obsession with precision, focused on the work that matters most.</div>
   </div>
   <div style="max-width:1100px; margin:0 auto; padding:0 48px;">
-    <div class="products-grid reveal">
-      <div class="product-card praix">
-        <div class="product-card-mark">
-          <span class="product-card-letter">X</span>
-          <div class="product-card-dot"></div>
-        </div>
-        <div class="product-card-name">PRAIX</div>
-        <div class="product-card-sub">Insurance Prospecting Intelligence</div>
-        <div class="product-card-desc">AI-powered prospecting for insurance professionals. PRAIX understands the language of risk, the rhythms of renewal cycles, and the nuances that make one lead worth a hundred cold calls.</div>
-        <div class="product-card-features">
-          <div class="product-feature">Intelligent lead scoring and prioritization</div>
-          <div class="product-feature">CRM integration with real-time insights</div>
-          <div class="product-feature">Domain-trained on insurance-specific data</div>
-        </div>
-        <a href="#" class="product-card-link">Learn more →</a>
-      </div>
+    <div class="products-grid reveal" style="grid-template-columns:1fr;max-width:640px;margin:60px auto 0">
       <div class="product-card cortex">
         <div class="product-card-mark">
           <span class="product-card-letter">X</span>
@@ -554,14 +534,13 @@ textarea.form-input { min-height:120px; resize:vertical; }
         <h3>Whether you're a potential partner, investor, or practitioner — we'd love to hear from you.</h3>
         <p>We're building intelligence for industries that matter. If that resonates, reach out. We respond to every message.</p>
         <div class="contact-detail"><span>Email — </span>hello@tigristechlabs.com</div>
-        <div class="contact-detail"><span>Products — </span>PRAIX · Peptide Cortex</div>
+        <div class="contact-detail"><span>Products — </span>Peptide Cortex</div>
       </div>
       <form class="contact-form" onsubmit="event.preventDefault();">
         <input type="text" class="form-input" placeholder="Your name">
         <input type="email" class="form-input" placeholder="Your email">
         <select class="form-input">
           <option value="" disabled selected>I'm interested in...</option>
-          <option>PRAIX — Insurance Intelligence</option>
           <option>Peptide Cortex — Peptide Intelligence</option>
           <option>Partnership Opportunity</option>
           <option>Investment Inquiry</option>
