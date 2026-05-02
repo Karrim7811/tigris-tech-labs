@@ -27,6 +27,10 @@ import { fmtP, type CockpitAction } from "./types";
 import { relativeTime } from "@/lib/utils";
 import { DashboardCustomizer } from "@/components/alevant/DashboardCustomizer";
 import { useDashboardTheme, themeToCssVars } from "@/components/alevant/useDashboardTheme";
+import { AccordionSection } from "@/components/alevant/AccordionSection";
+import { NewsFeedWidget } from "@/components/alevant/NewsFeedWidget";
+import { useWidgetVisibility } from "@/components/alevant/useWidgetVisibility";
+import { AlevantAcronymHeader } from "@/components/alevant/AlevantAcronymHeader";
 
 // ── types ──────────────────────────────────────────────────────────────
 interface KPI {
@@ -155,6 +159,7 @@ export default function CockpitClient({
   const [standupPlaying, setStandupPlaying] = useState(false);
   const [customizerOpen, setCustomizerOpen] = useState(false);
   const [theme, setTheme, resetTheme] = useDashboardTheme("cockpit");
+  const [widgets, toggleWidget, resetWidgets] = useWidgetVisibility();
 
   const filteredDeals = activeTab === "all"
     ? dealMomentum
@@ -172,35 +177,38 @@ export default function CockpitClient({
         onReset={resetTheme}
         isOpen={customizerOpen}
         onClose={() => setCustomizerOpen(false)}
+        widgets={widgets}
+        onWidgetToggle={toggleWidget}
+        onWidgetReset={resetWidgets}
       />
-      {/* Header */}
-      <header className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-        <div>
-          <p className="eyebrow !text-indigo mb-2">Cockpit</p>
-          <h1 className="serif-display text-ink text-5xl">{greeting}, {agentName}.</h1>
-          <p className="serif-italic text-stone text-lg mt-2">{dateLabel}</p>
-        </div>
-        <div className="flex gap-3">
-          <button
-            onClick={() => setStandupPlaying((s) => !s)}
-            className="btn-base bg-ink text-parchment hover:bg-ink/90"
-          >
-            <Bell className="w-4 h-4 mr-2" />
-            {standupPlaying ? "Stop standup" : "Play 90-second standup"}
-          </button>
-          <Link href="/inbox" className="btn-base bg-bone text-ink border border-mist hover:bg-mist">
-            View inbox
-          </Link>
-          <button
-            onClick={() => setCustomizerOpen(true)}
-            className="btn-base bg-bone text-ink border border-mist hover:bg-mist !px-4"
-            title="Customize cockpit"
-            aria-label="Customize cockpit theme"
-          >
-            <Sliders className="w-4 h-4" />
-          </button>
-        </div>
-      </header>
+      {/* Brand + greeting header with ALEVANT acronym treatment */}
+      <AlevantAcronymHeader
+        agentName={agentName}
+        greeting={greeting}
+        dateLabel={dateLabel}
+        rightSlot={
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setStandupPlaying((s) => !s)}
+              className="btn-base bg-ink text-parchment hover:bg-ink/90"
+            >
+              <Bell className="w-4 h-4 mr-2" />
+              {standupPlaying ? "Stop standup" : "Play 90-second standup"}
+            </button>
+            <Link href="/inbox" className="btn-base bg-bone text-ink border border-mist hover:bg-mist">
+              View inbox
+            </Link>
+            <button
+              onClick={() => setCustomizerOpen(true)}
+              className="btn-base bg-bone text-ink border border-mist hover:bg-mist !px-4"
+              title="Customize cockpit"
+              aria-label="Customize cockpit"
+            >
+              <Sliders className="w-4 h-4" />
+            </button>
+          </div>
+        }
+      />
 
       {/* KPI strip */}
       <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-mist border border-mist mb-10">
@@ -251,67 +259,63 @@ export default function CockpitClient({
 
       {/* Two-column main grid */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 mb-10">
-        {/* LEFT — actions / momentum / grid */}
+        {/* LEFT — actions / momentum / grid / news */}
         <div className="space-y-6 min-w-0">
           {/* Action queue */}
-          <section className="border border-mist bg-parchment">
-            <div className="px-6 py-5 border-b border-mist flex items-center justify-between">
-              <div>
-                <p className="eyebrow !text-brass">Today's actions</p>
-                <h3 className="serif-display text-2xl text-ink mt-1">
-                  {actions.length === 0 ? "All clear." : `Top ${actions.length} actions, ranked.`}
-                </h3>
-              </div>
-              <Badge tone={actions.length > 6 ? "hot" : actions.length > 0 ? "warm" : "success"}>
-                {actions.length === 0 ? "Clear" : `${actions.length} action${actions.length === 1 ? "" : "s"}`}
-              </Badge>
-            </div>
-            {actions.length === 0 ? (
-              <p className="px-6 py-12 text-sm text-stone text-center">
-                Nothing pressing. Sphere Brain runs again in 6 hours.
-              </p>
-            ) : (
-              <ul className="divide-y divide-mist">
-                {actions.map((a, i) => (
-                  <li key={i}>
-                    <Link
-                      href={a.href}
-                      className="px-6 py-4 grid grid-cols-[24px_1fr_auto] gap-4 items-center hover:bg-bone transition-colors group"
-                    >
-                      <div className="text-stone group-hover:text-indigo">{actionIcon(a.type)}</div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <p className="text-sm text-ink font-medium truncate">{a.title}</p>
-                          <Badge tone={a.badgeTone}>{a.badge}</Badge>
+          {widgets.actions && (
+            <AccordionSection
+              id="cockpit-actions"
+              title="Today's Actions"
+              count={actions.length}
+              pulse={actions.length > 6}
+              right={
+                <Badge tone={actions.length > 6 ? "hot" : actions.length > 0 ? "warm" : "success"}>
+                  {actions.length === 0 ? "Clear" : `${actions.length} ranked`}
+                </Badge>
+              }
+            >
+              {actions.length === 0 ? (
+                <p className="px-6 py-12 text-sm text-stone text-center">
+                  Nothing pressing. Sphere Brain runs again in 6 hours.
+                </p>
+              ) : (
+                <ul className="divide-y divide-mist">
+                  {actions.map((a, i) => (
+                    <li key={i}>
+                      <Link
+                        href={a.href}
+                        className="px-6 py-4 grid grid-cols-[24px_1fr_auto] gap-4 items-center hover:bg-bone transition-colors group"
+                      >
+                        <div className="text-stone group-hover:text-indigo">{actionIcon(a.type)}</div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="text-sm text-ink font-medium truncate">{a.title}</p>
+                            <Badge tone={a.badgeTone}>{a.badge}</Badge>
+                          </div>
+                          <p className="text-xs text-stone truncate">{a.detail}</p>
                         </div>
-                        <p className="text-xs text-stone truncate">{a.detail}</p>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-stone group-hover:text-indigo flex-shrink-0" />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
+                        <ChevronRight className="w-4 h-4 text-stone group-hover:text-indigo flex-shrink-0" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </AccordionSection>
+          )}
 
           {/* Deal momentum */}
-          {dealMomentum.length > 0 && (
-            <section className="border border-mist bg-parchment">
-              <div className="px-6 py-5 border-b border-mist flex items-center justify-between">
-                <div>
-                  <p className="eyebrow !text-brass">Deal momentum</p>
-                  <h3 className="serif-display text-2xl text-ink mt-1">
-                    {dealMomentum.filter((d) => d.tier === "stalling").length} stalling ·{" "}
-                    {dealMomentum.filter((d) => d.tier === "coasting").length} coasting ·{" "}
-                    {dealMomentum.filter((d) => d.tier === "accelerating").length} accelerating
-                  </h3>
-                </div>
+          {widgets.momentum && dealMomentum.length > 0 && (
+            <AccordionSection
+              id="cockpit-momentum"
+              title="Deal Momentum"
+              count={`${dealMomentum.filter((d) => d.tier === "stalling").length} stalling`}
+              right={
                 <div className="flex gap-1">
                   {(["all", "stalling", "coasting", "accelerating"] as const).map((t) => (
                     <button
                       key={t}
                       onClick={() => setActiveTab(t)}
-                      className={`px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] border transition-colors ${
+                      className={`px-2.5 py-1 text-[9px] uppercase tracking-[0.15em] border transition-colors ${
                         activeTab === t
                           ? "bg-ink text-parchment border-ink"
                           : "bg-bone text-stone border-mist hover:bg-mist"
@@ -321,7 +325,8 @@ export default function CockpitClient({
                     </button>
                   ))}
                 </div>
-              </div>
+              }
+            >
               <ul className="divide-y divide-mist">
                 {filteredDeals.length === 0 ? (
                   <li className="px-6 py-12 text-center text-sm text-stone">
@@ -361,28 +366,25 @@ export default function CockpitClient({
                   })
                 )}
               </ul>
-            </section>
+            </AccordionSection>
           )}
 
           {/* Grid blazing */}
-          {gridTop.length > 0 && (
-            <section className="border border-mist bg-parchment">
-              <div className="px-6 py-5 border-b border-mist flex items-center justify-between">
-                <div>
-                  <p className="eyebrow !text-brass flex items-center gap-2">
-                    <Grid3x3 className="w-3 h-3" /> The Grid · top signals
-                  </p>
-                  <h3 className="serif-display text-2xl text-ink mt-1">
-                    Predicted sellers in your farm zones.
-                  </h3>
-                </div>
+          {widgets.grid && gridTop.length > 0 && (
+            <AccordionSection
+              id="cockpit-grid"
+              title="The Grid · top signals"
+              count={`${gridTop.length} signal${gridTop.length === 1 ? "" : "s"}`}
+              right={
                 <Link
                   href="/grid"
-                  className="text-[10px] uppercase tracking-[0.22em] text-stone hover:text-indigo"
+                  className="font-mono text-[9px] uppercase tracking-[0.18em] text-indigo hover:text-indigo-deep"
+                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
-                  View grid →
+                  VIEW GRID →
                 </Link>
-              </div>
+              }
+            >
               <ul className="divide-y divide-mist">
                 {gridTop.map((g) => (
                   <li key={g.id} className="px-6 py-4 grid grid-cols-[60px_1fr_140px] gap-4 items-center">
@@ -409,67 +411,15 @@ export default function CockpitClient({
                   </li>
                 ))}
               </ul>
-            </section>
+            </AccordionSection>
           )}
 
-          {/* News & Intel */}
-          <section className="border border-mist bg-parchment">
-            <div className="px-6 py-5 border-b border-mist flex items-center justify-between">
-              <div>
-                <p className="eyebrow !text-brass flex items-center gap-2">
-                  <Newspaper className="w-3 h-3" /> News & Intel
-                </p>
-                <h3 className="serif-display text-2xl text-ink mt-1">
-                  {news.length > 0 ? "Live feed." : "Quiet."}
-                </h3>
-              </div>
-              <Link href="/news" className="text-[10px] uppercase tracking-[0.22em] text-stone hover:text-indigo">
-                View all →
-              </Link>
-            </div>
-            {news.length === 0 ? (
-              <p className="px-6 py-10 text-center text-sm text-stone">
-                Feed populates twice daily at 7am and 5pm ET. Hit refresh on the news page to run a manual scan.
-              </p>
-            ) : (
-              <ul className="divide-y divide-mist">
-                {news.slice(0, 5).map((n) => (
-                  <li key={n.id} className="px-6 py-4 grid grid-cols-[80px_1fr_100px] gap-4 items-start">
-                    <div>
-                      <Badge tone={n.severity === "act" ? "hot" : n.severity === "watch" ? "warm" : "neutral"}>
-                        {n.severity}
-                      </Badge>
-                      <p className="text-[9px] uppercase tracking-[0.22em] text-stone mt-1.5">
-                        {NEWS_LABEL[n.category] ?? n.category}
-                      </p>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm text-ink font-medium leading-snug mb-1">{n.title}</p>
-                      {n.summary && <p className="text-xs text-smoke leading-relaxed line-clamp-2">{n.summary}</p>}
-                      {n.source_url && (
-                        <a
-                          href={n.source_url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-[10px] text-indigo hover:underline inline-flex items-center gap-1 mt-1.5"
-                        >
-                          <ExternalLink className="w-2.5 h-2.5" /> {n.source_name ?? "Source"}
-                        </a>
-                      )}
-                    </div>
-                    <p className="text-[10px] text-stone text-right">
-                      {n.surfaced_at ? relativeTime(n.surfaced_at) : ""}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
         </div>
 
         {/* RIGHT rail */}
         <aside className="space-y-6">
           {/* Today's tasks */}
+          {widgets.today && (
           <section className="border border-mist bg-parchment">
             <div className="px-5 py-4 border-b border-mist">
               <p className="eyebrow !text-brass">Today</p>
@@ -494,9 +444,10 @@ export default function CockpitClient({
               </ul>
             )}
           </section>
+          )}
 
           {/* Vesper queue */}
-          {vesperQueue.length > 0 && (
+          {widgets.vesper && vesperQueue.length > 0 && (
             <section className="border border-mist bg-parchment">
               <div className="px-5 py-4 border-b border-mist flex items-center justify-between">
                 <div>
@@ -521,7 +472,7 @@ export default function CockpitClient({
           )}
 
           {/* Sphere right-calls */}
-          {sphereSignals.length > 0 && (
+          {widgets.sphere && sphereSignals.length > 0 && (
             <section className="border border-mist bg-parchment">
               <div className="px-5 py-4 border-b border-mist flex items-center justify-between">
                 <div>

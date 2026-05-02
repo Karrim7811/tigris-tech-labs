@@ -1,10 +1,12 @@
 "use client";
 
-import { X, RotateCcw, Bold, Italic } from "lucide-react";
+import { useState } from "react";
+import { X, RotateCcw, Bold, Italic, Palette, LayoutGrid, Eye, EyeOff } from "lucide-react";
 import {
   DASH_PRESETS,
   type DashboardTheme,
 } from "./useDashboardTheme";
+import { WIDGET_LABELS, type WidgetVisibility } from "./useWidgetVisibility";
 
 interface Props {
   dashboardId: string;
@@ -13,6 +15,9 @@ interface Props {
   onReset: () => void;
   isOpen: boolean;
   onClose: () => void;
+  widgets?: WidgetVisibility;
+  onWidgetToggle?: (key: keyof WidgetVisibility, on: boolean) => void;
+  onWidgetReset?: () => void;
 }
 
 const FONT = "'Jost', sans-serif";
@@ -67,7 +72,11 @@ export function DashboardCustomizer({
   onReset,
   isOpen,
   onClose,
+  widgets,
+  onWidgetToggle,
+  onWidgetReset,
 }: Props) {
+  const [tab, setTab] = useState<"theme" | "widgets">("theme");
   if (!isOpen) return null;
 
   function applyPreset(key: string) {
@@ -118,6 +127,94 @@ export function DashboardCustomizer({
           </button>
         </div>
 
+        {/* Tabs */}
+        {widgets && onWidgetToggle && (
+          <div className="px-5 py-3 border-b border-[#222] flex gap-2">
+            <button
+              onClick={() => setTab("theme")}
+              className="flex-1 py-2 rounded-md flex items-center justify-center gap-1.5 transition-colors"
+              style={{
+                background: tab === "theme" ? ACCENT : "#1A1A1A",
+                border: `1px solid ${tab === "theme" ? ACCENT : "#333"}`,
+                color: tab === "theme" ? "#fff" : "#999",
+                fontFamily: FONT,
+                fontSize: 11,
+              }}
+            >
+              <Palette className="w-3 h-3" /> Theme
+            </button>
+            <button
+              onClick={() => setTab("widgets")}
+              className="flex-1 py-2 rounded-md flex items-center justify-center gap-1.5 transition-colors"
+              style={{
+                background: tab === "widgets" ? ACCENT : "#1A1A1A",
+                border: `1px solid ${tab === "widgets" ? ACCENT : "#333"}`,
+                color: tab === "widgets" ? "#fff" : "#999",
+                fontFamily: FONT,
+                fontSize: 11,
+              }}
+            >
+              <LayoutGrid className="w-3 h-3" /> Widgets
+            </button>
+          </div>
+        )}
+
+        {tab === "widgets" && widgets && onWidgetToggle ? (
+          <>
+            <div className="px-5 py-4 border-b border-[#222]">
+              <div
+                className="text-[9px] uppercase mb-3"
+                style={{ fontFamily: MONO, letterSpacing: "0.18em", color: "#666" }}
+              >
+                Cockpit widgets — show / hide
+              </div>
+              <div className="space-y-1.5">
+                {(Object.keys(WIDGET_LABELS) as Array<keyof WidgetVisibility>).map((key) => {
+                  const on = widgets[key];
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => onWidgetToggle(key, !on)}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-md border transition-colors"
+                      style={{
+                        background: on ? "rgba(26,138,158,0.10)" : "#1A1A1A",
+                        borderColor: on ? ACCENT : "#333",
+                        color: on ? "#eee" : "#777",
+                        fontFamily: FONT,
+                        fontSize: 12,
+                      }}
+                    >
+                      <span>{WIDGET_LABELS[key]}</span>
+                      {on ? (
+                        <Eye className="w-3 h-3" style={{ color: ACCENT }} />
+                      ) : (
+                        <EyeOff className="w-3 h-3" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            {onWidgetReset && (
+              <div className="px-5 py-4">
+                <button
+                  onClick={onWidgetReset}
+                  className="w-full py-2.5 rounded-md border border-[#333] flex items-center justify-center gap-2 hover:border-[#666] transition-colors"
+                  style={{
+                    fontFamily: FONT,
+                    fontSize: 11,
+                    color: "#999",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  <RotateCcw className="w-3 h-3" /> Show all widgets
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+        <>
         {/* Presets */}
         <div className="px-5 py-4 border-b border-[#222]">
           <div
@@ -271,6 +368,8 @@ export function DashboardCustomizer({
             <RotateCcw className="w-3 h-3" /> Reset to Editorial
           </button>
         </div>
+        </>
+        )}
       </div>
     </>
   );
