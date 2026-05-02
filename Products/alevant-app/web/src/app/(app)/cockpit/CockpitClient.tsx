@@ -19,10 +19,14 @@ import {
   MessageCircle,
   Megaphone,
   ChevronRight,
+  Settings as SettingsIcon,
+  Sliders,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { fmtP, type CockpitAction } from "./types";
 import { relativeTime } from "@/lib/utils";
+import { DashboardCustomizer } from "@/components/alevant/DashboardCustomizer";
+import { useDashboardTheme, themeToCssVars } from "@/components/alevant/useDashboardTheme";
 
 // ── types ──────────────────────────────────────────────────────────────
 interface KPI {
@@ -149,6 +153,8 @@ export default function CockpitClient({
 }: CockpitClientProps) {
   const [activeTab, setActiveTab] = useState<"all" | "stalling" | "coasting" | "accelerating">("all");
   const [standupPlaying, setStandupPlaying] = useState(false);
+  const [customizerOpen, setCustomizerOpen] = useState(false);
+  const [theme, setTheme, resetTheme] = useDashboardTheme("cockpit");
 
   const filteredDeals = activeTab === "all"
     ? dealMomentum
@@ -158,7 +164,15 @@ export default function CockpitClient({
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
 
   return (
-    <div className="px-10 py-12 max-w-[1600px]">
+    <div className="px-10 py-12 max-w-[1600px]" style={themeToCssVars(theme)}>
+      <DashboardCustomizer
+        dashboardId="cockpit"
+        theme={theme}
+        onChange={setTheme}
+        onReset={resetTheme}
+        isOpen={customizerOpen}
+        onClose={() => setCustomizerOpen(false)}
+      />
       {/* Header */}
       <header className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
@@ -177,6 +191,14 @@ export default function CockpitClient({
           <Link href="/inbox" className="btn-base bg-bone text-ink border border-mist hover:bg-mist">
             View inbox
           </Link>
+          <button
+            onClick={() => setCustomizerOpen(true)}
+            className="btn-base bg-bone text-ink border border-mist hover:bg-mist !px-4"
+            title="Customize cockpit"
+            aria-label="Customize cockpit theme"
+          >
+            <Sliders className="w-4 h-4" />
+          </button>
         </div>
       </header>
 
