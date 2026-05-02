@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALEVANT — Brand Identity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parchment: #FAFAF8;
+  --bone: #F2F0ED;
+  --mist: #E8E5E0;
+  --stone: #B0AAA0;
+  --smoke: #3A3730;
+  --ink: #1A1915;
+  --indigo: #3D4F8C;
+  --indigo-deep: #2D3A6A;
+  --indigo-glow: rgba(61,79,140,0.10);
+  --brass: #B5853E;
+  --brass-deep: #8E6628;
+  --teal: #1A8A9E;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Jost', 'Helvetica Neue', sans-serif;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:var(--sans);
+  background:var(--parchment);
+  color:var(--smoke);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  height:56px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 40px;
+  background:rgba(250,250,248,0.92);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--mist);
+}
+.topbar-left { display:flex; align-items:baseline; gap:12px; }
+.topbar-mark {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:22px; color:var(--ink); letter-spacing:0.02em;
+  position:relative;
+}
+.topbar-mark::after {
+  content:''; position:absolute; top:5px; left:1px;
+  width:4px; height:4px; border-radius:50%; background:var(--brass);
+}
+.topbar-tag {
+  font-size:10px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--stone);
+}
+.topbar-right {
+  font-size:10px; font-weight:400; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--stone);
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height:90vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:140px 40px 80px;
+  position:relative;
+  background:var(--bone);
+  border-bottom:1px solid var(--mist);
+  overflow:hidden;
+}
+.hero::before {
+  content:''; position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:1100px; height:1100px;
+  background:radial-gradient(circle, var(--indigo-glow) 0%, transparent 65%);
+  border-radius:50%; pointer-events:none;
+}
+.hero-eyebrow {
+  position:relative; z-index:2;
+  font-size:11px; font-weight:400; letter-spacing:0.32em;
+  text-transform:uppercase; color:var(--indigo);
+  margin-bottom:28px;
+}
+.hero-mark {
+  position:relative; z-index:2;
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:clamp(110px, 18vw, 220px);
+  color:var(--ink); line-height:0.85;
+  letter-spacing:-0.005em;
+  display:inline-block;
+}
+.hero-mark::after {
+  content:''; position:absolute;
+  top:18%; left:2.5%;
+  width:10px; height:10px; border-radius:50%; background:var(--brass);
+}
+.hero-tagline {
+  position:relative; z-index:2;
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:clamp(20px, 2.5vw, 30px);
+  color:var(--smoke); margin-top:36px; text-align:center;
+}
+.hero-desc {
+  position:relative; z-index:2;
+  font-size:14px; font-weight:300; color:var(--stone);
+  max-width:540px; line-height:1.85; margin-top:24px; text-align:center;
+}
+.hero-meta {
+  position:relative; z-index:2;
+  margin-top:80px;
+  display:flex; gap:48px;
+  font-size:10px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--stone);
+}
+.hero-meta-item span { color:var(--ink); display:block; margin-top:6px; font-size:13px; letter-spacing:0.1em; }
+
+/* ===== SECTIONS ===== */
+.section { padding:120px 40px; max-width:1200px; margin:0 auto; }
+.section-num {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:48px; color:var(--brass); line-height:1; margin-bottom:8px;
+}
+.section-title {
+  font-family:var(--serif); font-weight:300;
+  font-size:48px; color:var(--ink); line-height:1.1;
+  margin-bottom:20px;
+}
+.section-lead {
+  font-size:15px; font-weight:300; color:var(--smoke);
+  max-width:680px; line-height:1.85; margin-bottom:64px;
+}
+
+/* ===== LOGO LAB ===== */
+.logo-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:24px;
+}
+.logo-card {
+  background:var(--parchment);
+  border:1px solid var(--mist);
+  padding:64px 32px 32px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-height:240px;
+  position:relative;
+}
+.logo-card.dark { background:var(--ink); }
+.logo-card.indigo { background:var(--indigo); }
+.logo-card-label {
+  position:absolute; top:14px; left:14px;
+  font-size:9px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--stone);
+}
+.logo-card.dark .logo-card-label,
+.logo-card.indigo .logo-card-label { color:rgba(250,250,248,0.5); }
+.lockup-wordmark {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:64px; line-height:1; color:var(--ink);
+  position:relative; display:inline-block;
+}
+.lockup-wordmark::after {
+  content:''; position:absolute; top:14%; left:1.5%;
+  width:6px; height:6px; border-radius:50%; background:var(--brass);
+}
+.logo-card.dark .lockup-wordmark { color:var(--parchment); }
+.logo-card.indigo .lockup-wordmark { color:var(--parchment); }
+.logo-card.indigo .lockup-wordmark::after { background:var(--brass); }
+.lockup-tagline {
+  margin-top:18px;
+  font-size:9px; font-weight:400; letter-spacing:0.32em;
+  text-transform:uppercase; color:var(--stone);
+}
+.logo-card.dark .lockup-tagline,
+.logo-card.indigo .lockup-tagline { color:rgba(250,250,248,0.55); }
+.lockup-monogram {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:96px; line-height:1; color:var(--ink);
+  position:relative; display:inline-block;
+}
+.lockup-monogram::after {
+  content:''; position:absolute; top:18%; left:2%;
+  width:7px; height:7px; border-radius:50%; background:var(--brass);
+}
+.logo-card.dark .lockup-monogram { color:var(--parchment); }
+.lockup-vertical { display:flex; flex-direction:column; align-items:center; gap:0; }
+.lockup-vertical .lockup-wordmark { font-size:48px; }
+
+/* ===== COLOR ===== */
+.color-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+  gap:0;
+  border:1px solid var(--mist);
+}
+.color-swatch {
+  aspect-ratio:1.2; padding:18px; display:flex; flex-direction:column; justify-content:flex-end;
+  border-right:1px solid var(--mist); border-bottom:1px solid var(--mist);
+}
+.color-swatch:last-child { border-right:none; }
+.color-swatch-name {
+  font-size:14px; font-weight:400; color:inherit;
+  font-family:var(--serif); font-style:italic;
+}
+.color-swatch-hex {
+  font-size:10px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:inherit; opacity:0.7; margin-top:4px;
+}
+.color-swatch-role {
+  font-size:9px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:inherit; opacity:0.5; margin-bottom:4px;
+}
+.swatch-parchment { background:var(--parchment); color:var(--ink); }
+.swatch-bone { background:var(--bone); color:var(--ink); }
+.swatch-mist { background:var(--mist); color:var(--ink); }
+.swatch-stone { background:var(--stone); color:var(--ink); }
+.swatch-smoke { background:var(--smoke); color:var(--parchment); }
+.swatch-ink { background:var(--ink); color:var(--parchment); }
+.swatch-indigo { background:var(--indigo); color:var(--parchment); }
+.swatch-indigo-deep { background:var(--indigo-deep); color:var(--parchment); }
+.swatch-brass { background:var(--brass); color:var(--ink); }
+.swatch-brass-deep { background:var(--brass-deep); color:var(--parchment); }
+.swatch-teal { background:var(--teal); color:var(--parchment); }
+
+/* ===== TYPOGRAPHY ===== */
+.type-block { padding:32px 0; border-bottom:1px solid var(--mist); }
+.type-block:last-child { border-bottom:none; }
+.type-label {
+  font-size:10px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--stone); margin-bottom:18px;
+}
+.type-display-1 {
+  font-family:var(--serif); font-weight:300;
+  font-size:96px; line-height:1; color:var(--ink); letter-spacing:-0.01em;
+}
+.type-display-italic {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:64px; line-height:1.05; color:var(--ink);
+}
+.type-h1 {
+  font-family:var(--serif); font-weight:300;
+  font-size:48px; line-height:1.1; color:var(--ink);
+}
+.type-h2 {
+  font-family:var(--serif); font-weight:400;
+  font-size:32px; line-height:1.2; color:var(--ink);
+}
+.type-eyebrow {
+  font-family:var(--sans); font-size:11px; font-weight:400;
+  letter-spacing:0.32em; text-transform:uppercase; color:var(--indigo);
+}
+.type-body {
+  font-family:var(--sans); font-size:15px; font-weight:300;
+  line-height:1.85; color:var(--smoke); max-width:640px;
+}
+.type-caption {
+  font-family:var(--sans); font-size:11px; font-weight:400;
+  letter-spacing:0.18em; text-transform:uppercase; color:var(--stone);
+}
+
+/* ===== COMPONENTS ===== */
+.comp-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:32px;
+}
+.btn {
+  display:inline-block; font-family:var(--sans);
+  font-size:11px; font-weight:500; letter-spacing:0.2em; text-transform:uppercase;
+  padding:14px 28px; cursor:pointer;
+  transition:all 0.3s ease; text-decoration:none;
+  border:1px solid transparent;
+}
+.btn-primary { background:var(--indigo); color:var(--parchment); }
+.btn-primary:hover { background:var(--indigo-deep); }
+.btn-ghost { background:transparent; color:var(--indigo); border-color:var(--indigo); }
+.btn-ghost:hover { background:var(--indigo); color:var(--parchment); }
+.btn-brass { background:var(--brass); color:var(--ink); }
+.btn-brass:hover { background:var(--brass-deep); color:var(--parchment); }
+.card {
+  background:var(--parchment); border:1px solid var(--mist);
+  padding:32px;
+}
+.card-eyebrow {
+  font-size:10px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--brass); margin-bottom:12px;
+}
+.card-title {
+  font-family:var(--serif); font-weight:300;
+  font-size:24px; line-height:1.2; color:var(--ink); margin-bottom:8px;
+}
+.card-body {
+  font-size:13px; font-weight:300; color:var(--smoke); line-height:1.7;
+}
+.card-footer {
+  margin-top:20px; padding-top:16px; border-top:1px solid var(--mist);
+  font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--stone);
+}
+
+/* ===== TENANT BRANDS ===== */
+.tenant-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:0;
+  border:1px solid var(--mist);
+}
+.tenant-card { padding:48px; border-right:1px solid var(--mist); }
+.tenant-card:last-child { border-right:none; }
+.tenant-bichi { background:#0E5560; color:#E8DCC4; }
+.tenant-alevant { background:var(--bone); color:var(--ink); }
+.tenant-name {
+  font-family:var(--serif); font-weight:300; font-size:48px;
+  line-height:1; margin-bottom:8px;
+}
+.tenant-meta {
+  font-size:10px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; opacity:0.7; margin-bottom:32px;
+}
+.tenant-palette { display:flex; gap:8px; }
+.tenant-swatch { width:40px; height:40px; border:1px solid rgba(0,0,0,0.05); }
+
+/* ===== VOICE PRESETS ===== */
+.voice-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:0;
+  border:1px solid var(--mist);
+}
+.voice-card { padding:32px; border-right:1px solid var(--mist); border-bottom:1px solid var(--mist); }
+.voice-card:nth-child(2n) { border-right:none; }
+.voice-name {
+  font-family:var(--serif); font-style:italic; font-weight:400;
+  font-size:24px; color:var(--ink); margin-bottom:6px;
+}
+.voice-tier {
+  font-size:9px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--brass); margin-bottom:18px;
+}
+.voice-sample {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:18px; line-height:1.5; color:var(--smoke);
+  border-left:2px solid var(--brass); padding-left:16px;
+}
+.voice-card.recommended {
+  background:var(--indigo);
+}
+.voice-card.recommended .voice-name { color:var(--parchment); }
+.voice-card.recommended .voice-tier { color:var(--brass); }
+.voice-card.recommended .voice-sample { color:rgba(250,250,248,0.85); border-left-color:var(--brass); }
+
+/* ===== FOOTER ===== */
+.footer {
+  padding:80px 40px 60px;
+  background:var(--ink); color:var(--stone);
+  text-align:center;
+}
+.footer-mark {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:48px; color:var(--parchment); margin-bottom:16px;
+  position:relative; display:inline-block;
+}
+.footer-mark::after {
+  content:''; position:absolute; top:18%; left:2%;
+  width:5px; height:5px; border-radius:50%; background:var(--brass);
+}
+.footer-tagline {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:18px; color:rgba(250,250,248,0.65);
+  margin-bottom:48px;
+}
+.footer-meta {
+  font-size:10px; font-weight:400; letter-spacing:0.32em;
+  text-transform:uppercase; color:rgba(250,250,248,0.4);
+}
+
+@media (max-width: 768px) {
+  .topbar { padding:0 20px; }
+  .topbar-tag { display:none; }
+  .section { padding:80px 24px; }
+  .hero { padding:120px 24px 60px; }
+  .hero-meta { flex-direction:column; gap:24px; margin-top:48px; }
+  .tenant-grid { grid-template-columns:1fr; }
+  .tenant-card { border-right:none; border-bottom:1px solid var(--mist); }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-mark">alevant</div>
+    <div class="topbar-tag">Brand Identity · v0.1</div>
+  </div>
+  <div class="topbar-right">A Tigris Tech Labs Product</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Brand Identity Foundation</div>
+  <div class="hero-mark">alevant</div>
+  <div class="hero-tagline">Where real estate intelligence begins.</div>
+  <div class="hero-desc">
+    The AI Operating System for real estate. A single multi-tenant platform that replaces the inside sales agent, the marketing director, the transaction coordinator, and the sphere manager — purpose-built for the modern producing agent.
+  </div>
+  <div class="hero-meta">
+    <div class="hero-meta-item">Domain<span>alevant.ai</span></div>
+    <div class="hero-meta-item">Pilot<span>Bichi · Miami</span></div>
+    <div class="hero-meta-item">Class<span>Multi-tenant SaaS</span></div>
+    <div class="hero-meta-item">Origin<span>Tigris Tech Labs</span></div>
+  </div>
+</section>
+
+<!-- 1. WORDMARK -->
+<section class="section">
+  <div class="section-num">01</div>
+  <h2 class="section-title">The Wordmark</h2>
+  <p class="section-lead">
+    The mark is set in Cormorant Garamond italic at weight 300 — restrained, editorial, and unmistakably premium. The brass dot above the "a" is the ALEVANT signature; it echoes the Tigris Tech Labs lowercase-t-with-violet-dot lineage while staking out a distinct identity.
+  </p>
+
+  <div class="logo-grid">
+    <div class="logo-card">
+      <div class="logo-card-label">Primary · Light</div>
+      <div class="lockup-wordmark">alevant</div>
+      <div class="lockup-tagline">Where Intelligence Begins</div>
+    </div>
+    <div class="logo-card dark">
+      <div class="logo-card-label">Inverted · Dark</div>
+      <div class="lockup-wordmark">alevant</div>
+      <div class="lockup-tagline">Where Intelligence Begins</div>
+    </div>
+    <div class="logo-card indigo">
+      <div class="logo-card-label">On Indigo</div>
+      <div class="lockup-wordmark">alevant</div>
+      <div class="lockup-tagline">Where Intelligence Begins</div>
+    </div>
+    <div class="logo-card">
+      <div class="logo-card-label">Monogram · A</div>
+      <div class="lockup-monogram">a</div>
+    </div>
+    <div class="logo-card dark">
+      <div class="logo-card-label">Monogram · Inverted</div>
+      <div class="lockup-monogram">a</div>
+    </div>
+    <div class="logo-card">
+      <div class="logo-card-label">Vertical Lockup</div>
+      <div class="lockup-vertical">
+        <div class="lockup-wordmark">alevant</div>
+        <div class="lockup-tagline" style="margin-top:8px;">A Tigris Tech Labs Product</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. PALETTE -->
+<section class="section" style="background:var(--bone); max-width:none; padding-left:max(40px, calc((100vw - 1200px) / 2)); padding-right:max(40px, calc((100vw - 1200px) / 2));">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div class="section-num">02</div>
+    <h2 class="section-title">The Palette</h2>
+    <p class="section-lead">
+      A neutral foundation lifted by indigo authority and brass accent. The system is intentionally restrained — luxury through restraint, not loudness. Tenants receive their own brand kit overlaid on this base; ALEVANT chrome itself uses only this palette.
+    </p>
+
+    <div style="margin-bottom:48px;">
+      <h3 class="type-eyebrow" style="color:var(--stone); margin-bottom:24px;">Primary System</h3>
+      <div class="color-grid">
+        <div class="color-swatch swatch-parchment">
+          <div class="color-swatch-role">Surface</div>
+          <div class="color-swatch-name">Parchment</div>
+          <div class="color-swatch-hex">#FAFAF8</div>
+        </div>
+        <div class="color-swatch swatch-bone">
+          <div class="color-swatch-role">Surface 2</div>
+          <div class="color-swatch-name">Bone</div>
+          <div class="color-swatch-hex">#F2F0ED</div>
+        </div>
+        <div class="color-swatch swatch-mist">
+          <div class="color-swatch-role">Border</div>
+          <div class="color-swatch-name">Mist</div>
+          <div class="color-swatch-hex">#E8E5E0</div>
+        </div>
+        <div class="color-swatch swatch-stone">
+          <div class="color-swatch-role">Muted</div>
+          <div class="color-swatch-name">Stone</div>
+          <div class="color-swatch-hex">#B0AAA0</div>
+        </div>
+        <div class="color-swatch swatch-smoke">
+          <div class="color-swatch-role">Body Text</div>
+          <div class="color-swatch-name">Smoke</div>
+          <div class="color-swatch-hex">#3A3730</div>
+        </div>
+        <div class="color-swatch swatch-ink">
+          <div class="color-swatch-role">Headline</div>
+          <div class="color-swatch-name">Ink</div>
+          <div class="color-swatch-hex">#1A1915</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:48px;">
+      <h3 class="type-eyebrow" style="color:var(--stone); margin-bottom:24px;">Brand Accents</h3>
+      <div class="color-grid">
+        <div class="color-swatch swatch-indigo">
+          <div class="color-swatch-role">Primary</div>
+          <div class="color-swatch-name">Indigo</div>
+          <div class="color-swatch-hex">#3D4F8C</div>
+        </div>
+        <div class="color-swatch swatch-indigo-deep">
+          <div class="color-swatch-role">Primary Deep</div>
+          <div class="color-swatch-name">Indigo Deep</div>
+          <div class="color-swatch-hex">#2D3A6A</div>
+        </div>
+        <div class="color-swatch swatch-brass">
+          <div class="color-swatch-role">Accent</div>
+          <div class="color-swatch-name">Brass</div>
+          <div class="color-swatch-hex">#B5853E</div>
+        </div>
+        <div class="color-swatch swatch-brass-deep">
+          <div class="color-swatch-role">Accent Deep</div>
+          <div class="color-swatch-name">Brass Deep</div>
+          <div class="color-swatch-hex">#8E6628</div>
+        </div>
+        <div class="color-swatch swatch-teal">
+          <div class="color-swatch-role">Signal</div>
+          <div class="color-swatch-name">Teal</div>
+          <div class="color-swatch-hex">#1A8A9E</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. TYPOGRAPHY -->
+<section class="section">
+  <div class="section-num">03</div>
+  <h2 class="section-title">The Type System</h2>
+  <p class="section-lead">
+    Cormorant Garamond carries display, headlines, and the editorial voice. Jost handles UI, body, captions, and metadata. The pair is the Tigris Tech Labs lineage; ALEVANT inherits it whole.
+  </p>
+
+  <div class="type-block">
+    <div class="type-label">Display 01 — Cormorant Garamond Light 96px</div>
+    <div class="type-display-1">Real Estate, Elevated.</div>
+  </div>
+  <div class="type-block">
+    <div class="type-label">Display Italic — Cormorant Garamond Italic Light 64px</div>
+    <div class="type-display-italic">Six bedrooms. The view at sunrise.</div>
+  </div>
+  <div class="type-block">
+    <div class="type-label">H1 — Cormorant Garamond Light 48px</div>
+    <div class="type-h1">The AI Operating System for Real Estate</div>
+  </div>
+  <div class="type-block">
+    <div class="type-label">H2 — Cormorant Garamond Regular 32px</div>
+    <div class="type-h2">Where intelligence begins.</div>
+  </div>
+  <div class="type-block">
+    <div class="type-label">Eyebrow — Jost 11px Letterspacing 0.32em</div>
+    <div class="type-eyebrow">A Tigris Tech Labs Product</div>
+  </div>
+  <div class="type-block">
+    <div class="type-label">Body — Jost Light 15px</div>
+    <div class="type-body">
+      ALEVANT replaces the most expensive non-agent roles in a producing agent's business — the inside sales agent, the marketing director, the transaction coordinator, the sphere manager — with a single multi-tenant platform powered by Claude. A solo agent recovers $160k–$270k of annual operating cost; a brokerage recovers it across every desk.
+    </div>
+  </div>
+  <div class="type-block">
+    <div class="type-label">Caption — Jost Regular 11px Letterspacing 0.18em</div>
+    <div class="type-caption">Phase 0 · Foundation Document · Q2 2026</div>
+  </div>
+</section>
+
+<!-- 4. COMPONENTS -->
+<section class="section" style="background:var(--bone); max-width:none; padding-left:max(40px, calc((100vw - 1200px) / 2)); padding-right:max(40px, calc((100vw - 1200px) / 2));">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div class="section-num">04</div>
+    <h2 class="section-title">UI Components</h2>
+    <p class="section-lead">
+      The component vocabulary. Restrained chrome, generous whitespace, no decorative gradients. The aesthetic is Aman, not Salesforce.
+    </p>
+
+    <div style="margin-bottom:48px;">
+      <h3 class="type-eyebrow" style="color:var(--stone); margin-bottom:24px;">Buttons</h3>
+      <div style="display:flex; flex-wrap:wrap; gap:20px;">
+        <a href="#" class="btn btn-primary">Activate Sofia</a>
+        <a href="#" class="btn btn-ghost">Generate Listing Film</a>
+        <a href="#" class="btn btn-brass">Run Underwriter</a>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="type-eyebrow" style="color:var(--stone); margin-bottom:24px;">Cards</h3>
+      <div class="comp-grid">
+        <div class="card">
+          <div class="card-eyebrow">Sofia · Voice ISA</div>
+          <div class="card-title">3 leads handled overnight.</div>
+          <div class="card-body">
+            All three qualified. Two booked Saturday showings. One investor flagged for direct handoff — Brickell condo, $1.4M, cash.
+          </div>
+          <div class="card-footer">+1 (305) 555 · 0184</div>
+        </div>
+        <div class="card">
+          <div class="card-eyebrow">Vesper · Marketing</div>
+          <div class="card-title">Listing film ready for review.</div>
+          <div class="card-body">
+            2150 Ocean Drive · 90s cinematic cut · scored · voiceover in <em>The Insider</em> tone. Microsite live at 2150oceandrive.alevant.ai.
+          </div>
+          <div class="card-footer">Approve · Edit · Reroute</div>
+        </div>
+        <div class="card">
+          <div class="card-eyebrow">Sphere Brain</div>
+          <div class="card-title">Today's right call.</div>
+          <div class="card-body">
+            Maria Delgado closed three years ago this month. Building up 22%. Suggested: free valuation update + soft refi conversation. Script ready.
+          </div>
+          <div class="card-footer">Open call · Send text · Defer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. TENANT BRANDS -->
+<section class="section">
+  <div class="section-num">05</div>
+  <h2 class="section-title">Tenant Brand Layer</h2>
+  <p class="section-lead">
+    ALEVANT runs multi-tenant — every workspace owns a complete brand kit overlaid on the platform chrome. The pilot tenant is Bichi (Miami). Future tenants render with their own palette, typography, and voice. ALEVANT identity stays in the chrome corners; the agent's brand owns the canvas.
+  </p>
+
+  <div class="tenant-grid">
+    <div class="tenant-card tenant-alevant">
+      <div class="tenant-name">alevant</div>
+      <div class="tenant-meta">Platform Chrome</div>
+      <div class="tenant-palette">
+        <div class="tenant-swatch" style="background:#3D4F8C;"></div>
+        <div class="tenant-swatch" style="background:#B5853E;"></div>
+        <div class="tenant-swatch" style="background:#FAFAF8;"></div>
+        <div class="tenant-swatch" style="background:#1A1915;"></div>
+      </div>
+    </div>
+    <div class="tenant-card tenant-bichi">
+      <div class="tenant-name">Bichi</div>
+      <div class="tenant-meta">Tenant 001 · Miami</div>
+      <div class="tenant-palette">
+        <div class="tenant-swatch" style="background:#0E5560;"></div>
+        <div class="tenant-swatch" style="background:#E8DCC4;"></div>
+        <div class="tenant-swatch" style="background:#B5853E;"></div>
+        <div class="tenant-swatch" style="background:#1A1915;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. VOICE PRESETS -->
+<section class="section" style="background:var(--bone); max-width:none; padding-left:max(40px, calc((100vw - 1200px) / 2)); padding-right:max(40px, calc((100vw - 1200px) / 2));">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div class="section-num">06</div>
+    <h2 class="section-title">Vesper Voice Presets</h2>
+    <p class="section-lead">
+      Vesper, the AI Marketing Director, ships with four calibrated voice presets. Every tenant picks one at onboarding. Bichi's V1 default is <em>The Insider</em>.
+    </p>
+
+    <div class="voice-grid">
+      <div class="voice-card recommended">
+        <div class="voice-name">The Insider</div>
+        <div class="voice-tier">Sotheby's · Aman · Bichi V1</div>
+        <div class="voice-sample">"Six bedrooms. The view at sunrise."</div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-name">The Storyteller</div>
+        <div class="voice-tier">Compass · Town &amp; Country</div>
+        <div class="voice-sample">"She wakes to the bay. Coffee on the terrace before the city stirs."</div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-name">The Authority</div>
+        <div class="voice-tier">The Agency · Mauricio Umansky</div>
+        <div class="voice-sample">"Highest sale per sq ft in the building, 2026 YTD."</div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-name">The Local Legend</div>
+        <div class="voice-tier">Warm Miami insider</div>
+        <div class="voice-sample">"From the team that closed 11 transactions on Brickell this year."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-mark">alevant</div>
+  <div class="footer-tagline">Where real estate intelligence begins.</div>
+  <div class="footer-meta">Brand Identity · Phase 0 · Q2 2026 · A Tigris Tech Labs Product</div>
+</footer>
+
+</body>
+</html>

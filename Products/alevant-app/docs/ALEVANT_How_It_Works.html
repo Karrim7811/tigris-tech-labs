@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALEVANT — How It Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parchment: #FAFAF8;
+  --bone: #F2F0ED;
+  --mist: #E8E5E0;
+  --stone: #B0AAA0;
+  --smoke: #3A3730;
+  --ink: #1A1915;
+  --indigo: #3D4F8C;
+  --indigo-deep: #2D3A6A;
+  --indigo-glow: rgba(61,79,140,0.10);
+  --brass: #B5853E;
+  --brass-deep: #8E6628;
+  --teal: #1A8A9E;
+  --hot: #B03A2E;
+  --bichi-teal: #0E5560;
+  --bichi-sand: #E8DCC4;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Jost', 'Helvetica Neue', sans-serif;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:var(--sans);
+  background:var(--parchment);
+  color:var(--smoke);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a { color:inherit; text-decoration:none; }
+
+/* ===== TOPBAR ===== */
+.topbar {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  height:60px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 40px;
+  background:rgba(250,250,248,0.92);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--mist);
+}
+.topbar-mark {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:24px; color:var(--ink); letter-spacing:0.02em;
+  position:relative; display:inline-block;
+}
+.topbar-mark::after {
+  content:''; position:absolute; top:5px; left:1px;
+  width:5px; height:5px; border-radius:50%; background:var(--brass);
+}
+.topbar-nav {
+  display:flex; gap:32px;
+}
+.topbar-nav a {
+  font-size:11px; font-weight:400; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--stone);
+  transition:color 0.3s;
+}
+.topbar-nav a:hover { color:var(--indigo); }
+.topbar-cta {
+  font-size:11px; font-weight:500; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--parchment);
+  background:var(--indigo); padding:10px 20px;
+  transition:background 0.3s;
+}
+.topbar-cta:hover { background:var(--indigo-deep); }
+
+/* ===== HERO ===== */
+.hero {
+  min-height:88vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:140px 40px 80px;
+  position:relative; text-align:center;
+  background:var(--bone);
+  border-bottom:1px solid var(--mist);
+  overflow:hidden;
+}
+.hero::before {
+  content:''; position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:1100px; height:1100px;
+  background:radial-gradient(circle, var(--indigo-glow) 0%, transparent 65%);
+  border-radius:50%; pointer-events:none;
+}
+.hero-eyebrow {
+  position:relative; z-index:2;
+  font-size:11px; font-weight:400; letter-spacing:0.32em;
+  text-transform:uppercase; color:var(--indigo);
+  margin-bottom:32px;
+}
+.hero-title {
+  position:relative; z-index:2;
+  font-family:var(--serif); font-weight:300;
+  font-size:clamp(48px, 7vw, 96px);
+  color:var(--ink); line-height:1; letter-spacing:-0.01em;
+  max-width:1100px;
+}
+.hero-title em {
+  font-style:italic; font-weight:300; color:var(--indigo);
+}
+.hero-tagline {
+  position:relative; z-index:2;
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:clamp(18px, 2.4vw, 26px);
+  color:var(--smoke); margin-top:32px; max-width:760px;
+}
+.hero-meta {
+  position:relative; z-index:2;
+  margin-top:64px;
+  display:flex; flex-wrap:wrap; justify-content:center; gap:48px;
+  font-size:10px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--stone);
+}
+.hero-meta-item span {
+  color:var(--ink); display:block; margin-top:6px;
+  font-size:13px; letter-spacing:0.1em; font-weight:400;
+}
+
+/* ===== SECTION CHROME ===== */
+.section { padding:120px 40px; max-width:1280px; margin:0 auto; }
+.section-num {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:48px; color:var(--brass); line-height:1; margin-bottom:8px;
+}
+.section-title {
+  font-family:var(--serif); font-weight:300;
+  font-size:clamp(36px, 5vw, 60px);
+  color:var(--ink); line-height:1.1; margin-bottom:24px;
+}
+.section-lead {
+  font-size:16px; font-weight:300; color:var(--smoke);
+  max-width:700px; line-height:1.85; margin-bottom:64px;
+}
+.section.alt {
+  background:var(--bone); max-width:none;
+  padding-left:max(40px, calc((100vw - 1280px) / 2));
+  padding-right:max(40px, calc((100vw - 1280px) / 2));
+}
+.section.alt .section-inner { max-width:1280px; margin:0 auto; }
+.section.dark {
+  background:var(--ink); max-width:none; color:var(--bone);
+  padding-left:max(40px, calc((100vw - 1280px) / 2));
+  padding-right:max(40px, calc((100vw - 1280px) / 2));
+}
+.section.dark .section-inner { max-width:1280px; margin:0 auto; }
+.section.dark .section-title { color:var(--parchment); }
+.section.dark .section-lead { color:rgba(250,250,248,0.7); }
+.section.dark .section-num { color:var(--brass); }
+
+/* ===== THE STACK ===== */
+.stack-headline {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:clamp(28px, 4vw, 48px);
+  color:var(--ink); line-height:1.2; margin-bottom:48px; max-width:900px;
+}
+.replace-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:24px;
+}
+.replace-card {
+  background:var(--parchment); border:1px solid var(--mist);
+  padding:40px 32px;
+  position:relative;
+  transition:border-color 0.3s, transform 0.3s;
+}
+.replace-card:hover { border-color:var(--indigo); transform:translateY(-4px); }
+.replace-card-eyebrow {
+  font-size:10px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--brass); margin-bottom:12px;
+}
+.replace-card-old {
+  font-family:var(--serif); font-weight:300;
+  font-size:24px; color:var(--ink); line-height:1.2;
+  margin-bottom:8px;
+}
+.replace-card-cost {
+  font-size:11px; font-weight:400; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--stone); margin-bottom:32px;
+}
+.replace-card-arrow {
+  font-family:var(--serif); font-style:italic; font-size:32px;
+  color:var(--brass); line-height:1; margin-bottom:24px;
+}
+.replace-card-new {
+  font-family:var(--serif); font-style:italic; font-weight:400;
+  font-size:32px; color:var(--indigo); line-height:1.1;
+  margin-bottom:8px;
+}
+.replace-card-new-desc {
+  font-size:12px; font-weight:400; letter-spacing:0.05em;
+  color:var(--smoke);
+}
+
+/* ===== TWO PERSONAS ===== */
+.persona-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:0;
+  border:1px solid var(--mist);
+}
+.persona-card {
+  padding:64px 48px;
+  border-right:1px solid var(--mist);
+}
+.persona-card:last-child { border-right:none; }
+.persona-card.sofia { background:var(--ink); color:var(--parchment); }
+.persona-card.vesper { background:var(--indigo); color:var(--parchment); }
+.persona-eyebrow {
+  font-size:10px; font-weight:400; letter-spacing:0.32em;
+  text-transform:uppercase; color:var(--brass); margin-bottom:16px;
+}
+.persona-name {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:96px; line-height:1; margin-bottom:24px;
+}
+.persona-tagline {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:24px; line-height:1.3; margin-bottom:36px;
+  color:rgba(250,250,248,0.85);
+}
+.persona-spec-list { list-style:none; }
+.persona-spec-list li {
+  padding:12px 0;
+  border-top:1px solid rgba(250,250,248,0.12);
+  font-size:13px; color:rgba(250,250,248,0.78);
+  display:flex; gap:16px; align-items:baseline;
+}
+.persona-spec-list li:last-child { border-bottom:1px solid rgba(250,250,248,0.12); }
+.persona-spec-list .spec-label {
+  font-size:9px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--brass);
+  min-width:96px; flex-shrink:0;
+}
+
+/* ===== JOURNEY ===== */
+.journey-timeline {
+  display:flex; flex-direction:column; gap:0;
+  border-left:2px solid var(--brass); padding-left:48px; margin-left:8px;
+  position:relative;
+}
+.journey-step { position:relative; padding-bottom:56px; }
+.journey-step:last-child { padding-bottom:0; }
+.journey-step::before {
+  content:''; position:absolute; left:-58px; top:8px;
+  width:18px; height:18px; border-radius:50%;
+  background:var(--brass); border:4px solid var(--parchment);
+}
+.section.alt .journey-step::before { border-color:var(--bone); }
+.section.dark .journey-timeline { border-left-color:var(--brass); }
+.section.dark .journey-step::before { border-color:var(--ink); }
+.journey-time {
+  font-size:10px; font-weight:400; letter-spacing:0.32em;
+  text-transform:uppercase; color:var(--brass); margin-bottom:8px;
+}
+.journey-title {
+  font-family:var(--serif); font-weight:300;
+  font-size:28px; color:var(--ink); line-height:1.2; margin-bottom:8px;
+}
+.section.dark .journey-title { color:var(--parchment); }
+.journey-actor {
+  font-size:11px; font-weight:400; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--indigo); margin-bottom:16px;
+}
+.section.dark .journey-actor { color:var(--brass); }
+.journey-body {
+  font-size:14px; line-height:1.85; color:var(--smoke);
+  max-width:760px;
+}
+.section.dark .journey-body { color:rgba(250,250,248,0.7); }
+.journey-body strong { color:var(--ink); font-weight:500; }
+.section.dark .journey-body strong { color:var(--parchment); }
+
+/* ===== MODULES GRID ===== */
+.module-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:1px; background:var(--mist); border:1px solid var(--mist);
+}
+.module-cell {
+  background:var(--parchment); padding:32px 28px;
+  transition:background 0.3s;
+}
+.module-cell:hover { background:var(--bone); }
+.module-cell-num {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:36px; color:var(--brass); line-height:1; margin-bottom:12px;
+}
+.module-cell-title {
+  font-family:var(--serif); font-weight:400;
+  font-size:18px; color:var(--ink); line-height:1.2; margin-bottom:10px;
+}
+.module-cell-body {
+  font-size:12px; font-weight:300; color:var(--smoke);
+  line-height:1.7;
+}
+
+/* ===== VESPER OUTPUT GRID ===== */
+.vesper-grid {
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
+  background:var(--mist); border:1px solid var(--mist);
+}
+.vesper-cell {
+  background:var(--parchment); padding:32px 28px; min-height:200px;
+  display:flex; flex-direction:column; justify-content:space-between;
+  position:relative;
+}
+.vesper-cell-num {
+  font-size:9px; font-weight:400; letter-spacing:0.32em;
+  text-transform:uppercase; color:var(--stone);
+}
+.vesper-cell-title {
+  font-family:var(--serif); font-weight:300;
+  font-size:24px; color:var(--ink); line-height:1.2;
+}
+.vesper-cell-tag {
+  font-size:10px; font-weight:400; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--indigo);
+}
+.vesper-cell.featured { background:var(--ink); color:var(--parchment); }
+.vesper-cell.featured .vesper-cell-num { color:var(--brass); }
+.vesper-cell.featured .vesper-cell-title { color:var(--parchment); }
+.vesper-cell.featured .vesper-cell-tag { color:var(--brass); }
+
+/* ===== ARCHITECTURE ===== */
+.arch-stack {
+  display:flex; flex-direction:column; gap:1px;
+  border:1px solid var(--mist); background:var(--mist);
+}
+.arch-row {
+  background:var(--parchment); padding:24px 32px;
+  display:grid; grid-template-columns:200px 1fr 200px; gap:24px;
+  align-items:center;
+}
+.arch-row:hover { background:var(--bone); }
+.arch-row-label {
+  font-size:10px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--brass);
+}
+.arch-row-content {
+  font-size:13px; color:var(--smoke); font-weight:400;
+}
+.arch-row-content strong {
+  color:var(--ink); font-weight:500;
+}
+.arch-row-stack {
+  font-family:'Courier New', monospace; font-size:11px;
+  color:var(--stone); text-align:right; letter-spacing:0.04em;
+}
+
+/* ===== TENANT PROOF ===== */
+.tenant-spotlight {
+  background:var(--bichi-teal); color:var(--bichi-sand);
+  padding:80px 56px;
+  display:grid; grid-template-columns:1fr 2fr; gap:56px;
+  align-items:center; border:1px solid var(--mist);
+}
+.tenant-spotlight-side {
+  display:flex; flex-direction:column; gap:8px;
+}
+.tenant-spotlight-eyebrow {
+  font-size:10px; font-weight:400; letter-spacing:0.32em;
+  text-transform:uppercase; color:var(--brass);
+}
+.tenant-spotlight-name {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:80px; line-height:1; color:var(--bichi-sand);
+}
+.tenant-spotlight-meta {
+  font-size:11px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:rgba(232,220,196,0.7);
+  margin-top:16px;
+}
+.tenant-spotlight-stats {
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:32px;
+}
+.tenant-spotlight-stat-num {
+  font-family:var(--serif); font-weight:300;
+  font-size:48px; line-height:1; color:var(--bichi-sand);
+  margin-bottom:8px;
+}
+.tenant-spotlight-stat-label {
+  font-size:10px; font-weight:400; letter-spacing:0.22em;
+  text-transform:uppercase; color:rgba(232,220,196,0.7);
+  line-height:1.5;
+}
+
+/* ===== PHASES ===== */
+.phase-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+  gap:0; border:1px solid var(--mist);
+}
+.phase-card {
+  padding:32px 28px;
+  border-right:1px solid var(--mist);
+  position:relative;
+}
+.phase-card:last-child { border-right:none; }
+.phase-card.now { background:var(--brass); }
+.phase-num {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:14px; letter-spacing:0.32em; text-transform:uppercase;
+  color:var(--indigo); margin-bottom:8px;
+}
+.phase-card.now .phase-num { color:var(--ink); }
+.phase-name {
+  font-family:var(--serif); font-weight:400;
+  font-size:22px; color:var(--ink); line-height:1.2; margin-bottom:16px;
+}
+.phase-list { list-style:none; font-size:12px; color:var(--smoke); line-height:1.85; }
+.phase-list li:before { content:'— '; color:var(--brass); }
+
+/* ===== FOOTER ===== */
+.footer {
+  padding:80px 40px 60px;
+  background:var(--ink); color:var(--stone);
+  text-align:center;
+}
+.footer-mark {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:48px; color:var(--parchment); margin-bottom:16px;
+  position:relative; display:inline-block;
+}
+.footer-mark::after {
+  content:''; position:absolute; top:18%; left:2%;
+  width:5px; height:5px; border-radius:50%; background:var(--brass);
+}
+.footer-tagline {
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:18px; color:rgba(250,250,248,0.6); margin-bottom:48px;
+}
+.footer-meta {
+  font-size:10px; font-weight:400; letter-spacing:0.32em;
+  text-transform:uppercase; color:rgba(250,250,248,0.4);
+}
+
+@media (max-width: 900px) {
+  .topbar-nav { display:none; }
+  .persona-grid { grid-template-columns:1fr; }
+  .persona-card { border-right:none; border-bottom:1px solid var(--mist); }
+  .arch-row { grid-template-columns:1fr; gap:8px; }
+  .arch-row-stack { text-align:left; }
+  .tenant-spotlight { grid-template-columns:1fr; padding:48px 32px; gap:32px; }
+  .vesper-grid { grid-template-columns:repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .section { padding:80px 24px; }
+  .topbar { padding:0 20px; }
+  .vesper-grid { grid-template-columns:1fr; }
+  .tenant-spotlight-stats { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a href="#" class="topbar-mark">alevant</a>
+  <nav class="topbar-nav">
+    <a href="#stack">The Replacement</a>
+    <a href="#sofia">Sofia</a>
+    <a href="#vesper">Vesper</a>
+    <a href="#journey">A Day</a>
+    <a href="#modules">Modules</a>
+    <a href="#tenant">Bichi</a>
+  </nav>
+  <a href="#" class="topbar-cta">Request Access</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">A Tigris Tech Labs Product</div>
+  <h1 class="hero-title">The AI <em>Operating System</em><br>for Real Estate.</h1>
+  <p class="hero-tagline">
+    A single multi-tenant platform that replaces the inside sales agent, the marketing director,
+    the transaction coordinator, and the sphere manager — purpose-built for the modern producing agent.
+  </p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">Pilot Tenant<span>Bichi · Miami</span></div>
+    <div class="hero-meta-item">Voice ISA<span>24/7 · EN · ES · PT</span></div>
+    <div class="hero-meta-item">Marketing<span>$10M-tier creative</span></div>
+    <div class="hero-meta-item">Class<span>Multi-tenant SaaS</span></div>
+  </div>
+</section>
+
+<!-- 1. THE REPLACEMENT -->
+<section class="section" id="stack">
+  <div class="section-num">01</div>
+  <h2 class="section-title">What ALEVANT Replaces.</h2>
+  <p class="section-lead">
+    A producing agent today carries four expensive, hard-to-hire, hard-to-keep human roles. ALEVANT replaces all four with a single platform powered by Claude. The math, on Day One, is brutal in the agent's favor.
+  </p>
+
+  <div class="replace-grid">
+    <div class="replace-card">
+      <div class="replace-card-eyebrow">Replaced</div>
+      <div class="replace-card-old">Inside Sales Agent</div>
+      <div class="replace-card-cost">$40k–$70k base + commission</div>
+      <div class="replace-card-arrow">↓</div>
+      <div class="replace-card-new">Sofia</div>
+      <div class="replace-card-new-desc">Voice + text ISA. 24/7. Trilingual.</div>
+    </div>
+    <div class="replace-card">
+      <div class="replace-card-eyebrow">Replaced</div>
+      <div class="replace-card-old">Marketing Director</div>
+      <div class="replace-card-cost">$50k–$90k</div>
+      <div class="replace-card-arrow">↓</div>
+      <div class="replace-card-new">Vesper</div>
+      <div class="replace-card-new-desc">$10M-tier creative on demand.</div>
+    </div>
+    <div class="replace-card">
+      <div class="replace-card-eyebrow">Replaced</div>
+      <div class="replace-card-old">Transaction Coordinator</div>
+      <div class="replace-card-cost">$40k–$60k or $300–500/deal</div>
+      <div class="replace-card-arrow">↓</div>
+      <div class="replace-card-new">Transaction Brain</div>
+      <div class="replace-card-new-desc">Orchestrates contract → close.</div>
+    </div>
+    <div class="replace-card">
+      <div class="replace-card-eyebrow">Replaced</div>
+      <div class="replace-card-old">Sphere Manager</div>
+      <div class="replace-card-cost">$30k–$50k</div>
+      <div class="replace-card-arrow">↓</div>
+      <div class="replace-card-new">Sphere Brain</div>
+      <div class="replace-card-new-desc">Surfaces today's right call.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. THE TWO PERSONAS -->
+<section class="section alt">
+  <div class="section-inner">
+    <div class="section-num">02</div>
+    <h2 class="section-title">Two AI Personas.</h2>
+    <p class="section-lead">
+      ALEVANT is anchored by two named AI personas the agent works with daily. Each has a calibrated voice, a clear scope, and a strict compliance perimeter.
+    </p>
+
+    <div class="persona-grid" id="sofia">
+      <div class="persona-card sofia">
+        <div class="persona-eyebrow">Persona 01 · Voice ISA</div>
+        <div class="persona-name">Sofia</div>
+        <div class="persona-tagline">"Hi, this is Sofia — I'm Thomas's assistant. What are you looking for?"</div>
+        <ul class="persona-spec-list">
+          <li><span class="spec-label">Channels</span><span>Voice · SMS · Web Chat · IG · X · TikTok · LinkedIn DMs</span></li>
+          <li><span class="spec-label">Hours</span><span>24/7 — agent owns 8:30am–6pm; Sofia covers all overflow</span></li>
+          <li><span class="spec-label">Speed</span><span>Answers inbound in &lt;10 seconds</span></li>
+          <li><span class="spec-label">Languages</span><span>EN V1 · ES + PT V2</span></li>
+          <li><span class="spec-label">Compliance</span><span>Strict TCPA · State AI-disclosure on by default</span></li>
+          <li><span class="spec-label">Stack</span><span>Retell + Twilio + Claude + ElevenLabs</span></li>
+          <li><span class="spec-label">Handoff</span><span>Push + ringthrough on hot leads (qual ≥ 70)</span></li>
+        </ul>
+      </div>
+      <div class="persona-card vesper" id="vesper">
+        <div class="persona-eyebrow">Persona 02 · Marketing Director</div>
+        <div class="persona-name">Vesper</div>
+        <div class="persona-tagline">"Six bedrooms. The view at sunrise."</div>
+        <ul class="persona-spec-list">
+          <li><span class="spec-label">Tier</span><span>$10M+ luxury brand creative — Sotheby's / Aman caliber</span></li>
+          <li><span class="spec-label">Voice V1</span><span>The Insider — restrained, knowing, never breathless</span></li>
+          <li><span class="spec-label">Channels</span><span>IG · X · TikTok · LinkedIn · YouTube · Email · Print</span></li>
+          <li><span class="spec-label">Per Listing</span><span>12 deliverables in &lt;24 hours</span></li>
+          <li><span class="spec-label">Cadence</span><span>1/day default; dynamic per active listing</span></li>
+          <li><span class="spec-label">Approval</span><span>Gated by default; graduates to autonomous per channel</span></li>
+          <li><span class="spec-label">Compliance</span><span>Fair Housing linter — strict, not bypassable</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. A DAY IN THE LIFE -->
+<section class="section dark" id="journey">
+  <div class="section-inner">
+    <div class="section-num">03</div>
+    <h2 class="section-title">A Day in the Life.</h2>
+    <p class="section-lead">
+      Tuesday in Miami. Bichi has three appointments, two new listings, and an investor closing on Friday. Here is what ALEVANT runs in the background while he runs his calendar.
+    </p>
+
+    <div class="journey-timeline">
+      <div class="journey-step">
+        <div class="journey-time">3:42 AM</div>
+        <div class="journey-title">Inbound: international buyer</div>
+        <div class="journey-actor">Sofia · IG DM</div>
+        <div class="journey-body">
+          A Brazilian buyer DMs about a Brickell condo at 3:42 AM Miami time. <strong>Sofia answers in &lt;8 seconds.</strong> Qualifies in Portuguese (V2 — for now in English with a translation note). Books Saturday showing. Logs to CRM. Bichi gets a single push at 7:00 AM with the summary, not 14 messages overnight.
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-time">7:00 AM</div>
+        <div class="journey-title">The Daily Standup</div>
+        <div class="journey-actor">Cockpit · 90-second voice briefing</div>
+        <div class="journey-body">
+          ALEVANT plays a 90-second AI briefing in Bichi's car: 3 hot inbounds overnight, 2 listings need price reviews (showing volume below threshold), 1 sphere right-call (Maria Delgado — 3-year close anniversary, building +22%), 4 deals at risk. <strong>One audio file, no scrolling.</strong>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-time">9:15 AM</div>
+        <div class="journey-title">New listing taken</div>
+        <div class="journey-actor">Vesper · 12-asset campaign</div>
+        <div class="journey-body">
+          Bichi signs a $1.4M Coral Gables listing. He pastes the address into ALEVANT.
+          <strong>Within 24 hours, Vesper delivers:</strong> cinematic film script + shot list, hero photography brief, custom microsite at <em>312coralway.bichi.miami</em>, 8-page editorial brochure (PDF), 14-post 2-week social campaign (IG + X + TikTok + LinkedIn), email blast to 47 buyer-matches, just-listed event invite, and a press pitch for Mansion Global. Bichi reviews. Approves. Done.
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-time">11:30 AM</div>
+        <div class="journey-title">Showing presentation, live</div>
+        <div class="journey-actor">Live Co-Pilot · earbud whisper</div>
+        <div class="journey-body">
+          Bichi walks into a listing presentation against Compass and Douglas Elliman. Mid-meeting, the seller says, "Compass told me they'd list at $2.1M." Bichi's earbud quietly says: <em>"Last 4 comparable closings within 0.4 miles, 90 days: $1.85M, $1.92M, $1.88M, $1.95M. Compass listing 2 blocks east currently 38 DOM, 1 price drop."</em> Bichi answers with authority. Wins the listing.
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-time">2:00 PM</div>
+        <div class="journey-title">Investor underwriting</div>
+        <div class="journey-actor">Underwriter · 30 seconds</div>
+        <div class="journey-body">
+          A return investor texts Bichi: "1450 NW 7th, what do you think?" Bichi pastes the address into ALEVANT. <strong>30 seconds:</strong> cap rate 6.8%, cash-on-cash 9.2%, BRRRR ARV $720k, STR projection $5.4k/mo (AirDNA), comp set, FIRPTA flag (foreign seller), 1031 timing if needed. Bichi sends the one-page underwrite to the investor. They schedule a showing.
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-time">4:30 PM</div>
+        <div class="journey-title">Sphere right-call</div>
+        <div class="journey-actor">Sphere Brain · LinkedIn signal</div>
+        <div class="journey-body">
+          ALEVANT detects a past client just announced a baby on LinkedIn. Sphere Brain surfaces: "Carlos and Andrea — closed Aug 2024 · 2BR Brickell condo · just announced baby · likely outgrowing space within 18 months · current building +14%." <strong>Suggested: handwritten card today, valuation update conversation in 90 days.</strong> Card text drafted. Bichi adds three words and signs.
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-time">6:00 PM</div>
+        <div class="journey-title">Handoff to Sofia</div>
+        <div class="journey-actor">Sofia · solo</div>
+        <div class="journey-body">
+          Bichi clocks out. Sofia takes inbound until 8:30am. Vesper queues tomorrow's 4 social posts for Bichi's morning approval. Transaction Brain nudges a slow lender on Friday's investor closing. The platform <em>operates while he sleeps.</em>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. MODULES -->
+<section class="section" id="modules">
+  <div class="section-num">04</div>
+  <h2 class="section-title">The Modules.</h2>
+  <p class="section-lead">
+    Eleven core modules ship in V1. Every one is AI-native — not "with an AI sidebar bolted on." The platform is designed around Claude, not retrofitted.
+  </p>
+
+  <div class="module-grid">
+    <div class="module-cell">
+      <div class="module-cell-num">01</div>
+      <div class="module-cell-title">Lead Inbox</div>
+      <div class="module-cell-body">Multi-source ingestion: Gmail, IG / X / TikTok / LinkedIn DMs, web forms, phone, FB Lead Ads. AI-classified, AI-routed.</div>
+    </div>
+    <div class="module-cell">
+      <div class="module-cell-num">02</div>
+      <div class="module-cell-title">Sofia</div>
+      <div class="module-cell-body">Voice + text ISA. Twilio number. Retell + Claude. Strict TCPA. Inbound V1, consented outbound V2.</div>
+    </div>
+    <div class="module-cell">
+      <div class="module-cell-num">03</div>
+      <div class="module-cell-title">Pipelines × 4</div>
+      <div class="module-cell-body">Buyer / Seller / Investor / Rental — each a distinct workflow. Rentals get speed-to-lead urgency; investors get underwriting.</div>
+    </div>
+    <div class="module-cell">
+      <div class="module-cell-num">04</div>
+      <div class="module-cell-title">Listings</div>
+      <div class="module-cell-body">Manual entry V1, MLS adapter ready. Vesper triggers automatically when a new listing is added.</div>
+    </div>
+    <div class="module-cell">
+      <div class="module-cell-num">05</div>
+      <div class="module-cell-title">Vesper Studio</div>
+      <div class="module-cell-body">Per-listing 12-asset campaign. Weekly content engine. Cinematic film, microsite, brochure, social, email, press.</div>
+    </div>
+    <div class="module-cell">
+      <div class="module-cell-num">06</div>
+      <div class="module-cell-title">Underwriter</div>
+      <div class="module-cell-body">Residential CMA + investor MF. Cap rate, cash-on-cash, BRRRR, STR via AirDNA. 30 seconds from address.</div>
+    </div>
+    <div class="module-cell">
+      <div class="module-cell-num">07</div>
+      <div class="module-cell-title">Pre-Con Tracker</div>
+      <div class="module-cell-body">Miami towers index. Deposit schedules. Developer reputation. Assignment opportunities. Delivery delays.</div>
+    </div>
+    <div class="module-cell">
+      <div class="module-cell-num">08</div>
+      <div class="module-cell-title">Transaction Brain</div>
+      <div class="module-cell-body">Contract-to-close orchestration. DocuSign-aware. Inspection / appraisal / loan / title / HOA / closing nudges.</div>
+    </div>
+    <div class="module-cell">
+      <div class="module-cell-num">09</div>
+      <div class="module-cell-title">Sphere Brain</div>
+      <div class="module-cell-body">LinkedIn / public records / social signal monitoring. Surfaces today's right call. Drafts the message.</div>
+    </div>
+    <div class="module-cell">
+      <div class="module-cell-num">10</div>
+      <div class="module-cell-title">Microsites</div>
+      <div class="module-cell-body">Auto-generated per premium listing. Magazine-tier. Multilingual-ready. Embedded Sofia chat.</div>
+    </div>
+    <div class="module-cell">
+      <div class="module-cell-num">11</div>
+      <div class="module-cell-title">Cockpit</div>
+      <div class="module-cell-body">Daily AI standup, signal feed, KPIs, weighted pipeline, deal-velocity scoring.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. VESPER OUTPUT -->
+<section class="section alt">
+  <div class="section-inner">
+    <div class="section-num">05</div>
+    <h2 class="section-title">What Vesper Ships, Per Listing.</h2>
+    <p class="section-lead">
+      Twelve deliverables, every listing, in under 24 hours. The marketing department of a national luxury firm — running on every $200k–$2M home Bichi takes.
+    </p>
+
+    <div class="vesper-grid">
+      <div class="vesper-cell featured">
+        <div>
+          <div class="vesper-cell-num">01</div>
+          <div class="vesper-cell-title">Cinematic listing film</div>
+        </div>
+        <div class="vesper-cell-tag">60–90s · scripted · scored</div>
+      </div>
+      <div class="vesper-cell">
+        <div>
+          <div class="vesper-cell-num">02</div>
+          <div class="vesper-cell-title">Hero photography brief</div>
+        </div>
+        <div class="vesper-cell-tag">Light · styling · lens recs</div>
+      </div>
+      <div class="vesper-cell">
+        <div>
+          <div class="vesper-cell-num">03</div>
+          <div class="vesper-cell-title">Custom listing microsite</div>
+        </div>
+        <div class="vesper-cell-tag">address.bichi.miami</div>
+      </div>
+      <div class="vesper-cell">
+        <div>
+          <div class="vesper-cell-num">04</div>
+          <div class="vesper-cell-title">Editorial brochure</div>
+        </div>
+        <div class="vesper-cell-tag">8–12 pages · print-ready PDF</div>
+      </div>
+      <div class="vesper-cell featured">
+        <div>
+          <div class="vesper-cell-num">05</div>
+          <div class="vesper-cell-title">2-week social campaign</div>
+        </div>
+        <div class="vesper-cell-tag">14 posts · 4 channels</div>
+      </div>
+      <div class="vesper-cell">
+        <div>
+          <div class="vesper-cell-num">06</div>
+          <div class="vesper-cell-title">MLS description</div>
+        </div>
+        <div class="vesper-cell-tag">Fair Housing-linted</div>
+      </div>
+      <div class="vesper-cell">
+        <div>
+          <div class="vesper-cell-num">07</div>
+          <div class="vesper-cell-title">Email blast — sphere</div>
+        </div>
+        <div class="vesper-cell-tag">Segmented · personalized</div>
+      </div>
+      <div class="vesper-cell">
+        <div>
+          <div class="vesper-cell-num">08</div>
+          <div class="vesper-cell-title">Buyer-match outreach</div>
+        </div>
+        <div class="vesper-cell-tag">"I think this is yours"</div>
+      </div>
+      <div class="vesper-cell featured">
+        <div>
+          <div class="vesper-cell-num">09</div>
+          <div class="vesper-cell-title">Open house event</div>
+        </div>
+        <div class="vesper-cell-tag">Invite · RSVP · QR pre-qual</div>
+      </div>
+      <div class="vesper-cell">
+        <div>
+          <div class="vesper-cell-num">10</div>
+          <div class="vesper-cell-title">"Whisper" preview list</div>
+        </div>
+        <div class="vesper-cell-tag">Top 50 sphere · pre-public</div>
+      </div>
+      <div class="vesper-cell">
+        <div>
+          <div class="vesper-cell-num">11</div>
+          <div class="vesper-cell-title">Neighborhood report</div>
+        </div>
+        <div class="vesper-cell-tag">Comps · trends · absorption</div>
+      </div>
+      <div class="vesper-cell">
+        <div>
+          <div class="vesper-cell-num">12</div>
+          <div class="vesper-cell-title">Press pitch (when merited)</div>
+        </div>
+        <div class="vesper-cell-tag">WSJ · Mansion Global · TRD</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. ARCHITECTURE -->
+<section class="section">
+  <div class="section-num">06</div>
+  <h2 class="section-title">The Architecture.</h2>
+  <p class="section-lead">
+    Multi-tenant SaaS from day one. Workspace-scoped data with Supabase Row Level Security. Mirror of the PRAIX (Aon insurance) pattern, built for the real estate domain.
+  </p>
+
+  <div class="arch-stack">
+    <div class="arch-row">
+      <div class="arch-row-label">Client</div>
+      <div class="arch-row-content"><strong>Web app</strong> · agent dashboard, lead inbox, listing studio, underwriter, microsites · <strong>Mobile (V2)</strong> · React Native floating mic, shake-to-Sofia</div>
+      <div class="arch-row-stack">Next.js 16 · React 19<br>Tailwind v4</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-row-label">API Layer</div>
+      <div class="arch-row-content"><strong>~60 serverless routes</strong> · Sofia orchestration · Vesper generation · Underwriter math · Sphere Brain signals · Transaction Brain</div>
+      <div class="arch-row-stack">Vercel<br>Edge Network</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-row-label">AI</div>
+      <div class="arch-row-content"><strong>Claude</strong> · Haiku 4.5 default fast · Sonnet 4.6 synthesis · <strong>Opus 4.7</strong> for Vesper heavy creative</div>
+      <div class="arch-row-stack">Anthropic SDK<br>+ Foundry path</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-row-label">Voice</div>
+      <div class="arch-row-content"><strong>Sofia voice ISA</strong> · Twilio number provisioning · Retell orchestration · ElevenLabs TTS · Whisper STT</div>
+      <div class="arch-row-stack">Retell · Twilio<br>ElevenLabs</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-row-label">Database</div>
+      <div class="arch-row-content"><strong>Supabase Postgres</strong> · Row Level Security · workspace_id on every row · realtime subscriptions for inbox</div>
+      <div class="arch-row-stack">Postgres · RLS<br>Auth · Realtime</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-row-label">Data Sources</div>
+      <div class="arch-row-content"><strong>MLS adapter</strong> (stub V1, MLS Grid / Bridge / Trestle V2) · ATTOM (comps, V2) · AirDNA (STR) · Public records · KW Command (waiting on API)</div>
+      <div class="arch-row-stack">REST · scrape<br>OAuth</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-row-label">Marketing</div>
+      <div class="arch-row-content"><strong>Vesper</strong> · Meta Graph (IG/FB) · X API · TikTok Business · LinkedIn · YouTube Data · HeyGen avatar · DALL-E / Midjourney for visual</div>
+      <div class="arch-row-stack">OAuth + APIs<br>HeyGen</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-row-label">Comms</div>
+      <div class="arch-row-content"><strong>Gmail</strong> delegation OAuth · Google Calendar · DocuSign · WhatsApp Business (V2)</div>
+      <div class="arch-row-stack">Google Workspace<br>DocuSign</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. TENANT SPOTLIGHT -->
+<section class="section dark" id="tenant">
+  <div class="section-inner">
+    <div class="section-num">07</div>
+    <h2 class="section-title">Pilot Tenant: Bichi.</h2>
+    <p class="section-lead">
+      Thomas Bichi — Keller Williams Capital Realty, Coral Gables. Top KW producer since 2016. Investor-focused, multilingual market, "Invest Miami – Live Miami." The first ALEVANT workspace.
+    </p>
+
+    <div class="tenant-spotlight">
+      <div class="tenant-spotlight-side">
+        <div class="tenant-spotlight-eyebrow">Tenant 001</div>
+        <div class="tenant-spotlight-name">Bichi</div>
+        <div class="tenant-spotlight-meta">Miami · Investor · Residential · Rental</div>
+      </div>
+      <div class="tenant-spotlight-stats">
+        <div>
+          <div class="tenant-spotlight-stat-num">10+</div>
+          <div class="tenant-spotlight-stat-label">Years at Keller Williams</div>
+        </div>
+        <div>
+          <div class="tenant-spotlight-stat-num">2016</div>
+          <div class="tenant-spotlight-stat-label">First top-producer recognition</div>
+        </div>
+        <div>
+          <div class="tenant-spotlight-stat-num">$200k–$2M</div>
+          <div class="tenant-spotlight-stat-label">Sales range</div>
+        </div>
+        <div>
+          <div class="tenant-spotlight-stat-num">$2k–$10k</div>
+          <div class="tenant-spotlight-stat-label">Rentals / month</div>
+        </div>
+        <div>
+          <div class="tenant-spotlight-stat-num">SoFi</div>
+          <div class="tenant-spotlight-stat-label">Miami Beach South of Fifth specialty</div>
+        </div>
+        <div>
+          <div class="tenant-spotlight-stat-num">EN→ES→PT</div>
+          <div class="tenant-spotlight-stat-label">Language roadmap</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. PHASES -->
+<section class="section">
+  <div class="section-num">08</div>
+  <h2 class="section-title">Build Phases.</h2>
+  <p class="section-lead">
+    No timeline pressure — get it right. Each phase ends with a working artifact that compounds.
+  </p>
+
+  <div class="phase-grid">
+    <div class="phase-card now">
+      <div class="phase-num">Phase 0 · Now</div>
+      <div class="phase-name">Foundation</div>
+      <ul class="phase-list">
+        <li>Concept brief</li>
+        <li>Brand identity</li>
+        <li>Architecture doc</li>
+        <li>Onboarding spec</li>
+        <li>Repo scaffold</li>
+        <li>USPTO filing</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 1</div>
+      <div class="phase-name">Bichi Onboarding & Site</div>
+      <ul class="phase-list">
+        <li>Onboarding wizard</li>
+        <li>bichi.miami rebuild</li>
+        <li>Sofia chat embedded</li>
+        <li>Domain setup</li>
+        <li>OAuth connectors</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 2</div>
+      <div class="phase-name">Core Platform</div>
+      <ul class="phase-list">
+        <li>Lead Inbox</li>
+        <li>Sofia text ISA</li>
+        <li>4 pipelines</li>
+        <li>Listings module</li>
+        <li>CMA + Underwriter</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 3</div>
+      <div class="phase-name">Voice + Vesper V1</div>
+      <ul class="phase-list">
+        <li>Sofia voice (Retell)</li>
+        <li>Vesper one listing</li>
+        <li>HeyGen avatar</li>
+        <li>AirDNA ingest</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 4</div>
+      <div class="phase-name">Marketing + TX Brain</div>
+      <ul class="phase-list">
+        <li>Vesper all listings</li>
+        <li>Weekly content engine</li>
+        <li>Transaction Brain</li>
+        <li>Sphere Brain</li>
+        <li>Pre-Con tracker</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <div class="phase-num">Phase 5</div>
+      <div class="phase-name">Multi-Tenant GA</div>
+      <ul class="phase-list">
+        <li>Workspace self-serve</li>
+        <li>Pricing</li>
+        <li>Press launch</li>
+        <li>Brokerage tier</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-mark">alevant</div>
+  <div class="footer-tagline">Where real estate intelligence begins.</div>
+  <div class="footer-meta">How It Works · Phase 0 · Q2 2026 · A Tigris Tech Labs Product</div>
+</footer>
+
+</body>
+</html>
