@@ -1,24 +1,35 @@
 @import "tailwindcss";
 
 @theme {
+  /* ── Tigris Tech Labs base palette ─────────────────────── */
   --color-parchment: #FAFAF8;
   --color-bone: #F2F0ED;
   --color-mist: #E8E5E0;
   --color-stone: #B0AAA0;
   --color-smoke: #3A3730;
   --color-ink: #1A1915;
-  --color-indigo: #3D4F8C;
-  --color-indigo-deep: #2D3A6A;
-  --color-indigo-glow: rgba(61, 79, 140, 0.10);
+
+  /* ── ALEVANT product accent — teal sibling in TTL family
+        TTL master = violet · PRAIX = terra · ALEVANT = teal ── */
+  --color-indigo: #1A8A9E;          /* class kept (text-indigo) for compat */
+  --color-indigo-deep: #0F6A7A;
+  --color-indigo-glow: rgba(26, 138, 158, 0.12);
+  --color-teal: #1A8A9E;            /* alias — same as primary accent */
+  --color-teal-deep: #0F6A7A;
+
+  /* ── Warm secondaries (matches TTL palette) ────────────── */
   --color-brass: #B5853E;
   --color-brass-deep: #8E6628;
-  --color-teal: #1A8A9E;
+  --color-terra: #C4875A;            /* TTL terra — used for warm tone alignment with PRAIX family */
+
+  /* ── Status colors ─────────────────────────────────────── */
   --color-hot: #B03A2E;
   --color-warm: #C4875A;
   --color-cold: #3B82F6;
   --color-success: #27AE60;
   --color-error: #E74C3C;
 
+  /* ── Typography ────────────────────────────────────────── */
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: "Jost", "Helvetica Neue", system-ui, sans-serif;
 }
@@ -39,7 +50,10 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Brand brass dot — used by .alevant-mark */
+/* ── ALEVANT wordmark · TTL signature ─────────────────────
+   Pattern: lowercase italic Cormorant + dot above first 'a'
+   (TTL master uses lowercase 't' with dot — we use 'a').
+   Optional final-letter accent for product mark (PRAIX-style). */
 .alevant-mark {
   font-family: var(--font-serif);
   font-style: italic;
@@ -57,7 +71,7 @@ body {
   width: 0.18em;
   height: 0.18em;
   border-radius: 50%;
-  background: var(--color-brass);
+  background: var(--color-indigo);   /* teal dot — ALEVANT's TTL accent */
 }
 
 .eyebrow {
