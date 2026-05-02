@@ -43,6 +43,8 @@ desktop.ini
 # --- Vercel / Supabase ---
 .vercel/
 .supabase/
+supabase/.temp/
+.env-temp/
 
 # --- Coverage ---
 coverage/
