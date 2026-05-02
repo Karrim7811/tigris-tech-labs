@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "logo.clearbit.com" },
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "*.googleusercontent.com" },
-      { protocol: "https", hostname: "cdn.bichi.miami" },
+      { protocol: "https", hostname: "*.alevant.ai" },
     ],
   },
   experimental: {

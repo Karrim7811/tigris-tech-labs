@@ -81,7 +81,7 @@ export default async function CockpitPage() {
             </CardHeader>
             <CardBody>
               <strong className="text-ink">2150 Ocean Drive</strong> · 90s cinematic cut · scored · voiceover in <em>The Insider</em> tone. Microsite live at{" "}
-              <a href="#" className="text-indigo hover:underline">2150oceandrive.bichi.miami</a>.
+              <a href="#" className="text-indigo hover:underline">bichi.alevant.ai/m/2150-ocean-drive-ph4</a>.
             </CardBody>
             <CardFooter>Approve · Edit · Reroute</CardFooter>
           </Card>

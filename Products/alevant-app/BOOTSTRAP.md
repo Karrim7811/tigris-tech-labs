@@ -29,11 +29,9 @@ npm install -g pnpm
 
 ## Step 1 — register domains (~5 min)
 
-Recommended registrar: **Cloudflare Registrar** (at-cost pricing, free DNS).
+✅ `alevant.ai` already registered.
 
-1. `alevant.ai` — ~$70/yr
-2. `bichi.miami` — ~$30/yr
-3. After purchase: leave both at Cloudflare nameservers (we'll wire to Vercel below).
+Bichi tenant lives at `bichi.alevant.ai` (subdomain) — no separate domain needed. Future enterprise tenants can add custom domains later via the workspaces.custom_domain field.
 
 ---
 
@@ -196,19 +194,14 @@ Auto-bound to the Twilio number by `/api/sofia/provision`.
 
 ## Step 7 — DNS (~10 min + propagation)
 
-In Cloudflare DNS for `alevant.ai`:
+In your DNS provider for `alevant.ai`:
 - A record `@` → `76.76.21.21` (Vercel)
 - CNAME `www` → `cname.vercel-dns.com`
-- CNAME `*` → `cname.vercel-dns.com` (wildcard for tenant subdomains)
-
-In Cloudflare DNS for `bichi.miami`:
-- CNAME `@` → `cname.vercel-dns.com`
-- CNAME `www` → `cname.vercel-dns.com`
+- CNAME `*` → `cname.vercel-dns.com` (wildcard — covers `bichi.alevant.ai`, `app.alevant.ai`, all future tenants)
 
 In Vercel Dashboard → Domains:
 - Add `alevant.ai` (set as production)
-- Add `*.alevant.ai`
-- Add `bichi.miami` (assign to Bichi's tenant via custom_domain field once seeded)
+- Add `*.alevant.ai` (wildcard for tenants)
 
 ---
 
@@ -233,10 +226,7 @@ pnpm seed:bichi
 
 This creates the `bichi` workspace, brokerage, brand kit, Sofia + Vesper configs, sample listings, farm zones, and 3 sample Grid signals.
 
-Then point Bichi's tenant subdomain — in Supabase SQL editor:
-```sql
-update workspaces set custom_domain = 'bichi.miami' where slug = 'bichi';
-```
+The wildcard DNS already routes `bichi.alevant.ai` to the Bichi tenant — no extra step needed.
 
 ---
 
@@ -264,7 +254,7 @@ Follow `docs/ALEVANT_Bichi_Kickoff.md` — Day 1 walkthrough is a 90-minute Zoom
 
 ✅ `alevant.ai` loads the marketing landing
 ✅ `app.alevant.ai` requires login
-✅ `bichi.miami` resolves to the Bichi tenant microsite
+✅ `bichi.alevant.ai` resolves to the Bichi tenant
 ✅ A test signup completes the onboarding wizard end-to-end
 ✅ Sofia answers a test call within 10 seconds
 ✅ Vesper queues a test post when a listing transitions to Active

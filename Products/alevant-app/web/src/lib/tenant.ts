@@ -7,7 +7,7 @@ const APP_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN || "alevant.ai";
 /**
  * Resolve the current tenant from request headers.
  * Priority:
- *   1. Custom domain (e.g. bichi.miami) → workspaces.custom_domain match
+ *   1. Custom domain (future enterprise tenants) → workspaces.custom_domain match
  *   2. Subdomain on app domain (e.g. bichi.alevant.ai) → workspaces.slug match
  *   3. null (marketing / app root)
  */
@@ -19,7 +19,7 @@ export async function resolveTenantFromHeaders(): Promise<Workspace | null> {
   // Strip port
   const hostname = host.split(":")[0];
 
-  // Custom domain (e.g. bichi.miami)
+  // Custom domain (enterprise tenants — V2)
   if (!hostname.endsWith(APP_DOMAIN)) {
     const sb = getSupabaseService();
     const { data } = await sb

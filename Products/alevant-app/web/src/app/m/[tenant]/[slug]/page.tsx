@@ -1,5 +1,5 @@
 // Public listing microsite — dynamically themed per tenant.
-// Path: /m/{tenant}/{slug}  (resolved by tenant subdomain in production: bichi.miami/m/2150oceandrive-ph4)
+// Path: /m/{tenant}/{slug}  (in production: bichi.alevant.ai/m/2150-ocean-drive-ph4)
 import { notFound } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
 import { getSupabaseService } from "@/lib/supabase/server";

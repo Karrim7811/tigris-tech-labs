@@ -87,7 +87,6 @@ async function main() {
       vesper_config_id: vesper!.id,
       plan: "pilot",
       status: "active",
-      custom_domain: "bichi.miami",
       activated_at: new Date().toISOString(),
     })
     .select()
@@ -138,7 +137,6 @@ async function main() {
 
   console.log("✓ Bichi workspace seeded.");
   console.log(`  Workspace ID: ${ws!.id}`);
-  console.log(`  Custom domain: bichi.miami`);
   console.log(`  Subdomain: bichi.alevant.ai`);
 }
 
