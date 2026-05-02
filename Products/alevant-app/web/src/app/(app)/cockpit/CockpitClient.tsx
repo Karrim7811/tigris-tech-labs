@@ -31,6 +31,7 @@ import { AccordionSection } from "@/components/alevant/AccordionSection";
 import { NewsFeedWidget } from "@/components/alevant/NewsFeedWidget";
 import { useWidgetVisibility } from "@/components/alevant/useWidgetVisibility";
 import { AlevantAcronymHeader } from "@/components/alevant/AlevantAcronymHeader";
+import { PulseTicker, type PulseItem } from "@/components/alevant/PulseTicker";
 
 // ── types ──────────────────────────────────────────────────────────────
 interface KPI {
@@ -112,6 +113,7 @@ interface CockpitClientProps {
   todayTasks: TaskItem[];
   overdueCount: number;
   prioritizedLeads: LeadItem[];
+  tickerItems: PulseItem[];
   counts: {
     listings: number;
     buyers: number;
@@ -153,7 +155,7 @@ function tierMeta(tier: string) {
 export default function CockpitClient({
   agentName, dateLabel, kpis, actions, dealMomentum,
   gridTop, vesperQueue, sphereSignals, news, todayTasks,
-  overdueCount, prioritizedLeads, counts,
+  overdueCount, prioritizedLeads, tickerItems, counts,
 }: CockpitClientProps) {
   const [activeTab, setActiveTab] = useState<"all" | "stalling" | "coasting" | "accelerating">("all");
   const [standupPlaying, setStandupPlaying] = useState(false);
@@ -209,6 +211,9 @@ export default function CockpitClient({
           </div>
         }
       />
+
+      {/* Live signal ticker — fuses news, grid, sphere, transaction risks */}
+      <PulseTicker items={tickerItems} />
 
       {/* KPI strip */}
       <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-mist border border-mist mb-10">

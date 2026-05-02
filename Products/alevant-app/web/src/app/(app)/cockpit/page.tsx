@@ -377,6 +377,69 @@ export default async function CockpitPage() {
     weekday: "long", month: "long", day: "numeric", year: "numeric",
   });
 
+  // ── Pulse ticker — fuse 4 intelligence sources into a single live feed ──
+  const tickerItems = [
+    // News alerts
+    ..._news.slice(0, 8).map((n) => ({
+      id: `news-${n.id}`,
+      source: "news" as const,
+      tag: (n.category || "MARKET").toUpperCase().replace(/_/g, " "),
+      message: n.title,
+      detail: n.summary || undefined,
+      href: "/news",
+      source_url: n.source_url || undefined,
+      source_name: n.source_name || undefined,
+      timestamp: n.surfaced_at || undefined,
+      severity: n.severity as "act" | "watch" | "info" | undefined,
+    })),
+    // Grid blazing signals
+    ..._gridSignals
+      .filter((g) => (g.motivation_score ?? 0) >= 70 && g.status === "new" && !g.do_not_contact)
+      .slice(0, 5)
+      .map((g) => ({
+        id: `grid-${g.id}`,
+        source: "grid" as const,
+        tag: `GRID · ${g.motivation_score}`,
+        message: `${g.property_address} — ${g.reasons_summary || "predicted seller"}`,
+        detail: g.reasons_summary || undefined,
+        href: "/grid",
+        timestamp: undefined,
+        severity: ((g.motivation_score ?? 0) >= 80 ? "act" : "watch") as "act" | "watch",
+      })),
+    // Sphere right-calls
+    ..._sphereSignals.slice(0, 4).map((s) => ({
+      id: `sphere-${s.id}`,
+      source: "sphere" as const,
+      tag: (s.signal_type || "sphere").toUpperCase().replace(/_/g, " "),
+      message:
+        (s.signal_data as any)?.property_address ||
+        (s.signal_data as any)?.summary ||
+        "Today's right call",
+      detail: JSON.stringify(s.signal_data),
+      href: "/sphere",
+      timestamp: s.surfaced_at || undefined,
+      severity: "watch" as const,
+    })),
+    // Transactions at risk
+    ..._transactions
+      .filter((tx) => ((tx.risk_flags as any[]) || []).some((f) => f.severity === "high"))
+      .slice(0, 4)
+      .map((tx) => {
+        const flags = (tx.risk_flags as any[]) || [];
+        const top = flags.find((f) => f.severity === "high") || flags[0];
+        return {
+          id: `tx-${tx.id}`,
+          source: "transaction" as const,
+          tag: "RISK",
+          message: `${tx.property_address} — ${top?.reason || "risk flagged"}`,
+          detail: top?.suggested_action || undefined,
+          href: `/transactions/${tx.id}`,
+          timestamp: undefined,
+          severity: "act" as const,
+        };
+      }),
+  ];
+
   return (
     <CockpitClient
       agentName={agentName}
@@ -396,6 +459,7 @@ export default async function CockpitPage() {
       todayTasks={_todayTasks}
       overdueCount={_overdueTasks.length}
       prioritizedLeads={prioritizedLeads}
+      tickerItems={tickerItems}
       counts={{
         listings: activeListings.length,
         buyers: activeBuyers.length,
