@@ -29,6 +29,7 @@ import {
   Sun,
   LogOut,
   Shield,
+  Database,
 } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { AskAlevant } from "./AskAlevant";
@@ -94,6 +95,7 @@ const GROUPS: NavGroup[] = [
     color: "#9A8FBF",
     items: [
       { href: "/transactions", label: "Transactions", icon: FileText },
+      { href: "/mls", label: "MLS Sync", icon: Database },
       { href: "/admin", label: "Admin", icon: Shield },
       { href: "/settings", label: "Settings", icon: Settings },
     ],
