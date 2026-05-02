@@ -58,13 +58,14 @@ export async function runClaude({
   cacheSystem = true,
 }: ClaudeRunOptions): Promise<string> {
   const c = (preferFoundry && getFoundry()) || getAnthropic();
+  const systemParam = cacheSystem
+    ? ([{ type: "text", text: system, cache_control: { type: "ephemeral" } }] as unknown as string)
+    : system;
   const resp = await c.messages.create({
     model: modelFor(tier),
     max_tokens: maxTokens,
     temperature,
-    system: cacheSystem
-      ? [{ type: "text", text: system, cache_control: { type: "ephemeral" } }]
-      : system,
+    system: systemParam,
     messages: [{ role: "user", content: user }],
   });
   const block = resp.content[0];

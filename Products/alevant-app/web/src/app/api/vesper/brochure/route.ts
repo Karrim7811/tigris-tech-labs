@@ -96,7 +96,7 @@ export async function POST(req: Request) {
   });
   if (upErr) {
     // Inline fallback when storage bucket missing
-    return new NextResponse(buffer, {
+    return new NextResponse(new Uint8Array(buffer), {
       headers: {
         "content-type": "application/pdf",
         "content-disposition": `inline; filename="${listing.address.replace(/[^a-z0-9]+/gi, "-")}.pdf"`,
