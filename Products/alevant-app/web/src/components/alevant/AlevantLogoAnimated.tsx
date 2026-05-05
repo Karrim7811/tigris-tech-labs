@@ -1,33 +1,39 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLogoAnimation } from "@/hooks/useLogoAnimation";
 
 const ACCENT = "#1A8A9E";
 
-interface AnimatedLetterConfig {
+interface LetterMotion {
+  index: number;
   letter: string;
-  wordIndex: number;
-  startDelay: number;
+  startLeft: number;
+  startTop: number;
+  width: number;
+  height: number;
+  deltaX: number;
+  deltaY: number;
+  delay: number;
   duration: number;
+  finished: boolean;
 }
 
-const LETTERS: AnimatedLetterConfig[] = [
-  { letter: "A", wordIndex: 0, startDelay: 0, duration: 600 },      // ACQUIRE
-  { letter: "L", wordIndex: 1, startDelay: 150, duration: 550 },    // LISTING
-  { letter: "E", wordIndex: 2, startDelay: 300, duration: 500 },    // ENGAGE
-  { letter: "V", wordIndex: 3, startDelay: 450, duration: 450 },    // VALIDATE
-  { letter: "A", wordIndex: 4, startDelay: 600, duration: 400 },    // AUTOMATE
-  { letter: "N", wordIndex: 5, startDelay: 750, duration: 350 },    // NEGOTIATE
-  { letter: "T", wordIndex: 6, startDelay: 900, duration: 300 },    // TRANSACT
+const LETTER_CONFIG = [
+  { letter: "A", delay: 0, duration: 650 },
+  { letter: "L", delay: 150, duration: 600 },
+  { letter: "E", delay: 300, duration: 550 },
+  { letter: "V", delay: 450, duration: 500 },
+  { letter: "A", delay: 600, duration: 450 },
+  { letter: "N", delay: 750, duration: 400 },
+  { letter: "T", delay: 900, duration: 350 },
 ];
 
 export function AlevantLogoAnimated() {
   const shouldAnimate = useLogoAnimation();
-  const [animatingIndices, setAnimatingIndices] = useState<Set<number>>(new Set());
+  const [letterMotions, setLetterMotions] = useState<LetterMotion[]>([]);
   const [isComplete, setIsComplete] = useState(false);
-  const logoRef = useRef<HTMLDivElement>(null);
-  const headerContainerRef = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!shouldAnimate) {
@@ -35,90 +41,120 @@ export function AlevantLogoAnimated() {
       return;
     }
 
-    // Start animations
-    const animationPromises = LETTERS.map((config) => {
-      return new Promise<void>((resolve) => {
-        setTimeout(() => {
-          setAnimatingIndices((prev) => new Set(prev).add(config.wordIndex));
-
-          setTimeout(() => {
-            setAnimatingIndices((prev) => {
-              const next = new Set(prev);
-              next.delete(config.wordIndex);
-              return next;
-            });
-            resolve();
-          }, config.duration);
-        }, config.startDelay);
-      });
-    });
-
-    Promise.all(animationPromises).then(() => {
+    const targetElement = targetRef.current;
+    const sourceElements = Array.from(document.querySelectorAll<HTMLElement>("[data-alevant-letter]"));
+    if (!targetElement || sourceElements.length !== LETTER_CONFIG.length) {
       setIsComplete(true);
+      return;
+    }
+
+    const targetRect = targetElement.getBoundingClientRect();
+    const motions: LetterMotion[] = LETTER_CONFIG.map((cfg, index) => {
+      const source = sourceElements[index];
+      const sourceRect = source.getBoundingClientRect();
+      const endLeft = targetRect.left + targetRect.width / 2 - sourceRect.width / 2;
+      const endTop = targetRect.top + targetRect.height / 2 - sourceRect.height / 2;
+
+      return {
+        index,
+        letter: cfg.letter,
+        startLeft: sourceRect.left,
+        startTop: sourceRect.top,
+        width: sourceRect.width,
+        height: sourceRect.height,
+        deltaX: endLeft - sourceRect.left,
+        deltaY: endTop - sourceRect.top,
+        delay: cfg.delay,
+        duration: cfg.duration,
+        finished: false,
+      };
     });
+
+    setLetterMotions(motions);
+
+    const timers = motions.map((motion) =>
+      window.setTimeout(() => {
+        setLetterMotions((prev) =>
+          prev.map((item) =>
+            item.index === motion.index ? { ...item, finished: true } : item
+          )
+        );
+      }, motion.delay + motion.duration)
+    );
+
+    const completeTimer = window.setTimeout(() => {
+      setIsComplete(true);
+    }, Math.max(...motions.map((motion) => motion.delay + motion.duration)) + 100);
+
+    return () => {
+      timers.forEach(window.clearTimeout);
+      window.clearTimeout(completeTimer);
+    };
   }, [shouldAnimate]);
 
-  return (
-    <>
-      {/* Inject keyframe animations for each letter */}
-      <style>{`
-        ${LETTERS.map((config, idx) => {
-          return `
-            @keyframes flyDownLetter${idx} {
+  const keyframes = useMemo(
+    () =>
+      letterMotions
+        .map(
+          (motion) => `
+            @keyframes flyLetter${motion.index} {
               0% {
                 transform: translate(0, 0) scale(1);
                 opacity: 0;
               }
-              5% {
+              10% {
                 opacity: 1;
               }
-              95% {
+              85% {
                 opacity: 1;
               }
               100% {
-                transform: translate(-120px, 160px) scale(0.6);
+                transform: translate(${motion.deltaX}px, ${motion.deltaY}px) scale(0.65);
                 opacity: 0;
               }
             }
-          `;
-        }).join("")}
-      `}</style>
+          `
+        )
+        .join(""),
+    [letterMotions]
+  );
 
-      {/* Hidden header reference to measure positions */}
-      <div ref={headerContainerRef} style={{ position: "relative" }} />
+  return (
+    <>
+      <style>{keyframes}</style>
 
-      {/* Animated letters - rendered as portals near the header */}
-      {shouldAnimate && LETTERS.map((config, idx) => {
-        const isAnimating = animatingIndices.has(config.wordIndex);
-        if (!isAnimating) return null;
-
-        return (
+      {letterMotions.map((motion) =>
+        !motion.finished ? (
           <div
-            key={idx}
+            key={motion.index}
             style={{
               position: "fixed",
-              top: "60px",
-              left: "100px",
-              fontSize: "20px",
-              fontWeight: "700",
+              left: motion.startLeft,
+              top: motion.startTop,
+              width: motion.width,
+              height: motion.height,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "clamp(24px, 2vw, 32px)",
+              fontWeight: 700,
               color: ACCENT,
               fontFamily: "'Jost', sans-serif",
               pointerEvents: "none",
-              zIndex: 1000,
-              animation: `flyDownLetter${idx} ${config.duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`,
+              zIndex: 1100,
+              animation: `flyLetter${motion.index} ${motion.duration}ms cubic-bezier(0.3, 0.0, 0.2, 1) ${motion.delay}ms forwards`,
             }}
           >
-            {config.letter}
+            {motion.letter}
           </div>
-        );
-      })}
+        ) : null
+      )}
 
-      {/* Static logo that fades in after animation */}
       <div
-        ref={logoRef}
+        ref={targetRef}
         style={{
           opacity: isComplete ? 1 : shouldAnimate ? 0 : 1,
-          transition: shouldAnimate ? "opacity 600ms ease-in 950ms" : "none",
+          transition: shouldAnimate ? "opacity 600ms ease-in 0ms" : "none",
         }}
       >
         <div
@@ -127,7 +163,6 @@ export function AlevantLogoAnimated() {
         >
           alevan
           <span style={{ color: ACCENT }}>t</span>
-          {/* TTL signature dot above first 'a' */}
           <span
             className="absolute"
             style={{

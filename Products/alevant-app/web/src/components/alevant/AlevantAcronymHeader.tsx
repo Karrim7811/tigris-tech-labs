@@ -48,24 +48,10 @@ export function AlevantAcronymHeader({
 
   useEffect(() => {
     setHasMounted(true);
-    let t: ReturnType<typeof setTimeout> | null = null;
     try {
-      const seen = sessionStorage.getItem(SESSION_KEY);
-      if (seen === "1") {
-        // Skip the intro this session — go straight to compact
-        setCollapsed(true);
-      } else {
-        t = setTimeout(() => {
-          setCollapsed(true);
-          try {
-            sessionStorage.setItem(SESSION_KEY, "1");
-          } catch {}
-        }, COLLAPSE_AFTER_MS);
-      }
+      const stored = sessionStorage.getItem(SESSION_KEY);
+      setCollapsed(stored === "1");
     } catch {}
-    return () => {
-      if (t) clearTimeout(t);
-    };
   }, []);
 
   // ── Single layout, all sizing driven by `collapsed` flag ──
@@ -178,6 +164,7 @@ export function AlevantAcronymHeader({
               >
                 <div
                   className="serif-display text-center"
+                  data-alevant-letter={i}
                   style={{
                     fontSize: letterSize,
                     fontStyle: "italic",
