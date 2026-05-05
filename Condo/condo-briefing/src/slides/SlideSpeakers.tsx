@@ -5,7 +5,7 @@ import Slide from "@/components/Slide";
 
 interface Speaker {
   name: string;
-  title: string;
+  title?: string;
   location: string;
   specialty: string;
 }
@@ -13,19 +13,16 @@ interface Speaker {
 const speakers: Speaker[] = [
   {
     name: "Karim Nasser",
-    title: "Senior Vice President",
     location: "Aon — Miami",
     specialty: "Senior Real Estate Advisor · Condominium and Multifamily Industry",
   },
   {
     name: "Kali Mullen",
-    title: "Senior Vice President",
     location: "Aon — Tampa",
     specialty: "Florida property practice lead",
   },
   {
     name: "Norbert Fernandez",
-    title: "Senior Vice President",
     location: "Aon — Miami",
     specialty: "Middle Market practice leader",
   },
@@ -108,10 +105,12 @@ export default function SlideSpeakers() {
               </h3>
 
               {/* Title + location stack */}
-              <div className="text-[13px] text-aon-graphite font-medium leading-snug">
-                {s.title}
-              </div>
-              <div className="text-[11px] tracking-[0.18em] uppercase text-aon-stone mt-1.5">
+              {s.title && (
+                <div className="text-[13px] text-aon-graphite font-medium leading-snug">
+                  {s.title}
+                </div>
+              )}
+              <div className={`text-[11px] tracking-[0.18em] uppercase text-aon-stone ${s.title ? "mt-1.5" : ""}`}>
                 {s.location}
               </div>
 
