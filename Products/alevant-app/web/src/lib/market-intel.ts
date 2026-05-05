@@ -36,6 +36,10 @@ export interface MarketGroupSummary {
   };
 }
 
+export interface MarketRecommendation extends MarketGroupSummary {
+  recommendation_score: number;
+}
+
 export interface MarketOverview {
   total_signals: number;
   blazing: number;
@@ -147,6 +151,29 @@ function buildGroup(rows: MarketSignalRow[], level: MarketGroupLevel): MarketGro
       if (b.avg_motivation !== a.avg_motivation) return b.avg_motivation - a.avg_motivation;
       return b.count - a.count;
     });
+}
+
+function computeRecommendationScore(group: MarketGroupSummary): number {
+  return Math.round(
+    group.avg_motivation * 1.4 +
+    group.hot_share * 0.55 +
+    Math.min(group.count, 40) * 0.25
+  );
+}
+
+export function recommendMarketGroups(
+  rows: MarketSignalRow[],
+  level: MarketGroupLevel,
+  limit = 5
+): MarketRecommendation[] {
+  return buildGroup(rows, level)
+    .map((group) => ({
+      ...group,
+      recommendation_score: computeRecommendationScore(group),
+    }))
+    .filter((group) => group.key !== "Unknown" && group.count > 0)
+    .sort((a, b) => b.recommendation_score - a.recommendation_score)
+    .slice(0, limit);
 }
 
 export function summarizeGridSignals(rows: MarketSignalRow[]): MarketOverview {

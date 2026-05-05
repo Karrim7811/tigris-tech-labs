@@ -293,7 +293,25 @@ export function fusedToGridInputs(fused: FusedSignal) {
     : 0;
   const estimatedEquity = Math.max(0, value - estimatedMortgage);
 
+  const sources = [
+    resolvedCounty === "Miami-Dade"
+      ? "miami_dade_pa"
+      : resolvedCounty === "Broward"
+      ? "broward_pa"
+      : resolvedCounty === "Palm Beach"
+      ? "palm_beach_pa"
+      : resolvedCounty === "Monroe"
+      ? "monroe_pa"
+      : "florida_public_records",
+  ];
+  if (fused.tax) sources.push("tax_collector");
+  if (fused.court_filings.length) sources.push("clerk_of_court");
+  if (fused.code_enforcement.length) sources.push("code_enforcement");
+  if (fused.str_market) sources.push("str_market");
+
   return {
+    apn: p.folio,
+    county: p.county,
     property_address: `${p.address.line1}, ${p.address.city}, ${p.address.state} ${p.address.zip}`,
     property_city: p.address.city,
     property_state: p.address.state,
@@ -314,17 +332,7 @@ export function fusedToGridInputs(fused: FusedSignal) {
     is_senior_owner: false, // TODO: cross-ref voter rolls / age proxies
     has_hoa_delinquency: false, // TODO: HOA-specific adapter (per-association)
     is_vacant: false, // TODO: USPS NCOA when licensed
-    data_sources: [
-      resolvedCounty === "Miami-Dade"
-        ? "miami_dade_pa"
-        : resolvedCounty === "Broward"
-        ? "broward_pa"
-        : resolvedCounty === "Palm Beach"
-        ? "palm_beach_pa"
-        : resolvedCounty === "Monroe"
-        ? "monroe_pa"
-        : "florida_public_records",
-    ],
+    data_sources: Array.from(new Set(sources)),
   };
 }
 

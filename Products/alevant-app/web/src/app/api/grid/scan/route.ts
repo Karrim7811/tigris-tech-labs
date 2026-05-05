@@ -9,7 +9,7 @@ export const maxDuration = 60;
 
 /**
  * POST /api/grid/scan — scan a list of addresses, fuse public records, score them, persist as grid_signals.
- * Body: { addresses: string[], zip?: string, county?: string, include_str_market?: boolean }
+ * Body: { addresses: string[], zip?: string, county?: string, include_str_market?: boolean, include_mls_market?: boolean }
  *   OR: { zone_id: uuid }   — uses the workspace's grid_farm_zones row (TBD: address generation per zone)
  */
 export async function POST(req: Request) {
