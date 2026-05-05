@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { AskAlevant } from "./AskAlevant";
+import { AlevantLogoAnimated } from "./AlevantLogoAnimated";
 
 interface NavItem {
   href: string;
@@ -187,49 +188,7 @@ export function Sidebar() {
           style={{ borderBottom: `1px solid ${BORDER}` }}
         >
           <Link href="/cockpit" className="block group">
-            {/*  TTL signature wordmark:
-                 - lowercase italic Cormorant
-                 - dot above first 'a' (TTL master pattern)
-                 - final 't' in accent (PRAIX-style product letter)  */}
-            <div
-              className="font-light text-[30px] leading-none italic relative inline-block text-parchment"
-              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", letterSpacing: "0.01em" }}
-            >
-              alevan
-              <span style={{ color: ACCENT }}>t</span>
-              {/* TTL signature dot above first 'a' */}
-              <span
-                className="absolute"
-                style={{
-                  top: 4,
-                  left: 2,
-                  width: 4,
-                  height: 4,
-                  borderRadius: "50%",
-                  background: ACCENT,
-                }}
-              />
-            </div>
-            <div
-              className="text-[9px] uppercase mt-2"
-              style={{
-                letterSpacing: "0.32em",
-                color: ACCENT,
-                fontFamily: "'Jost', sans-serif",
-              }}
-            >
-              AI Operating System
-            </div>
-            <div
-              className="text-[8px] uppercase mt-1"
-              style={{
-                letterSpacing: "0.28em",
-                color: "#5A5750",
-                fontFamily: "'Jost', sans-serif",
-              }}
-            >
-              A Tigris Tech Labs Product
-            </div>
+            <AlevantLogoAnimated />
           </Link>
           <div className="flex gap-1.5 mt-1 flex-shrink-0">
             <button
