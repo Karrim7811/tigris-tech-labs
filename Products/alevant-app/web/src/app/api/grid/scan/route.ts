@@ -9,7 +9,7 @@ export const maxDuration = 60;
 
 /**
  * POST /api/grid/scan — scan a list of addresses, fuse public records, score them, persist as grid_signals.
- * Body: { addresses: string[], zip?: string }
+ * Body: { addresses: string[], zip?: string, county?: string, include_str_market?: boolean }
  *   OR: { zone_id: uuid }   — uses the workspace's grid_farm_zones row (TBD: address generation per zone)
  */
 export async function POST(req: Request) {
@@ -34,7 +34,12 @@ export async function POST(req: Request) {
     await Promise.all(
       slice.map(async (addr) => {
         try {
-          const fused = await fuseAddressSignals({ address: addr, zip: body.zip });
+          const fused = await fuseAddressSignals({
+            address: addr,
+            zip: body.zip,
+            county: body.county,
+            include_str_market: body.include_str_market,
+          });
           if (!fused) {
             results.push({ address: addr, ok: false, error: "no public record found" });
             return;

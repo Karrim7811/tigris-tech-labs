@@ -21,6 +21,8 @@ export interface GridSignalInputs {
   is_probate?: boolean;
   is_divorce?: boolean;
   is_senior_owner?: boolean;
+  // Location
+  property_neighborhood?: string;
   // Market
   neighborhood_absorption_rate?: number; // months of inventory; lower = sellers' market
 }

@@ -33,6 +33,7 @@ export async function POST(req: Request) {
     is_probate: body.is_probate,
     is_divorce: body.is_divorce,
     is_senior_owner: body.is_senior_owner,
+    property_neighborhood: body.property_neighborhood,
     neighborhood_absorption_rate: body.neighborhood_absorption_rate,
   });
 
@@ -86,6 +87,7 @@ export async function POST(req: Request) {
       property_city: body.property_city,
       property_state: body.property_state || "FL",
       property_zip: body.property_zip,
+      property_neighborhood: body.property_neighborhood,
       owner_name: body.owner_name,
       owner_phone: body.owner_phone,
       estimated_value: body.estimated_value,

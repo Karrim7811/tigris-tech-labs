@@ -77,6 +77,7 @@ const GROUPS: NavGroup[] = [
     color: BRASS,
     items: [
       { href: "/news", label: "News & Intel", icon: Newspaper },
+      { href: "/market-insights", label: "Market Intel", icon: Search },
       { href: "/grid", label: "The Grid", icon: Grid3x3 },
       { href: "/sphere", label: "Sphere", icon: CircleUser },
       { href: "/underwriter", label: "Underwriter", icon: Calculator },

@@ -22,6 +22,7 @@ export interface PropertyRecord {
   year_built?: number;
   property_type?: string;
   use_code?: string;
+  neighborhood?: string;
   assessed_value?: number;
   market_value?: number;
   homestead_exemption?: boolean;
