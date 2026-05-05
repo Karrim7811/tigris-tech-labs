@@ -40,7 +40,6 @@ export default function SlidePortfolioMap() {
       sectionLabel={selected ? "Asset profile" : "Your building"}
       sectionNumber="—"
       className="!bg-white"
-      hideWordmark={!!selected}
       hideSectionMark={!!selected}
     >
       <AnimatePresence mode="wait">

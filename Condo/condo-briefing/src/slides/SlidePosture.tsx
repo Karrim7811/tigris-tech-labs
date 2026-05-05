@@ -62,7 +62,7 @@ export default function SlidePosture() {
   };
 
   return (
-    <Slide variant="light" sectionLabel="Today's runway" sectionNumber="01">
+    <Slide variant="light" sectionLabel="Today's runway" sectionNumber="01" hideWordmark={false}>
       <div className="bg-grid-light absolute inset-0 opacity-40" />
 
       <div className="relative z-10 h-full flex flex-col px-20 pt-24 pb-16 max-w-[1500px] mx-auto">

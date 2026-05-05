@@ -35,6 +35,7 @@ export default function SlideReward() {
       titlePrefix="What underwriters"
       titleAccent="reward."
       items={items}
+      hideWordmark={false}
     />
   );
 }

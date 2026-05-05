@@ -33,7 +33,7 @@ const speakers = [
 
 export default function SlideQA() {
   return (
-    <Slide variant="dark" hideSectionMark className="!bg-aon-midnight">
+    <Slide variant="dark" hideSectionMark className="!bg-aon-midnight" hideWordmark={false}>
       <div className="absolute inset-0 bg-grid opacity-25" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(40,175,195,0.18),transparent_55%),radial-gradient(circle_at_75%_85%,rgba(235,0,23,0.18),transparent_60%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(6,11,38,0.85)_95%)]" />

@@ -18,6 +18,7 @@ interface FrameworkSlideProps {
   titlePrefix: string;
   titleAccent: string;
   items: FrameworkItem[];
+  hideWordmark?: boolean;
 }
 
 const accentByMode: Record<FrameworkMode, { text: string; bg: string; ring: string; rule: string }> = {
@@ -49,11 +50,12 @@ export default function FrameworkSlide({
   titlePrefix,
   titleAccent,
   items,
+  hideWordmark,
 }: FrameworkSlideProps) {
   const accent = accentByMode[mode];
 
   return (
-    <Slide variant="light" sectionLabel={sectionLabel} sectionNumber={sectionNumber}>
+    <Slide variant="light" sectionLabel={sectionLabel} sectionNumber={sectionNumber} hideWordmark={hideWordmark}>
       <div className="bg-grid-light absolute inset-0 opacity-40" />
 
       <div className="relative z-10 h-full flex flex-col justify-center px-20 pt-24 pb-12 max-w-[1700px] mx-auto">

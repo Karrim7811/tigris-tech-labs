@@ -55,7 +55,7 @@ const totalCarriers = regions.reduce((n, r) => n + r.carriers.length, 0);
 
 export default function SlideCarrierWall() {
   return (
-    <Slide variant="dark" sectionLabel="Markets we touch" sectionNumber="—">
+    <Slide variant="dark" sectionLabel="Markets we touch" sectionNumber="—" hideWordmark={false}>
       <div className="absolute inset-0 bg-grid opacity-50" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(40,175,195,0.15),transparent_55%),radial-gradient(circle_at_75%_80%,rgba(235,0,23,0.10),transparent_55%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(6,11,38,0.85)_98%)]" />

@@ -42,7 +42,7 @@ const phaseLabels: Record<Step["phase"], string> = {
 
 export default function SlideRenewalTimeline() {
   return (
-    <Slide variant="light" sectionLabel="Renewal timeline" sectionNumber="—">
+    <Slide variant="light" sectionLabel="Renewal timeline" sectionNumber="—" hideWordmark={false}>
       <div className="bg-grid-light absolute inset-0 opacity-40" />
 
       <div className="relative z-10 h-full flex flex-col justify-center px-16 pt-24 pb-12 max-w-[1700px] mx-auto">

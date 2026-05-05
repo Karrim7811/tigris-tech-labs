@@ -35,7 +35,7 @@ export default function SlideStormHistory() {
       >
         <div className="text-[11px] tracking-[0.4em] uppercase text-aon-cyan/85 mb-1.5 flex items-center gap-3 justify-center">
           <span className="h-px w-8 bg-aon-cyan/60" />
-          NOAA HURDAT2 · 1950 → 2022
+          NOAA HURDAT2 · 1950 → 2025
           <span className="h-px w-8 bg-aon-cyan/60" />
         </div>
         <h1 className="text-3xl xl:text-5xl font-medium tracking-tight text-white leading-[1.05]">

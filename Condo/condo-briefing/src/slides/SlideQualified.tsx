@@ -51,7 +51,7 @@ const stats = [
 
 export default function SlideQualified() {
   return (
-    <Slide variant="light" sectionLabel="Why we&apos;re qualified" sectionNumber="02">
+    <Slide variant="light" sectionLabel="Why we&apos;re qualified" sectionNumber="02" hideWordmark={false}>
       <div className="bg-grid-light absolute inset-0 opacity-40" />
 
       <div className="relative z-10 h-full flex flex-col justify-center px-20 pt-24 pb-12">

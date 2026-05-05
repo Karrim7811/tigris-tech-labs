@@ -28,6 +28,7 @@ export default function SlideControl() {
       variant="light"
       sectionLabel="What you can influence"
       sectionNumber="—"
+      hideWordmark={false}
     >
       <div className="bg-grid-light absolute inset-0 opacity-40" />
 

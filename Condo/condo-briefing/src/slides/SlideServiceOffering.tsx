@@ -150,7 +150,7 @@ export default function SlideServiceOffering() {
   const selected = selectedId ? services.find((s) => s.id === selectedId) : null;
 
   return (
-    <Slide variant="light" sectionLabel="Service offering" sectionNumber="—">
+    <Slide variant="light" sectionLabel="Service offering" sectionNumber="—" hideWordmark={false}>
       <div className="bg-grid-light absolute inset-0 opacity-40" />
 
       <AnimatePresence mode="wait">

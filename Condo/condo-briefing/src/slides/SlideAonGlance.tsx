@@ -38,7 +38,7 @@ const stats: Stat[] = [
 
 export default function SlideAonGlance() {
   return (
-    <Slide variant="dark" sectionLabel="Aon at a glance" sectionNumber="—">
+    <Slide variant="dark" sectionLabel="Aon at a glance" sectionNumber="—" hideWordmark={false}>
       {/* Atmospheric backdrop */}
       <div className="absolute inset-0 bg-grid opacity-60" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(40,175,195,0.18),transparent_55%),radial-gradient(circle_at_20%_85%,rgba(167,0,112,0.15),transparent_55%)]" />

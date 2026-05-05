@@ -79,7 +79,7 @@ const pillars: Pillar[] = [
 
 export default function SlideAGRC() {
   return (
-    <Slide variant="dark" sectionLabel="Aon Global Risk Consulting (AGRC)" sectionNumber="—">
+    <Slide variant="dark" sectionLabel="Aon Global Risk Consulting (AGRC)" sectionNumber="—" hideWordmark={false}>
       <div className="absolute inset-0 bg-grid opacity-50" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_25%,rgba(40,175,195,0.18),transparent_55%),radial-gradient(circle_at_20%_80%,rgba(167,0,112,0.14),transparent_55%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(6,11,38,0.85)_98%)]" />
