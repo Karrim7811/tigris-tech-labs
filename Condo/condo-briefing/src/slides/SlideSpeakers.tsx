@@ -13,13 +13,19 @@ interface Speaker {
   oneLiner: string;
   /** Title (e.g. Senior Vice President). */
   title: string;
-  /** Marks the presenter — gets the red accent + LEAD tag. */
-  isLead?: boolean;
   /** Path to portrait, e.g. "/images/speakers/karim.jpg". When absent, initials disc renders. */
   photo?: string;
 }
 
 const speakers: Speaker[] = [
+  {
+    lane: "Commercial Risk",
+    name: "Karim Nasser",
+    location: "Aon — Miami",
+    title: "Senior Vice President",
+    oneLiner: "Commercial real estate playbook. Leading the session today.",
+    photo: "/images/speakers/karim.jpg",
+  },
   {
     lane: "Florida Property Leader",
     name: "Kali Mullen",
@@ -27,15 +33,6 @@ const speakers: Speaker[] = [
     title: "Senior Vice President",
     oneLiner: "Sees every FL wind line in the state.",
     photo: "/images/speakers/kali.jpg",
-  },
-  {
-    lane: "Commercial Risk",
-    name: "Karim Nasser",
-    location: "Aon — Miami",
-    title: "Senior Vice President",
-    oneLiner: "Commercial real estate playbook. Leading the session today.",
-    isLead: true,
-    photo: "/images/speakers/karim.jpg",
   },
   {
     lane: "Florida Middle Market Leader",
@@ -123,18 +120,14 @@ export default function SlideSpeakers() {
                 delay: 0.5 + i * 0.1,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className={`border-b border-aon-fog/60 flex-1 min-h-0 transition-colors ${
-                s.isLead ? "bg-aon-red/[0.04]" : ""
-              }`}
+              className="border-b border-aon-fog/60 flex-1 min-h-0 transition-colors"
             >
               <div className="h-full flex items-center gap-7 py-4 px-2 -mx-2">
                 {/* Portrait — photo if available, initials disc otherwise */}
                 <div className="shrink-0">
                   {s.photo ? (
                     <div
-                      className={`relative h-20 w-20 rounded-full overflow-hidden ring-2 ${
-                        s.isLead ? "ring-aon-red" : "ring-aon-fog/70"
-                      }`}
+                      className="relative h-20 w-20 rounded-full overflow-hidden ring-2 ring-aon-fog/70"
                       style={{ boxShadow: "0 6px 18px rgba(10, 19, 70, 0.18)" }}
                     >
                       <Image
@@ -147,9 +140,7 @@ export default function SlideSpeakers() {
                     </div>
                   ) : (
                     <div
-                      className={`grid h-20 w-20 place-items-center rounded-full text-white text-[20px] font-semibold tracking-[0.04em] ring-2 ${
-                        s.isLead ? "ring-aon-red" : "ring-aon-fog/70"
-                      }`}
+                      className="grid h-20 w-20 place-items-center rounded-full text-white text-[20px] font-semibold tracking-[0.04em] ring-2 ring-aon-fog/70"
                       style={{
                         background:
                           "linear-gradient(135deg, #101E7F 0%, #060B26 100%)",
@@ -162,21 +153,13 @@ export default function SlideSpeakers() {
                 </div>
 
                 {/* Numeral */}
-                <div
-                  className={`text-3xl xl:text-5xl font-medium tabular leading-none w-16 shrink-0 ${
-                    s.isLead ? "text-aon-red" : "text-aon-fog"
-                  }`}
-                >
+                <div className="text-3xl xl:text-5xl font-medium tabular leading-none w-16 shrink-0 text-aon-fog">
                   {String(i + 1).padStart(2, "0")}
                 </div>
 
                 {/* Lane (kicker) — fixed width column */}
                 <div className="w-[260px] shrink-0">
-                  <div
-                    className={`text-[10px] tracking-[0.3em] uppercase font-semibold mb-1 ${
-                      s.isLead ? "text-aon-red" : "text-aon-stone"
-                    }`}
-                  >
+                  <div className="text-[10px] tracking-[0.3em] uppercase font-semibold mb-1 text-aon-stone">
                     {s.lane}
                   </div>
                   <div className="text-xl xl:text-2xl font-semibold text-aon-ink leading-tight tracking-tight">
@@ -197,15 +180,6 @@ export default function SlideSpeakers() {
                   </p>
                 </div>
 
-                {/* Lead tag */}
-                {s.isLead && (
-                  <div className="shrink-0">
-                    <span className="inline-flex items-center gap-2 bg-aon-red text-white text-[10px] tracking-[0.2em] uppercase font-bold px-3 py-1.5 rounded-sm">
-                      <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                      Lead · presenting today
-                    </span>
-                  </div>
-                )}
               </div>
             </motion.li>
           ))}
