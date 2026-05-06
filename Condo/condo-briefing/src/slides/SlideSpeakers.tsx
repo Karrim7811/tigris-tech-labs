@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { Mic } from "lucide-react";
 import Slide from "@/components/Slide";
 
 interface Speaker {
@@ -15,6 +16,8 @@ interface Speaker {
   title: string;
   /** Path to portrait, e.g. "/images/speakers/karim.jpg". When absent, initials disc renders. */
   photo?: string;
+  /** Marks the active presenter — adds a red mic badge to the portrait. */
+  isPresenter?: boolean;
 }
 
 const speakers: Speaker[] = [
@@ -25,6 +28,7 @@ const speakers: Speaker[] = [
     title: "Senior Vice President",
     oneLiner: "Commercial real estate playbook. Leading the session today.",
     photo: "/images/speakers/karim.jpg",
+    isPresenter: true,
   },
   {
     lane: "Florida Property Leader",
@@ -124,7 +128,7 @@ export default function SlideSpeakers() {
             >
               <div className="h-full flex items-center gap-7 py-4 px-2 -mx-2">
                 {/* Portrait — photo if available, initials disc otherwise */}
-                <div className="shrink-0">
+                <div className="relative shrink-0">
                   {s.photo ? (
                     <div
                       className="relative h-20 w-20 rounded-full overflow-hidden ring-2 ring-aon-fog/70"
@@ -149,6 +153,25 @@ export default function SlideSpeakers() {
                     >
                       {initials(s.name)}
                     </div>
+                  )}
+
+                  {/* Presenter mic badge — bottom-right corner */}
+                  {s.isPresenter && (
+                    <motion.div
+                      initial={{ scale: 0, rotate: -20 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{
+                        delay: 0.7,
+                        type: "spring",
+                        stiffness: 320,
+                        damping: 18,
+                      }}
+                      className="absolute -bottom-1 -right-1 grid h-8 w-8 place-items-center rounded-md bg-aon-red text-white ring-2 ring-white"
+                      style={{ boxShadow: "0 4px 14px rgba(235, 0, 23, 0.45)" }}
+                      aria-label="Presenting today"
+                    >
+                      <Mic className="h-[15px] w-[15px]" strokeWidth={2.5} />
+                    </motion.div>
                   )}
                 </div>
 
