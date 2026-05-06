@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import Slide from "@/components/Slide";
 
@@ -10,41 +11,57 @@ interface Speaker {
   location: string;
   /** One-liner: what this person solves for the audience. */
   oneLiner: string;
-  /** Optional secondary title (shown beside the location). */
-  title?: string;
+  /** Title (e.g. Senior Vice President). */
+  title: string;
   /** Marks the presenter — gets the red accent + LEAD tag. */
   isLead?: boolean;
+  /** Path to portrait, e.g. "/images/speakers/karim.jpg". When absent, initials disc renders. */
+  photo?: string;
 }
 
 const speakers: Speaker[] = [
   {
-    lane: "Florida property",
+    lane: "Florida Property Leader",
     name: "Kali Mullen",
     location: "Aon — Tampa",
+    title: "Senior Vice President",
     oneLiner: "Sees every FL wind line in the state.",
+    photo: "/images/speakers/kali.jpg",
   },
   {
-    lane: "Real estate",
+    lane: "Commercial Risk",
     name: "Karim Nasser",
     location: "Aon — Miami",
-    title: "SVP · Senior Real Estate Advisor",
-    oneLiner: "Condominium & multifamily playbook. Leading the session today.",
+    title: "Senior Vice President",
+    oneLiner: "Commercial real estate playbook. Leading the session today.",
     isLead: true,
+    photo: "/images/speakers/karim.jpg",
   },
   {
-    lane: "Casualty & D&O",
+    lane: "Florida Middle Market Leader",
     name: "Norbert Fernandez",
     location: "Aon — Miami",
-    oneLiner: "Middle Market practice leader. Boards and liability live here.",
+    title: "Senior Vice President",
+    oneLiner: "Boards, D&O, and complex middle-market risk.",
+    photo: "/images/speakers/norbert.jpg",
   },
   {
-    lane: "Your day-to-day",
+    lane: "Real Estate",
     name: "Sam Eder",
-    location: "Aon — Miami",
-    title: "Senior Account Executive · Real Estate",
+    location: "Aon — Tampa",
+    title: "Senior Account Executive",
     oneLiner: "Runs your account 364 days a year. The Tuesday phone call.",
   },
 ];
+
+function initials(name: string): string {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((s) => s[0]?.toUpperCase() ?? "")
+    .join("");
+}
 
 export default function SlideSpeakers() {
   return (
@@ -94,7 +111,7 @@ export default function SlideSpeakers() {
           </motion.div>
         </div>
 
-        {/* Editorial roster — numbered rows */}
+        {/* Editorial roster — portrait + lane + one-liner */}
         <ul className="flex flex-col flex-1 min-h-0 border-t border-aon-fog/60">
           {speakers.map((s, i) => (
             <motion.li
@@ -110,10 +127,43 @@ export default function SlideSpeakers() {
                 s.isLead ? "bg-aon-red/[0.04]" : ""
               }`}
             >
-              <div className="h-full flex items-center gap-8 py-4 px-2 -mx-2">
+              <div className="h-full flex items-center gap-7 py-4 px-2 -mx-2">
+                {/* Portrait — photo if available, initials disc otherwise */}
+                <div className="shrink-0">
+                  {s.photo ? (
+                    <div
+                      className={`relative h-20 w-20 rounded-full overflow-hidden ring-2 ${
+                        s.isLead ? "ring-aon-red" : "ring-aon-fog/70"
+                      }`}
+                      style={{ boxShadow: "0 6px 18px rgba(10, 19, 70, 0.18)" }}
+                    >
+                      <Image
+                        src={s.photo}
+                        alt={s.name}
+                        fill
+                        sizes="80px"
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className={`grid h-20 w-20 place-items-center rounded-full text-white text-[20px] font-semibold tracking-[0.04em] ring-2 ${
+                        s.isLead ? "ring-aon-red" : "ring-aon-fog/70"
+                      }`}
+                      style={{
+                        background:
+                          "linear-gradient(135deg, #101E7F 0%, #060B26 100%)",
+                        boxShadow: "0 6px 18px rgba(10, 19, 70, 0.18)",
+                      }}
+                    >
+                      {initials(s.name)}
+                    </div>
+                  )}
+                </div>
+
                 {/* Numeral */}
                 <div
-                  className={`text-5xl xl:text-7xl font-medium tabular leading-none w-24 shrink-0 ${
+                  className={`text-3xl xl:text-5xl font-medium tabular leading-none w-16 shrink-0 ${
                     s.isLead ? "text-aon-red" : "text-aon-fog"
                   }`}
                 >
@@ -121,7 +171,7 @@ export default function SlideSpeakers() {
                 </div>
 
                 {/* Lane (kicker) — fixed width column */}
-                <div className="w-[230px] shrink-0">
+                <div className="w-[260px] shrink-0">
                   <div
                     className={`text-[10px] tracking-[0.3em] uppercase font-semibold mb-1 ${
                       s.isLead ? "text-aon-red" : "text-aon-stone"
@@ -135,15 +185,13 @@ export default function SlideSpeakers() {
                   <div className="text-[11px] tracking-[0.18em] uppercase text-aon-stone mt-1">
                     {s.location}
                   </div>
-                  {s.title && (
-                    <div className="text-[12px] text-aon-graphite mt-1 leading-snug">
-                      {s.title}
-                    </div>
-                  )}
+                  <div className="text-[12px] text-aon-graphite mt-1 leading-snug font-medium">
+                    {s.title}
+                  </div>
                 </div>
 
                 {/* One-liner — flex */}
-                <div className="flex-1 min-w-0 border-l-2 border-aon-fog/60 pl-8">
+                <div className="flex-1 min-w-0 border-l-2 border-aon-fog/60 pl-7">
                   <p className="text-base xl:text-lg text-aon-ink leading-snug">
                     {s.oneLiner}
                   </p>
