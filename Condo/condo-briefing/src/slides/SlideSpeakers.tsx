@@ -10,14 +10,10 @@ interface Speaker {
   lane: string;
   name: string;
   location: string;
-  /** One-liner: what this person solves for the audience. */
-  oneLiner: string;
   /** Title (e.g. Senior Vice President). */
   title: string;
   /** Path to portrait, e.g. "/images/speakers/karim.jpg". When absent, initials disc renders. */
   photo?: string;
-  /** Marks the active presenter — adds a red mic badge to the portrait. */
-  isPresenter?: boolean;
 }
 
 const speakers: Speaker[] = [
@@ -26,16 +22,13 @@ const speakers: Speaker[] = [
     name: "Karim Nasser",
     location: "Aon — Miami",
     title: "Senior Vice President",
-    oneLiner: "Commercial real estate playbook. Leading the session today.",
     photo: "/images/speakers/karim.jpg",
-    isPresenter: true,
   },
   {
     lane: "Florida Property Leader",
     name: "Kali Mullen",
     location: "Aon — Tampa",
     title: "Senior Vice President",
-    oneLiner: "Sees every FL wind line in the state.",
     photo: "/images/speakers/kali.jpg",
   },
   {
@@ -43,7 +36,6 @@ const speakers: Speaker[] = [
     name: "Norbert Fernandez",
     location: "Aon — Miami",
     title: "Senior Vice President",
-    oneLiner: "Boards, D&O, and complex middle-market risk.",
     photo: "/images/speakers/norbert.jpg",
   },
   {
@@ -51,9 +43,10 @@ const speakers: Speaker[] = [
     name: "Sam Eder",
     location: "Aon — Tampa",
     title: "Senior Account Executive",
-    oneLiner: "Runs your account 364 days a year. The Tuesday phone call.",
   },
 ];
+
+const WAVE_BARS = [0.35, 0.7, 1, 0.55, 0.85, 0.4, 0.95, 0.5, 0.75, 0.3, 0.6, 0.45];
 
 function initials(name: string): string {
   return name
@@ -155,24 +148,22 @@ export default function SlideSpeakers() {
                     </div>
                   )}
 
-                  {/* Presenter mic badge — bottom-right corner */}
-                  {s.isPresenter && (
-                    <motion.div
-                      initial={{ scale: 0, rotate: -20 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{
-                        delay: 0.7,
-                        type: "spring",
-                        stiffness: 320,
-                        damping: 18,
-                      }}
-                      className="absolute -bottom-1 -right-1 grid h-8 w-8 place-items-center rounded-md bg-aon-red text-white ring-2 ring-white"
-                      style={{ boxShadow: "0 4px 14px rgba(235, 0, 23, 0.45)" }}
-                      aria-label="Presenting today"
-                    >
-                      <Mic className="h-[15px] w-[15px]" strokeWidth={2.5} />
-                    </motion.div>
-                  )}
+                  {/* Mic badge — every speaker takes the floor */}
+                  <motion.div
+                    initial={{ scale: 0, rotate: -20 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{
+                      delay: 0.7 + i * 0.08,
+                      type: "spring",
+                      stiffness: 320,
+                      damping: 18,
+                    }}
+                    className="absolute -bottom-1 -right-1 grid h-8 w-8 place-items-center rounded-md bg-aon-red text-white ring-2 ring-white"
+                    style={{ boxShadow: "0 4px 14px rgba(235, 0, 23, 0.45)" }}
+                    aria-label="Speaks in this session"
+                  >
+                    <Mic className="h-[15px] w-[15px]" strokeWidth={2.5} />
+                  </motion.div>
                 </div>
 
                 {/* Numeral */}
@@ -196,11 +187,37 @@ export default function SlideSpeakers() {
                   </div>
                 </div>
 
-                {/* One-liner — flex */}
-                <div className="flex-1 min-w-0 border-l-2 border-aon-fog/60 pl-7">
-                  <p className="text-base xl:text-lg text-aon-ink leading-snug">
-                    {s.oneLiner}
-                  </p>
+                {/* Speaks-now cue — minimalist waveform + tracked label */}
+                <div className="flex-1 min-w-0 border-l-2 border-aon-fog/60 pl-7 flex items-center justify-between gap-6">
+                  <div
+                    className="flex items-end gap-[3px] h-7"
+                    aria-hidden
+                  >
+                    {WAVE_BARS.map((h, b) => (
+                      <motion.span
+                        key={b}
+                        initial={{ scaleY: 0.2, opacity: 0 }}
+                        animate={{
+                          scaleY: [0.25, h, 0.45, h * 0.9, h],
+                          opacity: 1,
+                        }}
+                        transition={{
+                          delay: 0.9 + i * 0.08 + b * 0.03,
+                          duration: 1.6,
+                          repeat: Infinity,
+                          repeatType: "mirror",
+                          ease: "easeInOut",
+                        }}
+                        className="w-[3px] origin-bottom rounded-full bg-aon-red/55"
+                        style={{ height: `${h * 100}%` }}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="text-[10px] tracking-[0.32em] uppercase text-aon-stone shrink-0 flex items-center gap-3">
+                    <span className="h-px w-6 bg-aon-stone/40" />
+                    Introduces themselves
+                  </div>
                 </div>
 
               </div>
