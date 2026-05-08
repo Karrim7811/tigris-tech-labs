@@ -99,8 +99,61 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
         </div>
       </header>
 
-      <section className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
-        <div className="space-y-8">
+      <section className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
+        {/* LEFT: Contact + Actions + Notes — sticky so it stays visible while scrolling */}
+        <aside className="space-y-4 lg:sticky lg:top-6 lg:self-start">
+          <div className="border border-mist bg-bone p-5">
+            <p className="eyebrow !text-brass mb-3">Contact</p>
+            <p className="text-sm text-ink mb-1 font-medium">{contact.full_name}</p>
+            {(contact.phones ?? []).map((p: string) => (
+              <p key={p} className="text-xs text-smoke">{p}</p>
+            ))}
+            {(contact.emails ?? []).map((e: string) => (
+              <p key={e} className="text-xs text-smoke truncate" title={e}>{e}</p>
+            ))}
+            {contact.language && <p className="text-xs text-stone mt-3">Language · {contact.language.toUpperCase()}</p>}
+            {contact.source && <p className="text-xs text-stone mt-1">Source · {contact.source.replace(/_/g, " ")}</p>}
+            {contact.last_touch_at && (
+              <p className="text-xs text-stone mt-1">Last touch · {relativeTime(contact.last_touch_at)}</p>
+            )}
+          </div>
+
+          <div className="border border-mist bg-bone p-5">
+            <p className="eyebrow !text-brass mb-3">Actions</p>
+            {classification.suggested_next_action && (
+              <button className="btn-base w-full bg-indigo text-parchment hover:bg-indigo-deep mb-2">
+                {classification.suggested_next_action}
+              </button>
+            )}
+            {nextAction && (
+              <button className="btn-base w-full bg-indigo text-parchment hover:bg-indigo-deep mb-2">
+                {nextAction.length > 32 ? nextAction.slice(0, 30) + "…" : nextAction}
+              </button>
+            )}
+            <button className="btn-base w-full bg-bone text-ink border border-mist hover:bg-mist mb-2">Send underwrite</button>
+            <button className="btn-base w-full bg-bone text-ink border border-mist hover:bg-mist mb-2">Add to pipeline</button>
+            {lastConv?.recording_url && (
+              <a
+                href={lastConv.recording_url}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-base w-full bg-bone text-ink border border-mist hover:bg-mist text-center block"
+              >
+                Play recording
+              </a>
+            )}
+          </div>
+
+          {contact.notes && (
+            <div className="border border-mist bg-bone p-5">
+              <p className="eyebrow !text-brass mb-3">Notes</p>
+              <p className="text-xs text-smoke whitespace-pre-wrap leading-relaxed">{contact.notes}</p>
+            </div>
+          )}
+        </aside>
+
+        {/* RIGHT: Sofia summary + transcript + activity log */}
+        <div className="space-y-8 min-w-0">
           {summaryText && (
             <div className="border border-mist bg-parchment p-8">
               <p className="eyebrow !text-brass mb-4">{lastConv ? "Sofia call summary" : "Lead summary"}</p>
@@ -161,54 +214,6 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
             </div>
           )}
         </div>
-
-        <aside className="space-y-4">
-          <div className="border border-mist bg-bone p-5">
-            <p className="eyebrow !text-brass mb-3">Contact</p>
-            <p className="text-sm text-ink mb-1">{contact.full_name}</p>
-            {(contact.phones ?? []).map((p: string) => (
-              <p key={p} className="text-xs text-smoke">{p}</p>
-            ))}
-            {(contact.emails ?? []).map((e: string) => (
-              <p key={e} className="text-xs text-smoke truncate" title={e}>{e}</p>
-            ))}
-            {contact.language && <p className="text-xs text-stone mt-3">Language · {contact.language.toUpperCase()}</p>}
-            {contact.source && <p className="text-xs text-stone mt-1">Source · {contact.source.replace(/_/g, " ")}</p>}
-          </div>
-
-          <div className="border border-mist bg-bone p-5">
-            <p className="eyebrow !text-brass mb-3">Actions</p>
-            {classification.suggested_next_action && (
-              <button className="btn-base w-full bg-indigo text-parchment hover:bg-indigo-deep mb-2">
-                {classification.suggested_next_action}
-              </button>
-            )}
-            {nextAction && (
-              <button className="btn-base w-full bg-indigo text-parchment hover:bg-indigo-deep mb-2">
-                {nextAction.length > 32 ? nextAction.slice(0, 30) + "…" : nextAction}
-              </button>
-            )}
-            <button className="btn-base w-full bg-bone text-ink border border-mist hover:bg-mist mb-2">Send underwrite</button>
-            <button className="btn-base w-full bg-bone text-ink border border-mist hover:bg-mist mb-2">Add to pipeline</button>
-            {lastConv?.recording_url && (
-              <a
-                href={lastConv.recording_url}
-                target="_blank"
-                rel="noreferrer"
-                className="btn-base w-full bg-bone text-ink border border-mist hover:bg-mist text-center block"
-              >
-                Play recording
-              </a>
-            )}
-          </div>
-
-          {contact.notes && (
-            <div className="border border-mist bg-bone p-5">
-              <p className="eyebrow !text-brass mb-3">Notes</p>
-              <p className="text-xs text-smoke whitespace-pre-wrap leading-relaxed">{contact.notes}</p>
-            </div>
-          )}
-        </aside>
       </section>
     </div>
   );
