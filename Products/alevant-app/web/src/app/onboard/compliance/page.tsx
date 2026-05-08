@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { StageShell } from "../_stage-shell";
-import { Button } from "@/components/ui/button";
+import { StageForm } from "../_stage-form";
+import { loadOnboardContext } from "../_load-onboard-defaults";
 
 const ACKS = [
   {
@@ -30,13 +29,17 @@ const ACKS = [
   },
 ];
 
-export default function StageCompliance() {
+export default async function StageCompliance() {
+  // Loaded only to ensure auth + workspace exist before showing the activate button.
+  await loadOnboardContext();
   return (
-    <StageShell
+    <StageForm
       stage={9}
       title="Compliance and activation."
       intro="A short set of explicit acknowledgments. These are not boilerplate — they shape how Sofia and Vesper behave in your workspace. Each is logged immutably."
       prevHref="/onboard/marketing"
+      nextHref="/dashboard"
+      isActivate
     >
       <div className="space-y-4">
         {ACKS.map((a) => (
@@ -51,10 +54,6 @@ export default function StageCompliance() {
           </label>
         ))}
       </div>
-      <div className="border-t border-mist mt-12 pt-8 flex items-center justify-between">
-        <Link href="/onboard/marketing"><Button variant="ghost">← Back</Button></Link>
-        <Link href="/api/onboard/activate"><Button variant="brass" size="lg">Activate ALEVANT</Button></Link>
-      </div>
-    </StageShell>
+    </StageForm>
   );
 }

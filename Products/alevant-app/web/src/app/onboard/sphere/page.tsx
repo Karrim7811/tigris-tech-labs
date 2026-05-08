@@ -1,8 +1,11 @@
-import { StageShell, Field } from "../_stage-shell";
+import { StageForm, Field } from "../_stage-form";
+import { loadOnboardContext } from "../_load-onboard-defaults";
 
-export default function StageSphere() {
+export default async function StageSphere() {
+  const ctx = await loadOnboardContext();
+  const contactsCount = ctx.counts?.contacts ?? 0;
   return (
-    <StageShell
+    <StageForm
       stage={6}
       title="Import your sphere."
       intro="ALEVANT scans the last 36 months of your Gmail, identifies past clients, vendors, and sphere members, and asks you to confirm. KW Command CSV exports go in here too. Manual additions for VIP investors live below."
@@ -14,7 +17,7 @@ export default function StageSphere() {
         <p className="text-sm text-smoke leading-relaxed mb-4">
           Once Gmail is connected, we'll scan and surface contacts in batches of 50 for confirmation. Each is auto-classified as Past Client / Active Client / Sphere / Vendor / Personal.
         </p>
-        <p className="text-xs text-stone">Status: Pending Gmail OAuth · ETA after connection: 4-8 minutes.</p>
+        <p className="text-xs text-stone">Status: {contactsCount > 0 ? `${contactsCount} contact${contactsCount === 1 ? "" : "s"} already imported.` : "Pending Gmail OAuth · ETA after connection: 4–8 minutes."}</p>
       </div>
 
       <Field label="KW Command — Contacts CSV" hint="Export your contacts list from KW Command and upload here. Standard fields auto-mapped.">
@@ -35,6 +38,10 @@ export default function StageSphere() {
           Add your top investor relationships, off-market relationships, and key referral sources manually after activation — Sphere Brain will prioritize their signals daily.
         </p>
       </div>
-    </StageShell>
+
+      <Field label="Notes for the sphere import" hint="Optional — context that helps the importer label categories correctly.">
+        <textarea name="sphere_notes" className="w-full bg-parchment border border-mist px-4 py-3 text-sm text-ink resize-y" rows={3} />
+      </Field>
+    </StageForm>
   );
 }

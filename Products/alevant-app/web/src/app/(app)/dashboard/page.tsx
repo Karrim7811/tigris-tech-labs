@@ -217,6 +217,19 @@ export default async function DashboardPage() {
     redirect("/onboard");
   }
 
+  // Onboarding gate: any member whose workspace_memberships.onboarded_at is NULL
+  // gets routed through the wizard before they can see the dashboard. Once the
+  // /api/onboard/activate endpoint sets that timestamp, this redirect stops firing.
+  const { data: membershipRow } = await svc
+    .from("workspace_memberships")
+    .select("onboarded_at")
+    .eq("workspace_id", workspaceId)
+    .eq("user_id", user.id)
+    .maybeSingle();
+  if (!membershipRow?.onboarded_at) {
+    redirect("/onboard");
+  }
+
   const todayStr = new Date().toISOString().split("T")[0];
 
   const [
