@@ -30,6 +30,7 @@ import {
   LogOut,
   Shield,
   Database,
+  BookOpen,
 } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { AskAlevant } from "./AskAlevant";
@@ -90,6 +91,10 @@ const GROUPS: NavGroup[] = [
     items: [
       { href: "/sofia", label: "Sofia", icon: Phone },
       { href: "/vesper", label: "Vesper", icon: Sparkles },
+      { href: "/knowledge/sofia", label: "Sofia · Knowledge", icon: BookOpen },
+      { href: "/knowledge/vesper", label: "Vesper · Knowledge", icon: BookOpen },
+      { href: "/settings/sofia", label: "Sofia · Settings", icon: Settings },
+      { href: "/settings/vesper", label: "Vesper · Settings", icon: Settings },
     ],
   },
   {
