@@ -79,6 +79,7 @@ JSON SHAPE
   "brochure_outline": { "page_1_cover": "...", "page_2_3_hero_spread": "...", "page_4_5_features": "...", "page_6_7_floorplan": "...", "page_8_neighborhood": "...", "page_9_agent_letter": "...", "page_10_back_cover": "..." },
   "social_campaign": {
     "instagram": [{"day":1,"format":"feed_post","caption":"...","visual_brief":"..."}],
+    "facebook": [{"day":1,"format":"page_post","copy":"...","cta":"...","visual_brief":"...","boost_eligible":true}],
     "x": [{"day":1,"copy":"..."}],
     "tiktok": [{"day":1,"hook":"...","script":"...","visual_brief":"..."}],
     "linkedin": [{"day":1,"copy":"..."}]

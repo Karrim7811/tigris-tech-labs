@@ -2,7 +2,7 @@ import { StageForm, FieldRow, Field } from "../_stage-form";
 import { Input } from "@/components/ui/input";
 import { loadOnboardContext } from "../_load-onboard-defaults";
 
-const CHANNELS = ["instagram", "x", "tiktok", "linkedin", "youtube", "email", "print"];
+const CHANNELS = ["instagram", "facebook", "x", "tiktok", "linkedin", "youtube", "email", "print"];
 
 export default async function StageMarketing() {
   const ctx = await loadOnboardContext();
@@ -31,7 +31,7 @@ export default async function StageMarketing() {
         </Field>
       </FieldRow>
 
-      <Field label="Channels enabled" hint="V1 priority: IG · LinkedIn · X · TikTok.">
+      <Field label="Channels enabled" hint="V1 priority: IG · Facebook · LinkedIn · X · TikTok.">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
           {CHANNELS.map((ch) => (
             <label key={ch} className="inline-flex items-center gap-2 text-sm text-ink">

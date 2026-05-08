@@ -110,7 +110,7 @@ export async function POST(req: Request) {
 
   // ── 3. vesper_config ───────────────────────────────────────────────
   let vesperCfgId = ws.vesper_config_id as string | null;
-  const channels = Array.isArray(vesper.channels) ? vesper.channels : (vesper.channels ? [vesper.channels] : ["instagram", "x", "tiktok", "linkedin", "email"]);
+  const channels = Array.isArray(vesper.channels) ? vesper.channels : (vesper.channels ? [vesper.channels] : ["instagram", "facebook", "x", "tiktok", "linkedin", "email"]);
   const vesperPayload = {
     voice_preset: brand.voice_preset || "insider",
     channel_priorities: channels,

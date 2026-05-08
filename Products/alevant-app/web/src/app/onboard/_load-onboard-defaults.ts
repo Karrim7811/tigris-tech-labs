@@ -181,7 +181,7 @@ export async function loadOnboardContext(): Promise<OnboardContext> {
         approval_mode: state["8"]?.approval_mode ?? vesper?.approval_mode ?? "gated",
         posts_per_day: state["8"]?.posts_per_day ?? vesper?.cadence_json?.posts_per_day ?? 1,
         approval_window: state["8"]?.approval_window ?? vesper?.approval_window_minutes ?? 240,
-        channels: state["8"]?.channels ?? vesper?.channel_priorities ?? ["instagram", "x", "tiktok", "linkedin", "email"],
+        channels: state["8"]?.channels ?? vesper?.channel_priorities ?? ["instagram", "facebook", "x", "tiktok", "linkedin", "email"],
         fair_housing_strict: state["8"]?.fair_housing_strict ?? vesper?.fair_housing_strict ?? true,
         auto_campaign_trigger: state["8"]?.auto_campaign_trigger ?? true,
       },
