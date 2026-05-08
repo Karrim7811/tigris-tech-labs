@@ -21,7 +21,7 @@ export default function OnboardIndex() {
           <li>· Logo and brand assets (or we'll generate placeholders)</li>
           <li>· Gmail account access (read-write for Sofia + sphere import)</li>
           <li>· Instagram, X, TikTok, LinkedIn business accounts (for Vesper)</li>
-          <li>· DocuSign account (for Transaction Brain)</li>
+          <li>· DocuSign or Dotloop account (for Transaction Brain — pick whichever you already use)</li>
           <li>· KW Command CSV exports (contacts, listings, transactions)</li>
         </ul>
       </div>

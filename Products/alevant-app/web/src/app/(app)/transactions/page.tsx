@@ -16,7 +16,7 @@ export default function TransactionsPage() {
         <p className="eyebrow !text-indigo mb-2">Transaction Brain</p>
         <h1 className="serif-display text-ink text-5xl">Contract to close.</h1>
         <p className="serif-italic text-stone text-base mt-2 max-w-3xl">
-          DocuSign-aware orchestration. Auto-nudge for inspection, appraisal, loan, title, HOA, walk-through, closing. Risk flags on lender silence, appraisal gaps, inspection blowups.
+          E-signing-aware orchestration — DocuSign envelopes and Dotloop loops both feed status into the same brain. Auto-nudge for inspection, appraisal, loan, title, HOA, walk-through, closing. Risk flags on lender silence, appraisal gaps, inspection blowups.
         </p>
       </header>
 

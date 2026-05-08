@@ -16,7 +16,7 @@ const PLANS = [
       "The Grid · 5 farm zones",
       "Underwriter · CMA + investor MF",
       "Listings + microsites · unlimited",
-      "Transaction Brain · DocuSign integrated",
+      "Transaction Brain · DocuSign + Dotloop integrated",
       "Sphere Brain · daily right-calls",
       "2,000 Sofia voice minutes / mo",
       "Email + chat support",

@@ -11,7 +11,8 @@ const CONNECTIONS = [
   { id: "youtube",   name: "YouTube",                     scopes: "Upload listing films",         required: false, group: "Social" },
   { id: "facebook",  name: "Facebook Business",           scopes: "Lead Ads · post",              required: false, group: "Social" },
   { id: "whatsapp",  name: "WhatsApp Business",           scopes: "Messages (LATAM, V2)",         required: false, group: "Social" },
-  { id: "docusign",  name: "DocuSign",                    scopes: "Envelope read/write",          required: true,  group: "Transaction" },
+  { id: "docusign",  name: "DocuSign",                    scopes: "Envelope read/write",          required: false, group: "Transaction" },
+  { id: "dotloop",   name: "Dotloop",                     scopes: "Loop / document / signing",    required: false, group: "Transaction" },
   { id: "kwcommand", name: "KW Command",                  scopes: "Held — API not public yet",    required: false, group: "Brokerage" },
   { id: "heygen",    name: "HeyGen",                      scopes: "Avatar generation",            required: false, group: "AI" },
 ];
@@ -24,7 +25,7 @@ export default async function StageConnections() {
     <StageForm
       stage={4}
       title="Connect your accounts."
-      intro="Each connection unlocks Sofia / Vesper / Transaction Brain features. Connect now or queue for later — required ones are flagged. Refresh tokens are encrypted and rotated automatically."
+      intro="Each connection unlocks Sofia / Vesper / Transaction Brain features. Connect now or queue for later — required ones are flagged. For e-signing pick whichever you actually use (DocuSign and Dotloop are both first-class). Refresh tokens are encrypted and rotated automatically."
       prevHref="/onboard/brand"
       nextHref="/onboard/sofia"
     >

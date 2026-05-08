@@ -21,7 +21,7 @@ const ACRONYM: AcronymLetter[] = [
   { letter: "V", word: "Validate",  href: "/underwriter",  blurb: "Underwriter · qualification" },
   { letter: "A", word: "Automate",  href: "/sofia",        blurb: "Sofia · Vesper · cron" },
   { letter: "N", word: "Negotiate", href: "/sphere",       blurb: "Live coaching · comp authority" },
-  { letter: "T", word: "Transact",  href: "/transactions", blurb: "Transaction Brain · DocuSign" },
+  { letter: "T", word: "Transact",  href: "/transactions", blurb: "Transaction Brain · DocuSign · Dotloop" },
 ];
 
 const ACCENT = "#1A8A9E";
