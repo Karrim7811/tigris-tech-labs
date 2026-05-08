@@ -25,7 +25,7 @@ export default function LoginPage() {
       setErr(error.message);
       return;
     }
-    router.push("/cockpit");
+    router.push("/dashboard");
     router.refresh();
   }
 

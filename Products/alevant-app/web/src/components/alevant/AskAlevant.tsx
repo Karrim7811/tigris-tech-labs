@@ -37,7 +37,7 @@ export function AskAlevant({ open, onClose }: { open: boolean; onClose: () => vo
     setLoading(true);
     setAnswer("");
     try {
-      const r = await fetch("/api/cockpit/standup", {
+      const r = await fetch("/api/dashboard/standup", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ query }),

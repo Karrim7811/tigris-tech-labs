@@ -23,7 +23,7 @@ import {
   Sliders,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { fmtP, type CockpitAction } from "./types";
+import { fmtP, type DashboardAction } from "./types";
 import { relativeTime } from "@/lib/utils";
 import { DashboardCustomizer } from "@/components/alevant/DashboardCustomizer";
 import { useDashboardTheme, themeToCssVars } from "@/components/alevant/useDashboardTheme";
@@ -100,11 +100,11 @@ interface LeadItem {
   _score: number;
 }
 
-interface CockpitClientProps {
+interface DashboardClientProps {
   agentName: string;
   dateLabel: string;
   kpis: KPI[];
-  actions: CockpitAction[];
+  actions: DashboardAction[];
   dealMomentum: DealMomentumItem[];
   gridTop: GridSignal[];
   vesperQueue: VesperQueueItem[];
@@ -152,15 +152,15 @@ function tierMeta(tier: string) {
 }
 
 // ── component ─────────────────────────────────────────────────────────
-export default function CockpitClient({
+export default function DashboardClient({
   agentName, dateLabel, kpis, actions, dealMomentum,
   gridTop, vesperQueue, sphereSignals, news, todayTasks,
   overdueCount, prioritizedLeads, tickerItems, counts,
-}: CockpitClientProps) {
+}: DashboardClientProps) {
   const [activeTab, setActiveTab] = useState<"all" | "stalling" | "coasting" | "accelerating">("all");
   const [standupPlaying, setStandupPlaying] = useState(false);
   const [customizerOpen, setCustomizerOpen] = useState(false);
-  const [theme, setTheme, resetTheme] = useDashboardTheme("cockpit");
+  const [theme, setTheme, resetTheme] = useDashboardTheme("dashboard");
   const [widgets, toggleWidget, resetWidgets] = useWidgetVisibility();
 
   const filteredDeals = activeTab === "all"
@@ -171,9 +171,9 @@ export default function CockpitClient({
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
 
   return (
-    <div className="px-10 py-12 max-w-[1600px]" style={themeToCssVars(theme)}>
+    <div className="px-10 pt-0 pb-12 max-w-[1600px]" style={themeToCssVars(theme)}>
       <DashboardCustomizer
-        dashboardId="cockpit"
+        dashboardId="dashboard"
         theme={theme}
         onChange={setTheme}
         onReset={resetTheme}
@@ -192,7 +192,7 @@ export default function CockpitClient({
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setStandupPlaying((s) => !s)}
-              className="btn-base bg-ink text-parchment hover:bg-ink/90"
+              className="btn-base bg-smoke text-parchment hover:bg-smoke/90"
             >
               <Bell className="w-4 h-4 mr-2" />
               {standupPlaying ? "Stop standup" : "Play 90-second standup"}
@@ -203,8 +203,8 @@ export default function CockpitClient({
             <button
               onClick={() => setCustomizerOpen(true)}
               className="btn-base bg-bone text-ink border border-mist hover:bg-mist !px-4"
-              title="Customize cockpit"
-              aria-label="Customize cockpit"
+              title="Customize dashboard"
+              aria-label="Customize dashboard"
             >
               <Sliders className="w-4 h-4" />
             </button>
@@ -216,7 +216,7 @@ export default function CockpitClient({
       <PulseTicker items={tickerItems} />
 
       {/* KPI strip */}
-      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-mist border border-mist mb-10">
+      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-mist border border-mist -mt-px">
         {kpis.map((k) => (
           <div
             key={k.label}
@@ -230,7 +230,7 @@ export default function CockpitClient({
       </section>
 
       {/* Pipeline counts strip */}
-      <section className="flex flex-wrap items-center gap-5 mb-10 px-5 py-4 bg-bone border border-mist text-xs">
+      <section className="flex flex-wrap items-center gap-5 px-5 py-4 bg-bone border border-mist text-xs -mt-px">
         <span className="eyebrow !text-brass">Pipeline</span>
         <Link href="/listings" className="text-ink hover:text-indigo">
           <strong className="text-ink">{counts.listings}</strong> active listings
@@ -263,13 +263,13 @@ export default function CockpitClient({
       </section>
 
       {/* Two-column main grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 mb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6">
         {/* LEFT — actions / momentum / grid / news */}
         <div className="space-y-6 min-w-0">
           {/* Action queue */}
           {widgets.actions && (
             <AccordionSection
-              id="cockpit-actions"
+              id="dashboard-actions"
               title="Today's Actions"
               count={actions.length}
               pulse={actions.length > 6}
@@ -311,7 +311,7 @@ export default function CockpitClient({
           {/* Deal momentum */}
           {widgets.momentum && dealMomentum.length > 0 && (
             <AccordionSection
-              id="cockpit-momentum"
+              id="dashboard-momentum"
               title="Deal Momentum"
               count={`${dealMomentum.filter((d) => d.tier === "stalling").length} stalling`}
               right={
@@ -377,7 +377,7 @@ export default function CockpitClient({
           {/* Grid blazing */}
           {widgets.grid && gridTop.length > 0 && (
             <AccordionSection
-              id="cockpit-grid"
+              id="dashboard-grid"
               title="The Grid · top signals"
               count={`${gridTop.length} signal${gridTop.length === 1 ? "" : "s"}`}
               right={

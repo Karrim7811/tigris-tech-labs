@@ -116,7 +116,7 @@ export function DashboardCustomizer({
               Customize
             </div>
             <div className="mt-0.5" style={{ fontFamily: FONT, fontSize: 14, color: "#eee" }}>
-              Cockpit Theme
+              Dashboard Theme
             </div>
           </div>
           <button
@@ -166,7 +166,7 @@ export function DashboardCustomizer({
                 className="text-[9px] uppercase mb-3"
                 style={{ fontFamily: MONO, letterSpacing: "0.18em", color: "#666" }}
               >
-                Cockpit widgets — show / hide
+                Dashboard widgets — show / hide
               </div>
               <div className="space-y-1.5">
                 {(Object.keys(WIDGET_LABELS) as Array<keyof WidgetVisibility>).map((key) => {

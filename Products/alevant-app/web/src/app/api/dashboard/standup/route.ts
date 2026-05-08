@@ -3,7 +3,7 @@ import { getSupabaseServer, getSupabaseService } from "@/lib/supabase/server";
 import { runClaude } from "@/lib/anthropic";
 
 /**
- * GET /api/cockpit/standup — generate the agent's 90-second AI standup.
+ * GET /api/dashboard/standup — generate the agent's 90-second AI standup.
  * Queries pipeline state, signals, and Vesper queue, then synthesizes a TTS-ready briefing.
  */
 export async function GET() {

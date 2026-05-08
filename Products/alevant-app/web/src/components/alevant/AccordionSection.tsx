@@ -17,7 +17,7 @@ interface Props {
 const STORAGE_KEY_PREFIX = "alevant-acc-";
 
 /**
- * PRAIX-style collapsible section. Each cockpit widget uses one.
+ * PRAIX-style collapsible section. Each dashboard widget uses one.
  * State persists per-section via localStorage so the layout sticks.
  */
 export function AccordionSection({

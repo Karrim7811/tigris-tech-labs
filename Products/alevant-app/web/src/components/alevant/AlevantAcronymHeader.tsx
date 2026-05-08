@@ -62,10 +62,7 @@ export function AlevantAcronymHeader({
   const wordTracking = collapsed ? "0.18em" : "0.20em";
   const blurbMaxH = collapsed ? "0" : "32px";
   const blurbOpacity = collapsed ? 0 : 1;
-  const heroPadY = collapsed ? "14px" : "44px";
-  const wordmarkSize = collapsed ? "20px" : "44px";
-  const taglineOpacity = collapsed ? 0 : 1;
-  const taglineMaxH = collapsed ? "0" : "32px";
+  const heroPadY = collapsed ? "8px" : "20px";
   const greetingLargeOpacity = collapsed ? 0 : 1;
   const greetingLargeMaxH = collapsed ? "0" : "200px";
   const greetingCompactOpacity = collapsed ? 1 : 0;
@@ -75,7 +72,7 @@ export function AlevantAcronymHeader({
 
   return (
     <header
-      className="mb-12 border border-mist bg-parchment relative overflow-hidden"
+      className="border border-mist bg-parchment relative overflow-hidden"
       style={{
         boxShadow: "0 1px 0 rgba(26,138,158,0.04)",
       }}
@@ -91,55 +88,21 @@ export function AlevantAcronymHeader({
           transition: `padding ${TRANSITION}`,
         }}
       >
-        {/* Wordmark + tagline + collapse trigger */}
-        <div
-          className="flex items-start justify-between gap-8"
-          style={{
-            marginBottom: collapsed ? 12 : 28,
-            transition: `margin ${TRANSITION}`,
+        {/* Collapse trigger — top-right of brand band */}
+        <button
+          onClick={() => {
+            const next = !collapsed;
+            setCollapsed(next);
+            try {
+              sessionStorage.setItem(SESSION_KEY, next ? "1" : "0");
+            } catch {}
           }}
+          className="absolute top-2 right-3 text-stone hover:text-indigo transition-colors p-1.5 flex-shrink-0 z-10"
+          title={collapsed ? "Expand brand" : "Collapse brand"}
+          aria-label={collapsed ? "Expand brand" : "Collapse brand"}
         >
-          <div className="flex items-baseline gap-4 min-w-0">
-            <span
-              className="alevant-mark"
-              style={{
-                fontSize: wordmarkSize,
-                lineHeight: 1,
-                transition: `font-size ${TRANSITION}`,
-              }}
-            >
-              alevant
-            </span>
-            <span
-              className="text-[10px] uppercase tracking-[0.32em] flex-shrink-0 overflow-hidden whitespace-nowrap"
-              style={{
-                color: ACCENT,
-                fontFamily: "'Jost', sans-serif",
-                opacity: taglineOpacity,
-                maxHeight: taglineMaxH,
-                transition: `opacity ${TRANSITION}, max-height ${TRANSITION}`,
-              }}
-            >
-              · AI Operating System for Real Estate
-            </span>
-          </div>
-
-          {/* Toggle — expand when collapsed, collapse when expanded */}
-          <button
-            onClick={() => {
-              const next = !collapsed;
-              setCollapsed(next);
-              try {
-                sessionStorage.setItem(SESSION_KEY, next ? "1" : "0");
-              } catch {}
-            }}
-            className="text-stone hover:text-indigo transition-colors p-1.5 -mr-1.5 flex-shrink-0"
-            title={collapsed ? "Expand brand" : "Collapse brand"}
-            aria-label={collapsed ? "Expand brand" : "Collapse brand"}
-          >
-            {collapsed ? <Maximize2 className="w-3.5 h-3.5" /> : <ChevronUp className="w-4 h-4" />}
-          </button>
-        </div>
+          {collapsed ? <Maximize2 className="w-3.5 h-3.5" /> : <ChevronUp className="w-4 h-4" />}
+        </button>
 
         {/* Acronym row — letters shrink in place, blurbs collapse */}
         <div className="grid grid-cols-7 gap-2">
@@ -233,7 +196,7 @@ export function AlevantAcronymHeader({
       >
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
-            <p className="eyebrow !text-indigo mb-2">Cockpit</p>
+            <p className="eyebrow !text-indigo mb-2">Dashboard</p>
             <h1
               className="serif-display leading-[1.05]"
               style={{ fontSize: "clamp(32px, 3.6vw, 52px)", color: "var(--color-ink)" }}
@@ -257,7 +220,7 @@ export function AlevantAcronymHeader({
       >
         <div className="px-10 py-3 flex items-center justify-between gap-4">
           <div className="flex items-baseline gap-3 min-w-0">
-            <p className="eyebrow !text-indigo flex-shrink-0">Cockpit</p>
+            <p className="eyebrow !text-indigo flex-shrink-0">Dashboard</p>
             <span className="text-mist flex-shrink-0">·</span>
             <span
               className="serif-italic text-ink truncate"

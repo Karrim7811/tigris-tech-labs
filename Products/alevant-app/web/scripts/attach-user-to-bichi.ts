@@ -56,7 +56,7 @@ async function main() {
     process.exit(1);
   }
 
-  // Link the existing Bichi agent to this user_id (so cockpit shows correct name)
+  // Link the existing Bichi agent to this user_id (so dashboard shows correct name)
   await sb
     .from("agents")
     .update({ user_id: user.id })
@@ -67,7 +67,7 @@ async function main() {
   console.log(`  User: ${user.email} (${user.id})`);
   console.log(`  Workspace: ${ws.name} (${ws.id})`);
   console.log(`  Role: owner`);
-  console.log(`\nLog in at https://alevant.ai/login → cockpit will show the Bichi tenant data.`);
+  console.log(`\nLog in at https://alevant.ai/login → dashboard will show the Bichi tenant data.`);
 }
 
 main().catch((e) => {

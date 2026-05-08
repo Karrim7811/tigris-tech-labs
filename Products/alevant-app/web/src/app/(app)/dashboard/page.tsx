@@ -1,7 +1,7 @@
 import { getSupabaseService, getSupabaseServer } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import CockpitClient from "./CockpitClient";
-import { fmtP, type CockpitAction } from "./types";
+import DashboardClient from "./DashboardClient";
+import { fmtP, type DashboardAction } from "./types";
 
 // ── helpers ────────────────────────────────────────────────────────────
 
@@ -68,10 +68,10 @@ function generateActions(args: {
   vesperQueue: any[];
   sphereSignals: any[];
   overdueTasks: any[];
-}): CockpitAction[] {
-  const actions: CockpitAction[] = [];
+}): DashboardAction[] {
+  const actions: DashboardAction[] = [];
   const seen = new Set<string>();
-  const add = (a: CockpitAction) => {
+  const add = (a: DashboardAction) => {
     const key = a.type + "|" + a.title;
     if (!seen.has(key)) { seen.add(key); actions.push(a); }
   };
@@ -190,7 +190,7 @@ function generateActions(args: {
 }
 
 // ── page ───────────────────────────────────────────────────────────────
-export default async function CockpitPage() {
+export default async function DashboardPage() {
   const sb = await getSupabaseServer();
   const { data: { user } } = await sb.auth.getUser();
   if (!user) redirect("/login");
@@ -441,7 +441,7 @@ export default async function CockpitPage() {
   ];
 
   return (
-    <CockpitClient
+    <DashboardClient
       agentName={agentName}
       dateLabel={dateLabel}
       kpis={kpis}

@@ -123,7 +123,7 @@ async function main() {
     .from("workspace_memberships")
     .insert({ workspace_id: ws!.id, user_id: user.id, role: "owner" });
 
-  // Agent record (so cockpit greets you)
+  // Agent record (so dashboard greets you)
   await sb.from("agents").insert({
     workspace_id: ws!.id,
     user_id: user.id,
@@ -135,7 +135,7 @@ async function main() {
     email: TARGET_EMAIL,
   });
 
-  // ── Sample data so the cockpit isn't empty ──
+  // ── Sample data so the dashboard isn't empty ──
   // 3 sample listings (Miami)
   const listings = [
     { address: "1450 Brickell Bay Dr #2902", city: "Miami", state: "FL", zip: "33131", price: 1675000, property_type: "condo", beds: 2, baths: 2.5, sqft: 1690, year_built: 2008, status: "active", listing_date: new Date(Date.now() - 12 * 86400000).toISOString().split("T")[0], microsite_slug: "1450-brickell-bay-2902", description: "Bay-front 2BR with floor-to-ceiling water views." },
@@ -191,7 +191,7 @@ async function main() {
   console.log(`  Owner: ${user.email}`);
   console.log(`  Subdomain: karim.alevant.ai`);
   console.log(`\nLog in at https://alevant.ai/login`);
-  console.log("Cockpit will show: 3 listings, 5 contacts (3 leads, 1 past client, 1 active client), 3 Grid signals, 1 active transaction with risk flag.");
+  console.log("Dashboard will show: 3 listings, 5 contacts (3 leads, 1 past client, 1 active client), 3 Grid signals, 1 active transaction with risk flag.");
 }
 
 main().catch((e) => {

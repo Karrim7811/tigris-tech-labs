@@ -48,7 +48,7 @@ Middleware (`src/middleware.ts`) sets `x-alevant-tenant` header for downstream r
 | `/` | Marketing landing page |
 | `/login` · `/signup` | Supabase auth |
 | `/onboard/*` | 9-stage agent onboarding wizard |
-| `/cockpit` | Daily AI standup home |
+| `/dashboard` | Daily AI standup home |
 | `/inbox` | Lead Inbox (multi-source) |
 | `/listings` · `/listings/new` · `/listings/[id]` | Listings module |
 | `/pipelines/[buyer\|seller\|investor\|rental]` | 4 distinct pipelines |
@@ -77,7 +77,7 @@ Middleware (`src/middleware.ts`) sets `x-alevant-tenant` header for downstream r
 - [x] Sphere Brain (right-call surface)
 - [x] Transactions (deal list)
 - [x] Microsite (dynamic per-tenant themed)
-- [x] API routes — onboard, listings, underwriter (CMA + investor), sofia (text + voice), vesper (campaign + lint), grid (score + outreach), sphere (sweep), cockpit (standup), crons
+- [x] API routes — onboard, listings, underwriter (CMA + investor), sofia (text + voice), vesper (campaign + lint), grid (score + outreach), sphere (sweep), dashboard (standup), crons
 - [x] Bichi seed script
 - [x] **Florida public-records scrapers** — Miami-Dade Property Appraiser API live; clerk-of-court / tax collector / code enforcement scaffolded with documented endpoints
 - [x] **Vesper PDF brochure renderer** — magazine-tier 10-page editorial layout via `@react-pdf/renderer`; Cormorant + Jost registered; per-tenant brand-kit theming
@@ -108,7 +108,7 @@ See `../docs/ALEVANT_Onboarding_Spec.md` for the onboarding wizard contract.
 ## Phase status
 
 - ✅ **Phase 0** — Concept brief, brand identity, technical architecture, How-It-Works
-- ✅ **Phase 1** — Repo scaffold + onboarding wizard + auth + cockpit
+- ✅ **Phase 1** — Repo scaffold + onboarding wizard + auth + dashboard
 - ✅ **Phase 2** — Lead Inbox, Listings, 4 Pipelines, Underwriter, Sofia text, Vesper studio, Microsite, The Grid
 - ✅ **Phase 3** — Florida public-records scrapers (Miami-Dade Property Appraiser API live), Vesper PDF brochure renderer, Twilio + Retell provisioning, Grid scan UI, Grid scan cron, AirDNA fixtures + API path
 - ✅ **Phase 4** — DocuSign integration (JWT auth + Connect webhooks), Transaction Brain orchestrator (timeline generator + nudge engine + risk flagging), social publishers (Meta/X/TikTok/LinkedIn), Vesper approve→publish flow, full OAuth router (Google / Meta / X / LinkedIn / TikTok), Sphere external-signal stubs, Broward + Palm Beach county scaffolds

@@ -123,5 +123,5 @@ export async function POST(req: Request) {
   // 7. Vesper warmup batch — generate 5 sample posts in awaiting_approval queue
   // (server-side fan-out kicks off when creds present)
 
-  return NextResponse.redirect(new URL("/cockpit", process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"), { status: 303 });
+  return NextResponse.redirect(new URL("/dashboard", process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"), { status: 303 });
 }

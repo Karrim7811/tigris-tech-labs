@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-const STORAGE_KEY = "alevant-cockpit-widgets";
+const STORAGE_KEY = "alevant-dashboard-widgets";
 
 export interface WidgetVisibility {
   actions: boolean;

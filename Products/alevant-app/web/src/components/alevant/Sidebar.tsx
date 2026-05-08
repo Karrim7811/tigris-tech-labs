@@ -58,7 +58,7 @@ const GROUPS: NavGroup[] = [
     label: "Core",
     color: ACCENT,
     items: [
-      { href: "/cockpit", label: "Cockpit", icon: LayoutDashboard },
+      { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
       { href: "/inbox", label: "Lead Inbox", icon: Inbox },
       { href: "/listings", label: "Listings", icon: Home },
     ],
@@ -187,7 +187,7 @@ export function Sidebar() {
           className="flex items-start justify-between px-4 pt-4 pb-3"
           style={{ borderBottom: `1px solid ${BORDER}` }}
         >
-          <Link href="/cockpit" className="block group">
+          <Link href="/dashboard" className="block group">
             <AlevantLogoAnimated />
           </Link>
           <div className="flex gap-1.5 mt-1 flex-shrink-0">
@@ -257,7 +257,7 @@ export function Sidebar() {
           {GROUPS.map((g) => {
             const isOpen = open[g.label];
             const hasActive = g.items.some(
-              (i) => pathname === i.href || (i.href !== "/cockpit" && pathname.startsWith(i.href))
+              (i) => pathname === i.href || (i.href !== "/dashboard" && pathname.startsWith(i.href))
             );
             return (
               <div key={g.label} className="mb-1">
@@ -290,7 +290,7 @@ export function Sidebar() {
                     {g.items.map((it) => {
                       const active =
                         pathname === it.href ||
-                        (it.href !== "/cockpit" && pathname.startsWith(it.href));
+                        (it.href !== "/dashboard" && pathname.startsWith(it.href));
                       return (
                         <li key={it.href}>
                           <Link

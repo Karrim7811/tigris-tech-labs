@@ -64,7 +64,7 @@ export function PulseTicker({ items }: { items: PulseItem[] }) {
   if (items.length === 0) {
     return (
       <div
-        className="border border-mist bg-bone overflow-hidden mb-10"
+        className="border border-mist bg-bone overflow-hidden -mt-px"
         style={{ height: 44 }}
       >
         <div className="h-full flex items-center px-6">
@@ -88,7 +88,7 @@ export function PulseTicker({ items }: { items: PulseItem[] }) {
   return (
     <>
       <div
-        className="border border-mist bg-parchment overflow-hidden mb-10 relative"
+        className="border border-mist bg-parchment overflow-hidden -mt-px relative"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         style={{ height: 44 }}

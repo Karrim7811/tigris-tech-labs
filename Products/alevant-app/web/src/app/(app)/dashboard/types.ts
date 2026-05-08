@@ -1,8 +1,8 @@
-// Shared types + helpers for the Cockpit (page.tsx + CockpitClient.tsx).
+// Shared types + helpers for the Dashboard (page.tsx + DashboardClient.tsx).
 // Lives here because Next.js page files only allow specific named exports
 // (default + metadata + revalidate, etc.).
 
-export interface CockpitAction {
+export interface DashboardAction {
   type: string;
   priority: number;
   title: string;
