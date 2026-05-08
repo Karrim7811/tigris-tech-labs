@@ -1,36 +1,104 @@
 import Link from "next/link";
-import { Phone, Mail, MessageCircle, Instagram, Linkedin } from "lucide-react";
+import { Phone, Mail, MessageCircle, Instagram, Linkedin, Inbox as InboxIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { bandFromScore, relativeTime } from "@/lib/utils";
+import { getSupabaseService } from "@/lib/supabase/server";
+import { resolveCurrentWorkspaceId } from "@/app/(app)/_lib/resolve-workspace";
 
-interface Lead {
-  id: string;
-  name: string;
-  channel: "voice" | "sms" | "ig_dm" | "linkedin_dm" | "email";
-  intent: string;
-  qualification: number;
-  summary: string;
-  received_at: string;
-  source: "sofia" | "agent" | "form";
-}
-
-const SAMPLE: Lead[] = [
-  { id: "1", name: "Carlos Mendes", channel: "voice", intent: "Buy investor", qualification: 88, summary: "Brickell condo $1.4M, cash, Brazilian, wants Saturday showing.", received_at: new Date(Date.now() - 1000*60*15).toISOString(), source: "sofia" },
-  { id: "2", name: "Andrea Castillo", channel: "ig_dm", intent: "Sell", qualification: 76, summary: "Coral Gables 4BR, considering listing in 60 days, wants CMA.", received_at: new Date(Date.now() - 1000*60*47).toISOString(), source: "sofia" },
-  { id: "3", name: "Mark Levine", channel: "sms", intent: "Buy primary", qualification: 62, summary: "Pre-approved $850k, 30-60 day, Coconut Grove.", received_at: new Date(Date.now() - 1000*60*60*2).toISOString(), source: "sofia" },
-  { id: "4", name: "Daniela Pinto", channel: "linkedin_dm", intent: "Investor", qualification: 81, summary: "1031 exchange, 6-12 unit MF in Brickell area, $4M budget.", received_at: new Date(Date.now() - 1000*60*60*3).toISOString(), source: "sofia" },
-  { id: "5", name: "John Reyes", channel: "email", intent: "Rental", qualification: 45, summary: "Rental seeker, $4.5k/mo, 1BR Brickell, 6mo lease.", received_at: new Date(Date.now() - 1000*60*60*5).toISOString(), source: "form" },
-];
-
-const ICONS = {
+const ICONS: Record<string, typeof Phone> = {
   voice: Phone,
   sms: MessageCircle,
   ig_dm: Instagram,
+  instagram: Instagram,
   linkedin_dm: Linkedin,
+  linkedin: Linkedin,
   email: Mail,
 };
 
-export default function InboxPage() {
+function inferChannel(contact: any, lastConv: any): string {
+  if (lastConv?.channel) return lastConv.channel;
+  const src = (contact.source || "").toLowerCase();
+  if (src.includes("voice") || src.includes("call")) return "voice";
+  if (src.includes("ig") || src.includes("instagram")) return "ig_dm";
+  if (src.includes("linkedin")) return "linkedin_dm";
+  if (src.includes("sms") || src.includes("text")) return "sms";
+  if (src.includes("email") || src.includes("form")) return "email";
+  return "voice";
+}
+
+export default async function InboxPage() {
+  const { workspaceId } = await resolveCurrentWorkspaceId();
+  const svc = getSupabaseService();
+
+  // Pull contacts + their most-recent sofia conversation + most-recent activity_log
+  const [{ data: contacts }, { data: convs }, { data: activity }] = await Promise.all([
+    svc
+      .from("contacts")
+      .select("id, full_name, emails, phones, category, relationship_score, source, language, last_touch_at, created_at, notes")
+      .eq("workspace_id", workspaceId)
+      .order("last_touch_at", { ascending: false, nullsFirst: false })
+      .order("created_at", { ascending: false })
+      .limit(50),
+    svc
+      .from("sofia_conversations")
+      .select("id, contact_id, channel, qualification_score, classification, started_at, transcript")
+      .eq("workspace_id", workspaceId)
+      .order("started_at", { ascending: false })
+      .limit(100),
+    svc
+      .from("activity_log")
+      .select("id, contact_id, activity_type, summary, next_action, next_date, source, created_at")
+      .eq("workspace_id", workspaceId)
+      .order("created_at", { ascending: false })
+      .limit(100),
+  ]);
+
+  const _contacts = contacts ?? [];
+  const _convs = convs ?? [];
+  const _activity = activity ?? [];
+
+  // Index latest conv + activity by contact_id
+  const lastConvByContact = new Map<string, any>();
+  for (const c of _convs) {
+    if (!lastConvByContact.has(c.contact_id)) lastConvByContact.set(c.contact_id, c);
+  }
+  const lastActivityByContact = new Map<string, any>();
+  for (const a of _activity) {
+    if (a.contact_id && !lastActivityByContact.has(a.contact_id)) lastActivityByContact.set(a.contact_id, a);
+  }
+
+  // Build display rows
+  const rows = _contacts.map((c) => {
+    const lastConv = lastConvByContact.get(c.id);
+    const lastAct = lastActivityByContact.get(c.id);
+    const score = lastConv?.qualification_score ?? c.relationship_score ?? 0;
+    const channel = inferChannel(c, lastConv);
+    const summary =
+      lastAct?.summary ||
+      (Array.isArray(lastConv?.transcript) && lastConv.transcript[0]?.summary) ||
+      (typeof lastConv?.classification === "object" && (lastConv.classification as any)?.summary) ||
+      c.notes ||
+      "—";
+    const intent =
+      (lastConv?.classification as any)?.intent ||
+      (lastAct?.activity_type ? lastAct.activity_type.replace(/_/g, " ") : null) ||
+      (c.category ? c.category.replace(/_/g, " ") : "Lead");
+    const receivedAt = lastConv?.started_at || lastAct?.created_at || c.last_touch_at || c.created_at;
+    const isFromSofia = lastConv != null || (c.source ?? "").toLowerCase().includes("sofia");
+
+    return {
+      id: c.id,
+      name: c.full_name || "Unnamed lead",
+      channel,
+      intent,
+      score,
+      summary,
+      receivedAt,
+      source: isFromSofia ? "sofia" : (c.source ?? "manual"),
+      category: c.category,
+    };
+  });
+
   return (
     <div className="px-10 py-12 max-w-7xl">
       <header className="flex items-end justify-between mb-10">
@@ -45,31 +113,41 @@ export default function InboxPage() {
         </div>
       </header>
 
-      <div className="border border-mist bg-parchment">
-        {SAMPLE.map((lead) => {
-          const Icon = ICONS[lead.channel];
-          const band = bandFromScore(lead.qualification);
-          return (
-            <Link
-              key={lead.id}
-              href={`/inbox/${lead.id}`}
-              className="grid grid-cols-[40px_1fr_120px_80px] gap-4 px-5 py-5 items-center border-b border-mist hover:bg-bone transition-colors"
-            >
-              <Icon className="w-4 h-4 text-stone" strokeWidth={1.5} />
-              <div className="min-w-0">
-                <div className="flex items-center gap-3 mb-1">
-                  <p className="text-sm font-medium text-ink truncate">{lead.name}</p>
-                  <Badge tone={band === "hot" ? "hot" : band === "warm" ? "warm" : "cold"}>{band}</Badge>
-                  {lead.source === "sofia" && <Badge tone="indigo">Sofia</Badge>}
+      {rows.length === 0 ? (
+        <div className="border border-mist bg-bone p-16 text-center">
+          <InboxIcon className="w-8 h-8 text-stone mx-auto mb-4" strokeWidth={1.2} />
+          <p className="serif-display text-ink text-2xl mb-2">No leads yet.</p>
+          <p className="text-sm text-stone leading-relaxed max-w-md mx-auto">
+            When Sofia picks up a call, when someone DMs your IG, when a web form comes in — the lead lands here. Until then, this inbox is empty by design.
+          </p>
+        </div>
+      ) : (
+        <div className="border border-mist bg-parchment">
+          {rows.map((lead) => {
+            const Icon = ICONS[lead.channel] || Phone;
+            const band = bandFromScore(lead.score);
+            return (
+              <Link
+                key={lead.id}
+                href={`/inbox/${lead.id}`}
+                className="grid grid-cols-[40px_1fr_120px_80px] gap-4 px-5 py-5 items-center border-b border-mist last:border-b-0 hover:bg-bone transition-colors"
+              >
+                <Icon className="w-4 h-4 text-stone" strokeWidth={1.5} />
+                <div className="min-w-0">
+                  <div className="flex items-center gap-3 mb-1">
+                    <p className="text-sm font-medium text-ink truncate">{lead.name}</p>
+                    <Badge tone={band === "hot" ? "hot" : band === "warm" ? "warm" : "cold"}>{band}</Badge>
+                    {lead.source === "sofia" && <Badge tone="indigo">Sofia</Badge>}
+                  </div>
+                  <p className="text-sm text-smoke truncate">{lead.summary}</p>
                 </div>
-                <p className="text-sm text-smoke truncate">{lead.summary}</p>
-              </div>
-              <p className="text-xs text-stone uppercase tracking-[0.18em]">{lead.intent}</p>
-              <p className="text-xs text-stone text-right">{relativeTime(lead.received_at)}</p>
-            </Link>
-          );
-        })}
-      </div>
+                <p className="text-xs text-stone uppercase tracking-[0.18em] truncate">{lead.intent}</p>
+                <p className="text-xs text-stone text-right">{lead.receivedAt ? relativeTime(lead.receivedAt) : "—"}</p>
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
