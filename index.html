@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tigris Tech Labs — Where Intelligence Begins</title>
+<link rel="icon" type="image/svg+xml" href="logo-mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
@@ -44,9 +45,8 @@ img { max-width:100%; display:block; }
 }
 .nav.scrolled { background:rgba(242,240,237,0.95); box-shadow:0 1px 20px rgba(0,0,0,0.04); }
 .nav-left { display:flex; align-items:center; gap:12px; }
-.nav-mark { display:flex; flex-direction:column; align-items:center; gap:3px; }
-.nav-mark-t { font-family:var(--serif); font-weight:300; font-size:20px; color:var(--black); line-height:0.8; }
-.nav-mark-dot { width:3px; height:3px; border-radius:50%; background:var(--violet); }
+.nav-mark { display:flex; align-items:center; }
+.nav-mark img { height:36px; width:auto; display:block; }
 .nav-wordmark { font-family:var(--serif); font-weight:400; font-size:16px; letter-spacing:0.12em; color:var(--black); }
 .nav-links { display:flex; gap:32px; }
 .nav-links a { font-size:12px; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:var(--stone); transition:color 0.3s; }
@@ -92,12 +92,11 @@ img { max-width:100%; display:block; }
   border-radius:50%; pointer-events:none;
 }
 .hero-mark {
-  display:flex; flex-direction:column; align-items:center; gap:12px;
+  display:flex; align-items:center; justify-content:center;
   margin-bottom:40px; position:relative; z-index:2;
   opacity:0; animation:fadeUp 1s ease-out 0.2s forwards;
 }
-.hero-mark-t { font-family:var(--serif); font-weight:300; font-size:clamp(80px,12vw,140px); color:var(--black); line-height:0.75; }
-.hero-mark-dot { width:8px; height:8px; border-radius:50%; background:var(--violet); }
+.hero-mark img { height:clamp(140px,18vw,220px); width:auto; display:block; }
 .hero-title {
   font-family:var(--serif); font-weight:300; font-size:clamp(14px,2vw,22px);
   letter-spacing:0.25em; text-transform:uppercase; color:var(--stone);
@@ -270,9 +269,8 @@ textarea.form-input { min-height:120px; resize:vertical; }
 }
 .footer-top { display:flex; justify-content:space-between; align-items:flex-start; }
 .footer-brand { display:flex; align-items:center; gap:16px; }
-.footer-mark { display:flex; flex-direction:column; align-items:center; gap:4px; }
-.footer-mark-t { font-family:var(--serif); font-weight:300; font-size:28px; color:var(--white); line-height:0.8; }
-.footer-mark-dot { width:4px; height:4px; border-radius:50%; background:var(--violet); }
+.footer-mark { display:flex; align-items:center; }
+.footer-mark img { height:48px; width:auto; display:block; }
 .footer-text {}
 .footer-name { font-family:var(--serif); font-weight:300; font-size:20px; letter-spacing:0.12em; color:var(--white); }
 .footer-sub { font-size:10px; font-weight:400; letter-spacing:0.4em; text-transform:uppercase; color:rgba(255,255,255,0.15); margin-top:4px; }
@@ -316,8 +314,7 @@ textarea.form-input { min-height:120px; resize:vertical; }
 <nav class="nav" id="nav">
   <div class="nav-left">
     <div class="nav-mark">
-      <span class="nav-mark-t">T</span>
-      <div class="nav-mark-dot"></div>
+      <img src="logo-mark.svg" alt="Tigris Tech Labs">
     </div>
     <span class="nav-wordmark">TIGRIS</span>
   </div>
@@ -344,8 +341,7 @@ textarea.form-input { min-height:120px; resize:vertical; }
 <!-- HERO -->
 <section class="hero">
   <div class="hero-mark">
-    <span class="hero-mark-t">T</span>
-    <div class="hero-mark-dot"></div>
+    <img src="logo-mark.svg" alt="Tigris Tech Labs">
   </div>
   <div class="hero-title">TIGRIS TECH LABS</div>
   <div class="hero-tagline">Where intelligence begins</div>
@@ -558,8 +554,7 @@ textarea.form-input { min-height:120px; resize:vertical; }
   <div class="footer-top">
     <div class="footer-brand">
       <div class="footer-mark">
-        <span class="footer-mark-t">T</span>
-        <div class="footer-mark-dot"></div>
+        <img src="logo-mark-cream.svg" alt="Tigris Tech Labs">
       </div>
       <div class="footer-text">
         <div class="footer-name">TIGRIS</div>
