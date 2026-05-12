@@ -4,10 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tigris Tech Labs — Where Intelligence Begins</title>
+<meta name="description" content="Tigris Tech Labs is a holding company for AI-native products built deep into single industries — Cortex for peptide research, Alevant for real estate.">
+<link rel="canonical" href="https://www.tigristechlabs.com/">
+<meta property="og:title" content="Tigris Tech Labs — Where Intelligence Begins">
+<meta property="og:description" content="A holding company for AI-native products built deep into single industries.">
+<meta property="og:url" content="https://www.tigristechlabs.com/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://www.tigristechlabs.com/logo-mark.svg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="logo-mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 /* ===== VARIABLES ===== */
 :root {
@@ -59,9 +67,7 @@ img { max-width:100%; display:block; }
   display:none; flex-direction:column; gap:5px; cursor:pointer;
   background:none; border:none; padding:4px;
 }
-.nav-hamburger span {
-  width:20px; height:1.5px; background:var(--smoke); transition:all 0.3s;
-}
+.nav-hamburger span { width:20px; height:1.5px; background:var(--smoke); transition:all 0.3s; }
 .nav-hamburger.active span:nth-child(1) { transform:rotate(45deg) translate(4px,4px); }
 .nav-hamburger.active span:nth-child(2) { opacity:0; }
 .nav-hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(4px,-4px); }
@@ -79,64 +85,96 @@ img { max-width:100%; display:block; }
 }
 .mobile-menu a:hover { color:var(--violet); }
 
-/* ===== HERO ===== */
-.hero {
+/* ===== LAUNCHER ===== */
+.launcher {
   min-height:100vh; display:flex; flex-direction:column;
-  justify-content:center; align-items:center; text-align:center;
-  padding:120px 48px 80px; position:relative; background:var(--off);
+  padding:120px 48px 80px; background:var(--off); position:relative;
 }
-.hero::before {
+.launcher::before {
   content:''; position:absolute; top:50%; left:50%;
   transform:translate(-50%,-50%); width:900px; height:900px;
   background:radial-gradient(circle, var(--violet-glow) 0%, transparent 70%);
   border-radius:50%; pointer-events:none;
 }
-.hero-mark {
-  display:flex; align-items:center; justify-content:center;
-  margin-bottom:40px; position:relative; z-index:2;
-  opacity:0; animation:fadeUp 1s ease-out 0.2s forwards;
+.launcher-frame {
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  margin-bottom:48px; position:relative; z-index:2;
+  opacity:0; animation:fadeUp 0.9s ease-out 0.2s forwards;
 }
-.hero-mark img { height:clamp(140px,18vw,220px); width:auto; display:block; }
-.hero-title {
-  font-family:var(--serif); font-weight:300; font-size:clamp(14px,2vw,22px);
+.launcher-mark img { height:28px; width:auto; display:block; margin:0 auto 16px; }
+.launcher-name {
+  font-family:var(--sans); font-weight:500; font-size:11px;
   letter-spacing:0.25em; text-transform:uppercase; color:var(--stone);
-  position:relative; z-index:2;
-  opacity:0; animation:fadeUp 1s ease-out 0.5s forwards;
+  margin-bottom:14px;
 }
-.hero-tagline {
+.launcher-line {
   font-family:var(--serif); font-style:italic; font-weight:300;
-  font-size:clamp(18px,2.5vw,28px); color:var(--smoke); margin-top:20px;
+  font-size:clamp(15px,1.4vw,18px); color:var(--smoke);
+}
+.launcher-divider {
+  width:80px; height:1px; background:var(--fog); margin:0 auto 48px;
   position:relative; z-index:2;
-  opacity:0; animation:fadeUp 1s ease-out 0.7s forwards;
+  opacity:0; animation:fadeUp 0.9s ease-out 0.4s forwards;
 }
-.hero-desc {
-  font-size:15px; font-weight:300; color:var(--stone); max-width:520px;
-  line-height:1.8; margin-top:24px; position:relative; z-index:2;
-  opacity:0; animation:fadeUp 1s ease-out 0.9s forwards;
+.launcher-grid {
+  display:grid; grid-template-columns:1fr 1px 1fr;
+  flex:1; max-width:1400px; width:100%; margin:0 auto;
+  min-height:50vh; position:relative; z-index:2;
 }
-.hero-ctas {
-  display:flex; gap:16px; margin-top:40px; position:relative; z-index:2;
-  opacity:0; animation:fadeUp 1s ease-out 1.1s forwards;
+.launcher-half {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:40px 32px; position:relative;
+  transition:background 400ms cubic-bezier(.2,.7,.2,1);
+  opacity:0;
 }
-.btn-primary {
-  font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase;
-  padding:14px 32px; background:var(--violet); color:var(--white);
-  border:1px solid var(--violet); transition:all 0.3s; cursor:pointer;
+.launcher-half.cortex { animation:fadeUp 0.9s ease-out 0.6s forwards; }
+.launcher-half.alevant { animation:fadeUp 0.9s ease-out 0.8s forwards; }
+.launcher-half.cortex:hover { background:rgba(26,138,158,0.04); }
+.launcher-half.alevant:hover { background:rgba(196,135,90,0.04); }
+.launcher-wordmark {
+  font-family:var(--serif); font-weight:300;
+  font-size:clamp(56px,9vw,128px);
+  letter-spacing:0.04em; line-height:0.9; margin-bottom:24px;
+  white-space:nowrap;
 }
-.btn-primary:hover { background:var(--violet-deep); border-color:var(--violet-deep); }
-.btn-secondary {
-  font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase;
-  padding:14px 32px; background:transparent; color:var(--smoke);
-  border:1px solid var(--fog); transition:all 0.3s; cursor:pointer;
+.launcher-half.cortex .launcher-wordmark { color:var(--teal); }
+.launcher-half.alevant .launcher-wordmark { color:var(--terra); }
+.launcher-rule {
+  width:0; height:1px; margin:0 auto 24px;
+  transition:width 400ms cubic-bezier(.2,.7,.2,1);
 }
-.btn-secondary:hover { border-color:var(--violet); color:var(--violet); }
-.hero-scroll {
-  position:absolute; bottom:40px; left:50%; transform:translateX(-50%);
+.launcher-half.cortex .launcher-rule { background:var(--teal); }
+.launcher-half.alevant .launcher-rule { background:var(--terra); }
+.launcher-half:hover .launcher-rule { width:60px; }
+.launcher-sub {
+  font-family:var(--sans); font-weight:500; font-size:11px;
+  letter-spacing:0.15em; text-transform:uppercase; color:var(--stone);
+  margin-bottom:16px;
+}
+.launcher-desc {
+  font-family:var(--sans); font-weight:300; font-size:14px;
+  color:var(--smoke); max-width:320px; line-height:1.7;
+  margin-bottom:32px;
+}
+.launcher-link {
+  font-family:var(--sans); font-weight:500; font-size:11px;
+  letter-spacing:0.12em; text-transform:uppercase;
+  display:inline-flex; align-items:center; gap:8px;
+  transition:color 200ms;
+}
+.launcher-half.cortex .launcher-link { color:var(--teal); }
+.launcher-half.alevant .launcher-link { color:var(--terra); }
+.launcher-arrow { display:inline-block; transition:transform 400ms cubic-bezier(.2,.7,.2,1); }
+.launcher-half:hover .launcher-arrow { transform:translateX(8px); }
+.launcher-vdivider { background:var(--fog); }
+.launcher-scroll {
+  position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
   display:flex; flex-direction:column; align-items:center; gap:8px;
-  opacity:0; animation:fadeUp 1s ease-out 1.4s forwards;
+  z-index:2;
+  opacity:0; animation:fadeUp 0.9s ease-out 1.1s forwards;
 }
-.hero-scroll span { font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:var(--stone); }
-.hero-scroll-line { width:1px; height:32px; background:linear-gradient(to bottom, var(--violet), transparent); }
+.launcher-scroll span { font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:var(--stone); }
+.launcher-scroll-line { width:1px; height:32px; background:linear-gradient(to bottom, var(--violet), transparent); }
 
 /* ===== SECTION SHARED ===== */
 .section { padding:120px 0; position:relative; }
@@ -154,77 +192,10 @@ img { max-width:100%; display:block; }
 .section-desc { font-size:15px; font-weight:300; color:var(--stone); max-width:560px; line-height:1.8; }
 .section.dark .section-desc { color:rgba(255,255,255,0.4); }
 
-/* ===== ABOUT / MISSION ===== */
-.mission-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; margin-top:60px; }
-.mission-text p { font-size:16px; line-height:1.9; color:var(--smoke); margin-bottom:20px; }
-.mission-text p:last-child { margin-bottom:0; }
-.mission-stats { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
-.stat-card { padding:32px; background:var(--off); border:1px solid var(--fog); }
-.stat-value { font-family:var(--serif); font-weight:300; font-size:40px; color:var(--violet); line-height:1; margin-bottom:8px; }
-.stat-label { font-size:11px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--stone); }
-
-/* ===== ABOUT DEEP SECTIONS ===== */
-.about-block { margin-top:80px; }
-.about-block-label { font-size:10px; font-weight:500; letter-spacing:0.4em; text-transform:uppercase; color:var(--violet); margin-bottom:16px; }
-.about-block-title { font-family:var(--serif); font-weight:300; font-size:clamp(24px,3vw,36px); color:var(--black); margin-bottom:20px; line-height:1.3; }
-.about-block-text { font-size:15px; font-weight:300; color:var(--smoke); line-height:1.9; max-width:700px; margin-bottom:16px; }
-.about-products-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:32px; }
-.about-product { padding:32px; background:var(--off); border:1px solid var(--fog); }
-.about-product-name { font-family:var(--serif); font-weight:400; font-size:20px; margin-bottom:4px; }
-.about-product-name.praix { color:var(--terra); }
-.about-product-name.cortex { color:var(--teal); }
-.about-product-sub { font-size:10px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--stone); margin-bottom:12px; }
-.about-product-text { font-size:14px; font-weight:300; color:var(--smoke); line-height:1.8; }
-.about-more { margin-top:24px; padding:24px 32px; background:rgba(107,76,154,0.04); border:1px solid var(--fog); }
-.about-more p { font-size:14px; font-weight:300; color:var(--smoke); line-height:1.8; }
-.about-more strong { font-weight:500; color:var(--violet); }
-.about-build-list { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:24px; }
-.about-build-item { padding:24px; background:var(--off); border:1px solid var(--fog); }
-.about-build-item h4 { font-family:var(--serif); font-weight:400; font-size:18px; color:var(--black); margin-bottom:8px; }
-.about-build-item p { font-size:13px; font-weight:300; color:var(--stone); line-height:1.8; }
-.about-vision { margin-top:80px; padding:48px; background:rgba(107,76,154,0.04); border:1px solid var(--fog); text-align:center; }
-.about-vision p { font-family:var(--serif); font-style:italic; font-weight:300; font-size:clamp(18px,2.5vw,24px); color:var(--smoke); line-height:1.6; max-width:700px; margin:0 auto 16px; }
-.about-vision p:last-child { font-family:var(--sans); font-style:normal; font-size:14px; font-weight:400; color:var(--violet); letter-spacing:0.05em; }
-@media (max-width:768px) {
-  .about-products-grid { grid-template-columns:1fr; }
-  .about-build-list { grid-template-columns:1fr; }
-}
-
-/* ===== PRODUCTS ===== */
-.products-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:60px; }
-.product-card {
-  padding:60px 48px; border:1px solid rgba(255,255,255,0.06);
-  display:flex; flex-direction:column; gap:24px;
-  transition:all 0.4s; position:relative; overflow:hidden;
-}
-.product-card::before {
-  content:''; position:absolute; top:0; left:0; width:3px; height:0;
-  transition:height 0.5s ease;
-}
-.product-card:hover::before { height:100%; }
-.product-card.praix::before { background:var(--terra); }
-.product-card.cortex::before { background:var(--teal); }
-.product-card-mark { display:flex; flex-direction:column; align-items:flex-start; gap:5px; }
-.product-card-letter { font-family:var(--serif); font-weight:300; font-size:48px; line-height:0.8; }
-.product-card.praix .product-card-letter { color:var(--terra); }
-.product-card.cortex .product-card-letter { color:var(--teal); }
-.product-card-dot { width:5px; height:5px; border-radius:50%; margin-left:12px; }
-.product-card.praix .product-card-dot { background:var(--terra); }
-.product-card.cortex .product-card-dot { background:var(--teal); }
-.product-card-name { font-family:var(--serif); font-weight:400; font-size:28px; letter-spacing:0.1em; color:var(--white); }
-.product-card-sub { font-size:10px; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.25); }
-.product-card-desc { font-size:14px; font-weight:300; color:rgba(255,255,255,0.5); line-height:1.8; }
-.product-card-features { display:flex; flex-direction:column; gap:8px; margin-top:auto; }
-.product-feature { font-size:12px; font-weight:300; color:rgba(255,255,255,0.35); padding-left:16px; position:relative; }
-.product-feature::before { content:''; position:absolute; left:0; top:7px; width:6px; height:1px; }
-.product-card.praix .product-feature::before { background:var(--terra); }
-.product-card.cortex .product-feature::before { background:var(--teal); }
-.product-card-link {
-  font-size:11px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase;
-  color:rgba(255,255,255,0.3); margin-top:16px; transition:color 0.3s;
-}
-.product-card.praix .product-card-link:hover { color:var(--terra); }
-.product-card.cortex .product-card-link:hover { color:var(--teal); }
+/* ===== ABOUT (collapsed) ===== */
+.about-body { max-width:720px; margin-top:40px; }
+.about-body p { font-size:16px; font-weight:300; line-height:1.9; color:var(--smoke); margin-bottom:20px; }
+.about-body p:last-child { margin-bottom:0; }
 
 /* ===== PHILOSOPHY ===== */
 .philosophy-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:60px; }
@@ -248,7 +219,7 @@ img { max-width:100%; display:block; }
 
 /* ===== CONTACT ===== */
 .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; margin-top:60px; align-items:start; }
-.contact-info h3 { font-family:var(--serif); font-weight:300; font-size:28px; color:var(--black); margin-bottom:20px; }
+.contact-info h3 { font-family:var(--serif); font-weight:300; font-size:28px; color:var(--black); margin-bottom:20px; line-height:1.4; }
 .contact-info p { font-size:14px; color:var(--stone); line-height:1.8; margin-bottom:24px; }
 .contact-detail { font-size:13px; color:var(--smoke); margin-bottom:8px; }
 .contact-detail span { color:var(--stone); }
@@ -261,6 +232,14 @@ img { max-width:100%; display:block; }
 .form-input:focus { border-color:var(--violet); }
 .form-input::placeholder { color:var(--stone); }
 textarea.form-input { min-height:120px; resize:vertical; }
+.btn-primary {
+  font-family:var(--sans);
+  font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase;
+  padding:14px 32px; background:var(--violet); color:var(--white);
+  border:1px solid var(--violet); transition:all 0.3s; cursor:pointer;
+  width:fit-content;
+}
+.btn-primary:hover { background:var(--violet-deep); border-color:var(--violet-deep); }
 
 /* ===== FOOTER ===== */
 .footer {
@@ -271,7 +250,6 @@ textarea.form-input { min-height:120px; resize:vertical; }
 .footer-brand { display:flex; align-items:center; gap:16px; }
 .footer-mark { display:flex; align-items:center; }
 .footer-mark img { height:48px; width:auto; display:block; }
-.footer-text {}
 .footer-name { font-family:var(--serif); font-weight:300; font-size:20px; letter-spacing:0.12em; color:var(--white); }
 .footer-sub { font-size:10px; font-weight:400; letter-spacing:0.4em; text-transform:uppercase; color:rgba(255,255,255,0.15); margin-top:4px; }
 .footer-links { display:flex; gap:32px; }
@@ -286,24 +264,43 @@ textarea.form-input { min-height:120px; resize:vertical; }
 .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity:1; transform:translateY(0); }
 
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration:0.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.01ms !important;
+    scroll-behavior:auto !important;
+  }
+  .launcher-frame, .launcher-divider, .launcher-half, .launcher-scroll, .reveal {
+    opacity:1 !important; transform:none !important;
+  }
+}
+
 /* ===== RESPONSIVE ===== */
+@media (max-width:900px) {
+  .launcher-wordmark { font-size:clamp(64px,14vw,120px); }
+}
 @media (max-width:768px) {
   .nav { padding:0 24px; }
   .nav-links { display:none; }
   .nav-cta { display:none; }
   .nav-hamburger { display:flex; }
   .container { padding:0 24px; }
-  .hero { padding:100px 24px 60px; }
+  .launcher { padding:100px 24px 80px; }
+  .launcher-grid {
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1px auto;
+  }
+  .launcher-vdivider { width:100%; height:1px; }
+  .launcher-half { padding:60px 24px; }
+  .launcher-wordmark { font-size:clamp(56px,18vw,96px); }
   .section { padding:80px 0; }
-  .mission-grid { grid-template-columns:1fr; gap:48px; }
-  .products-grid { grid-template-columns:1fr; }
-  .product-card { padding:48px 32px; }
   .philosophy-cards { grid-template-columns:1fr; }
   .contact-grid { grid-template-columns:1fr; gap:48px; }
   .footer { padding:48px 24px 32px; }
   .footer-top { flex-direction:column; gap:32px; }
   .footer-bottom { flex-direction:column; gap:12px; text-align:center; }
-  .hero-ctas { flex-direction:column; }
   .quote-section { padding:60px 24px; }
 }
 </style>
@@ -313,14 +310,12 @@ textarea.form-input { min-height:120px; resize:vertical; }
 <!-- NAV -->
 <nav class="nav" id="nav">
   <div class="nav-left">
-    <div class="nav-mark">
-      <img src="logo-mark.svg" alt="Tigris Tech Labs">
-    </div>
+    <div class="nav-mark"><img src="logo-mark.svg" alt="Tigris Tech Labs"></div>
     <span class="nav-wordmark">TIGRIS</span>
   </div>
   <div class="nav-links">
-    <a href="#about">About</a>
     <a href="#products">Products</a>
+    <a href="#about">About</a>
     <a href="#philosophy">Philosophy</a>
     <a href="#contact">Contact</a>
   </div>
@@ -332,27 +327,40 @@ textarea.form-input { min-height:120px; resize:vertical; }
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#about">About</a>
   <a href="#products">Products</a>
+  <a href="#about">About</a>
   <a href="#philosophy">Philosophy</a>
   <a href="#contact">Contact</a>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-mark">
-    <img src="logo-mark.svg" alt="Tigris Tech Labs">
+<!-- LAUNCHER -->
+<section class="launcher" id="products">
+  <div class="launcher-frame">
+    <div class="launcher-mark"><img src="logo-mark.svg" alt="Tigris Tech Labs"></div>
+    <div class="launcher-name">Tigris Tech Labs</div>
+    <div class="launcher-line">A holding company for AI-native products</div>
   </div>
-  <div class="hero-title">TIGRIS TECH LABS</div>
-  <div class="hero-tagline">Where intelligence begins</div>
-  <div class="hero-desc">We build AI products for industries that demand precision. Domain-native intelligence, not general-purpose tools.</div>
-  <div class="hero-ctas">
-    <a href="#products" class="btn-primary">Our Products</a>
-    <a href="#about" class="btn-secondary">Learn More</a>
+  <div class="launcher-divider"></div>
+  <div class="launcher-grid">
+    <a class="launcher-half cortex" href="https://peptidecortex.com" aria-label="Visit Peptide Cortex">
+      <div class="launcher-wordmark">CORTEX</div>
+      <div class="launcher-rule"></div>
+      <div class="launcher-sub">Peptide Protocol Intelligence</div>
+      <div class="launcher-desc">AI for peptide research and protocol design.</div>
+      <span class="launcher-link">Visit Cortex <span class="launcher-arrow">→</span></span>
+    </a>
+    <div class="launcher-vdivider"></div>
+    <a class="launcher-half alevant" href="https://alevant.ai" aria-label="Visit Alevant">
+      <div class="launcher-wordmark">ALEVANT</div>
+      <div class="launcher-rule"></div>
+      <div class="launcher-sub">Real-Estate Intelligence</div>
+      <div class="launcher-desc">AI-native operating system for real estate agents.</div>
+      <span class="launcher-link">Visit Alevant <span class="launcher-arrow">→</span></span>
+    </a>
   </div>
-  <div class="hero-scroll">
+  <div class="launcher-scroll">
     <span>Scroll</span>
-    <div class="hero-scroll-line"></div>
+    <div class="launcher-scroll-line"></div>
   </div>
 </section>
 
@@ -364,119 +372,9 @@ textarea.form-input { min-height:120px; resize:vertical; }
       <div class="section-tag-text">About</div>
     </div>
     <div class="section-title">We don't build tools.<br><em>We build intelligence.</em></div>
-    <div class="mission-grid reveal">
-      <div class="mission-text">
-        <p>Tigris Tech Labs is an AI-native product company. Every product we ship is built from the ground up with intelligence at its core — not bolted on as a feature.</p>
-        <p>We go deep into industries that others skim. Biotech. Domains where precision isn't a nice-to-have — it's the difference between a product that works and one that gets ignored.</p>
-      </div>
-      <div class="mission-stats">
-        <div class="stat-card">
-          <div class="stat-value">1</div>
-          <div class="stat-label">Product Live</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">AI</div>
-          <div class="stat-label">Native Architecture</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">Deep</div>
-          <div class="stat-label">Domain Expertise</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">2025</div>
-          <div class="stat-label">Founded</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- THE NAME -->
-    <div class="about-block reveal">
-      <div class="about-block-label">The Name</div>
-      <div class="about-block-title">Where the name comes from</div>
-      <p class="about-block-text">Tigris takes its name from the Tigris River — one of the two rivers that cradled Mesopotamia, the birthplace of civilization. It was there, between the Tigris and the Euphrates, that humanity first built systems — language, law, agriculture, trade. The foundations that everything after was built on.</p>
-      <p class="about-block-text">We chose that name because we believe AI is at a similar inflection point. Not AI as a novelty or a feature — AI as infrastructure. The kind that reshapes entire industries from the ground up. Tigris Tech Labs exists to build that foundation.</p>
-    </div>
-
-    <!-- WHAT WE DO -->
-    <div class="about-block reveal">
-      <div class="about-block-label">What We Do</div>
-      <div class="about-block-title">AI-native products for industries that demand precision</div>
-      <p class="about-block-text">Tigris Tech Labs is an AI-native product company. We don't consult. We don't build generic tools. We build software products — each one purpose-built for a specific industry, trained on its language, and designed for the professionals who actually work in it.</p>
-      <p class="about-block-text">Every product we ship has intelligence at its core, not bolted on as an afterthought. We go deep into industries that others skim — because surface-level AI doesn't survive contact with real-world complexity.</p>
-    </div>
-
-    <!-- OUR PRODUCTS -->
-    <div class="about-block reveal">
-      <div class="about-block-label">Our Products</div>
-      <div class="about-block-title">Purpose-built intelligence</div>
-      <div class="about-products-grid" style="grid-template-columns:1fr;max-width:560px">
-        <div class="about-product">
-          <div class="about-product-name cortex">Peptide Cortex</div>
-          <div class="about-product-sub">Peptide Protocol Intelligence</div>
-          <p class="about-product-text">Cortex brings AI into peptide research and protocol design. It reads the literature, understands mechanisms of action, and helps researchers build protocols faster — without cutting corners on science. From dosing frameworks to interaction analysis, Cortex turns hours of manual research into minutes of guided intelligence.</p>
-        </div>
-      </div>
-      <div class="about-more">
-        <p><strong>And more to come.</strong> We're actively exploring new verticals where domain expertise is fragmented, decision-making is high-stakes, and AI can do more than automate — it can elevate. Every new product follows the same principle: go deep, earn trust, build precision.</p>
-      </div>
-    </div>
-
-    <!-- HOW WE BUILD -->
-    <div class="about-block reveal">
-      <div class="about-block-label">How We Build</div>
-      <div class="about-block-title">Our principles</div>
-      <div class="about-build-list">
-        <div class="about-build-item">
-          <h4>Domain First</h4>
-          <p>We immerse ourselves in the industry before writing a single line of code. We talk to practitioners, read the research, and learn the pain points firsthand.</p>
-        </div>
-        <div class="about-build-item">
-          <h4>Precision Over Features</h4>
-          <p>We'd rather do three things perfectly than thirty things adequately. Every feature ships when it's ready to be trusted by professionals whose livelihoods depend on accuracy.</p>
-        </div>
-        <div class="about-build-item">
-          <h4>Intelligence, Not Automation</h4>
-          <p>Our products don't replace experts. They make experts more expert. We build tools that enhance human judgment, not tools that bypass it.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- THE VISION -->
-    <div class="about-vision reveal">
-      <p>The best AI products don't feel like AI products. They feel like the tool you always wished existed — one that speaks your language, understands your workflow, and makes you better at what you already do.</p>
-      <p>That's what we're building at Tigris Tech Labs. One industry at a time.</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- PRODUCTS -->
-<section class="section dark" id="products">
-  <div class="container">
-    <div class="section-tag">
-      <div class="section-tag-line"></div>
-      <div class="section-tag-text">Products</div>
-    </div>
-    <div class="section-title">One product.<br><em>One standard.</em></div>
-    <div class="section-desc">A single domain, deeply built. Engineering philosophy and obsession with precision, focused on the work that matters most.</div>
-  </div>
-  <div style="max-width:1100px; margin:0 auto; padding:0 48px;">
-    <div class="products-grid reveal" style="grid-template-columns:1fr;max-width:640px;margin:60px auto 0">
-      <div class="product-card cortex">
-        <div class="product-card-mark">
-          <span class="product-card-letter">X</span>
-          <div class="product-card-dot"></div>
-        </div>
-        <div class="product-card-name">CORTEX</div>
-        <div class="product-card-sub">Peptide Protocol Intelligence</div>
-        <div class="product-card-desc">Peptide Cortex brings AI to peptide research and protocol design. It reads the science, understands the mechanisms, and helps researchers move faster without cutting corners.</div>
-        <div class="product-card-features">
-          <div class="product-feature">Protocol generation from research literature</div>
-          <div class="product-feature">Mechanism-aware peptide analysis</div>
-          <div class="product-feature">Continuously updated knowledge base</div>
-        </div>
-        <a href="#" class="product-card-link">Learn more →</a>
-      </div>
+    <div class="about-body reveal">
+      <p>Tigris Tech Labs is an AI-native product company. Every product we ship is built from the ground up with intelligence at its core — not bolted on as a feature. We go deep into industries that others skim — where precision isn't a nice-to-have, it's the difference between a product that works and one that gets ignored.</p>
+      <p>The name comes from the Tigris River — one of the two rivers that cradled Mesopotamia, the birthplace of civilization, where humanity first built the systems that everything after was built on. AI is at a similar inflection. Tigris exists to build that foundation, one industry at a time.</p>
     </div>
   </div>
 </section>
@@ -527,23 +425,24 @@ textarea.form-input { min-height:120px; resize:vertical; }
     <div class="section-title">Let's talk.<br><em>We're listening.</em></div>
     <div class="contact-grid reveal">
       <div class="contact-info">
-        <h3>Whether you're a potential partner, investor, or practitioner — we'd love to hear from you.</h3>
+        <h3>Whether you're a partner, a practitioner, or a researcher — we'd love to hear from you.</h3>
         <p>We're building intelligence for industries that matter. If that resonates, reach out. We respond to every message.</p>
         <div class="contact-detail"><span>Email — </span>hello@tigristechlabs.com</div>
-        <div class="contact-detail"><span>Products — </span>Peptide Cortex</div>
+        <div class="contact-detail"><span>Products — </span>Cortex · Alevant</div>
       </div>
-      <form class="contact-form" onsubmit="event.preventDefault();">
-        <input type="text" class="form-input" placeholder="Your name">
-        <input type="email" class="form-input" placeholder="Your email">
-        <select class="form-input">
+      <form class="contact-form" action="https://formspree.io/f/mojrrjor" method="POST">
+        <input type="hidden" name="_subject" value="New inquiry from tigristechlabs.com">
+        <input type="text" name="name" class="form-input" placeholder="Your name" required>
+        <input type="email" name="email" class="form-input" placeholder="Your email" required>
+        <select name="interest" class="form-input" required>
           <option value="" disabled selected>I'm interested in...</option>
-          <option>Peptide Cortex — Peptide Intelligence</option>
-          <option>Partnership Opportunity</option>
-          <option>Investment Inquiry</option>
-          <option>General Inquiry</option>
+          <option value="cortex">Cortex — Peptide Intelligence</option>
+          <option value="alevant">Alevant — Real-Estate Intelligence</option>
+          <option value="partnership">Partnership Opportunity</option>
+          <option value="general">General Inquiry</option>
         </select>
-        <textarea class="form-input" placeholder="Your message"></textarea>
-        <button type="submit" class="btn-primary" style="border:none; cursor:pointer; width:fit-content;">Send Message</button>
+        <textarea name="message" class="form-input" placeholder="Your message" required></textarea>
+        <button type="submit" class="btn-primary">Send Message</button>
       </form>
     </div>
   </div>
@@ -553,17 +452,15 @@ textarea.form-input { min-height:120px; resize:vertical; }
 <footer class="footer">
   <div class="footer-top">
     <div class="footer-brand">
-      <div class="footer-mark">
-        <img src="logo-mark-cream.svg" alt="Tigris Tech Labs">
-      </div>
+      <div class="footer-mark"><img src="logo-mark-cream.svg" alt="Tigris Tech Labs"></div>
       <div class="footer-text">
         <div class="footer-name">TIGRIS</div>
         <div class="footer-sub">Tech Labs</div>
       </div>
     </div>
     <div class="footer-links">
-      <a href="#about">About</a>
       <a href="#products">Products</a>
+      <a href="#about">About</a>
       <a href="#philosophy">Philosophy</a>
       <a href="#contact">Contact</a>
     </div>
@@ -605,11 +502,13 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-// Smooth scroll for nav links
+// Smooth scroll for internal anchors only (skip external product links)
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (href === '#' || href.length < 2) return;
     e.preventDefault();
-    const target = document.querySelector(a.getAttribute('href'));
+    const target = document.querySelector(href);
     if (target) target.scrollIntoView({ behavior:'smooth', block:'start' });
   });
 });
