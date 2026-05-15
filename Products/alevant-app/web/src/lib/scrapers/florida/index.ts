@@ -293,14 +293,17 @@ export function fusedToGridInputs(fused: FusedSignal) {
     : 0;
   const estimatedEquity = Math.max(0, value - estimatedMortgage);
 
+  // County is already on the fused property record — out of scope from
+  // fuseAddressSignals here, so derive from fused.property.county.
+  const propertyCounty = fused.property.county;
   const sources = [
-    resolvedCounty === "Miami-Dade"
+    propertyCounty === "Miami-Dade"
       ? "miami_dade_pa"
-      : resolvedCounty === "Broward"
+      : propertyCounty === "Broward"
       ? "broward_pa"
-      : resolvedCounty === "Palm Beach"
+      : propertyCounty === "Palm Beach"
       ? "palm_beach_pa"
-      : resolvedCounty === "Monroe"
+      : propertyCounty === "Monroe"
       ? "monroe_pa"
       : "florida_public_records",
   ];

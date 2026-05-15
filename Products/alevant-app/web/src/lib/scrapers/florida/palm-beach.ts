@@ -32,59 +32,78 @@ interface PAPASaleHistory {
 }
 
 export async function searchPalmBeachByAddress(address: string, limit = 5): Promise<PAPASearchResult[]> {
-  return await withBrowser(async ({ page }) => {
-    await page.goto("https://www.pbcgov.com/papa/property-search", { waitUntil: "networkidle" });
+  return await withBrowser(async ({ context }) => {
+    const page = await context.newPage();
+    try {
+      await page.goto("https://www.pbcgov.com/papa/property-search", { waitUntil: "networkidle" });
 
-    // Fill address search form
-    await page.fill('input[name="propertyAddress"]', address);
-    await page.click('button[type="submit"]');
-    await page.waitForLoadState("networkidle");
+      // Fill address search form
+      await page.fill('input[name="propertyAddress"]', address);
+      await page.click('button[type="submit"]');
+      await page.waitForLoadState("networkidle");
 
-    // Parse results table
-    const results = await page.$$eval("table.propertySearchResults tr.dataRow", (rows) =>
-      rows.slice(0, limit).map((row) => {
-        const cells = Array.from(row.querySelectorAll("td")).map((td) => td.textContent?.trim() || "");
-        return {
-          Folio: cells[0] || "",
-          Address: cells[1] || "",
-          City: cells[2] || "",
-          Zip: cells[3] || "",
-          Owner1: cells[4] || "",
-          Owner2: cells[5] || "",
-          MailingAddress: cells[6] || "",
-          TrueMarketValue: parseFloat(cells[7]?.replace(/[$,]/g, "") || "0") || undefined,
-          AssessedValue: parseFloat(cells[8]?.replace(/[$,]/g, "") || "0") || undefined,
-          YearBuilt: parseInt(cells[9] || "0") || undefined,
-          Bedroom: parseInt(cells[10] || "0") || undefined,
-          Bath: parseFloat(cells[11] || "0") || undefined,
-          AdjustedSqFt: parseFloat(cells[12]?.replace(/[$,]/g, "") || "0") || undefined,
-          LotSize: parseFloat(cells[13]?.replace(/[$,]/g, "") || "0") || undefined,
-          DOR_Code: cells[14] || undefined,
-          HomesteadExemption: cells[15]?.toLowerCase().includes("yes") || false,
-        };
-      })
-    );
+      // Parse results table
+      const results = await page.$$eval(
+        "table.propertySearchResults tr.dataRow",
+        (rows: Element[], lim: number) =>
+          rows.slice(0, lim).map((row) => {
+            const cells = Array.from(row.querySelectorAll("td")).map(
+              (td) => (td as HTMLElement).textContent?.trim() || ""
+            );
+            return {
+              Folio: cells[0] || "",
+              Address: cells[1] || "",
+              City: cells[2] || "",
+              Zip: cells[3] || "",
+              Owner1: cells[4] || "",
+              Owner2: cells[5] || "",
+              MailingAddress: cells[6] || "",
+              TrueMarketValue: parseFloat(cells[7]?.replace(/[$,]/g, "") || "0") || undefined,
+              AssessedValue: parseFloat(cells[8]?.replace(/[$,]/g, "") || "0") || undefined,
+              YearBuilt: parseInt(cells[9] || "0") || undefined,
+              Bedroom: parseInt(cells[10] || "0") || undefined,
+              Bath: parseFloat(cells[11] || "0") || undefined,
+              AdjustedSqFt: parseFloat(cells[12]?.replace(/[$,]/g, "") || "0") || undefined,
+              LotSize: parseFloat(cells[13]?.replace(/[$,]/g, "") || "0") || undefined,
+              DOR_Code: cells[14] || undefined,
+              HomesteadExemption: cells[15]?.toLowerCase().includes("yes") || false,
+            };
+          }),
+        limit
+      );
 
-    return results;
+      return results;
+    } finally {
+      await page.close();
+    }
   });
 }
 
 export async function getPalmBeachSaleHistory(folio: string): Promise<PAPASaleHistory[]> {
-  return await withBrowser(async ({ page }) => {
-    await page.goto(`https://www.pbcgov.com/papa/property-detail/${folio}`, { waitUntil: "networkidle" });
+  return await withBrowser(async ({ context }) => {
+    const page = await context.newPage();
+    try {
+      await page.goto(`https://www.pbcgov.com/papa/property-detail/${folio}`, { waitUntil: "networkidle" });
 
-    // Parse sale history table
-    const sales = await page.$$eval("table.saleHistoryTable tr.dataRow", (rows) =>
-      rows.map((row) => {
-        const cells = Array.from(row.querySelectorAll("td")).map((td) => td.textContent?.trim() || "");
-        return {
-          DateOfSale: cells[0] || "",
-          SalePrice: parseFloat(cells[1]?.replace(/[$,]/g, "") || "0") || 0,
-        };
-      })
-    );
+      // Parse sale history table
+      const sales = await page.$$eval(
+        "table.saleHistoryTable tr.dataRow",
+        (rows: Element[]) =>
+          rows.map((row) => {
+            const cells = Array.from(row.querySelectorAll("td")).map(
+              (td) => (td as HTMLElement).textContent?.trim() || ""
+            );
+            return {
+              DateOfSale: cells[0] || "",
+              SalePrice: parseFloat(cells[1]?.replace(/[$,]/g, "") || "0") || 0,
+            };
+          })
+      );
 
-    return sales;
+      return sales;
+    } finally {
+      await page.close();
+    }
   });
 }
 
