@@ -1,6 +1,7 @@
 import { getSupabaseService, getSupabaseServer } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import DashboardClient from "./DashboardClient";
+import { TodaysPlays } from "./TodaysPlays";
 import { fmtP, type DashboardAction } from "./types";
 
 // ── helpers ────────────────────────────────────────────────────────────
@@ -454,7 +455,11 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <DashboardClient
+    <>
+      <div className="px-10 pt-10">
+        <TodaysPlays />
+      </div>
+      <DashboardClient
       agentName={agentName}
       dateLabel={dateLabel}
       kpis={kpis}
@@ -481,5 +486,6 @@ export default async function DashboardPage() {
         transactions: _transactions.length,
       }}
     />
+    </>
   );
 }

@@ -5,7 +5,9 @@
     "src/app/api/vesper/**/*.ts": { "maxDuration": 60 },
     "src/app/api/underwriter/**/*.ts": { "maxDuration": 30 },
     "src/app/api/sofia/**/*.ts": { "maxDuration": 30 },
-    "src/app/api/sphere/sweep/route.ts": { "maxDuration": 60 }
+    "src/app/api/sphere/sweep/route.ts": { "maxDuration": 60 },
+    "src/app/api/grid/scan/route.ts": { "maxDuration": 60 },
+    "src/app/api/contacts/[id]/research/route.ts": { "maxDuration": 60 }
   },
   "crons": [
     { "path": "/api/cron/sphere-sweep", "schedule": "0 */6 * * *" },
@@ -14,6 +16,8 @@
     { "path": "/api/cron/standup-prebake", "schedule": "30 11 * * *" },
     { "path": "/api/cron/grid-scan", "schedule": "0 10 * * *" },
     { "path": "/api/cron/news-scan", "schedule": "0 11,21 * * *" },
-    { "path": "/api/cron/transaction-nudges", "schedule": "0 13 * * *" }
+    { "path": "/api/cron/transaction-nudges", "schedule": "0 13 * * *" },
+    { "path": "/api/cron/grid-decay", "schedule": "0 4 * * *" },
+    { "path": "/api/cron/playbook-scheduler", "schedule": "*/15 * * * *" }
   ]
 }

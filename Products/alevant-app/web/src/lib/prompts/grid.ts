@@ -35,6 +35,13 @@ export interface GridReasonInput {
     is_divorce?: boolean;
     is_senior_owner?: boolean;
     long_tenure_flag?: boolean;
+    // v1.5 multimodal additions
+    permit_class?: "stay" | "flip" | "unknown" | string;
+    visual_diff?: "deterioration" | "renovation" | "no_change" | "not_comparable" | string;
+    ncoa_mail_forward?: boolean;
+    voter_dropped?: boolean;
+    llc_dissolved?: boolean;
+    rate_lock_strength?: "tight" | "moderate" | "loose" | string;
   };
   market: {
     neighborhood_absorption_rate?: number;
