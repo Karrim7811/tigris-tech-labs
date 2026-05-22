@@ -1,0 +1,45 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(winget install:*)",
+      "Bash(vercel --yes)",
+      "Bash(vercel --yes --name tigris-tech-labs)",
+      "Bash(git -C \"Z:/TigrisTechLabs\" remote -v)",
+      "Bash(git -C \"Z:/TigrisTechLabs\" log --oneline -3 -- index.html)",
+      "Bash(git -C \"Z:/TigrisTechLabs\" diff --stat index.html)",
+      "Bash(git -C \"Z:/TigrisTechLabs\" status --short index.html logo-mark.svg logo-mark-cream.svg)",
+      "Bash(git -C \"Z:/TigrisTechLabs\" add index.html logo-mark.svg logo-mark-cream.svg)",
+      "Bash(git -C Z:/TigrisTechLabs commit -m ' *)",
+      "Bash(git -C \"Z:/TigrisTechLabs\" push origin master)"
+    ]
+  },
+  "extraKnownMarketplaces": {
+    "anthropics-claude-code": {
+      "source": { "source": "github", "repo": "anthropics/claude-code" }
+    },
+    "vercel-labs-skills": {
+      "source": { "source": "github", "repo": "vercel-labs/skills" }
+    }
+  },
+  "enabledPlugins": {
+    "frontend-design@anthropics-claude-code": true,
+    "feature-dev@anthropics-claude-code": true,
+    "code-review@anthropics-claude-code": true,
+    "commit-commands@anthropics-claude-code": true,
+    "security-guidance@anthropics-claude-code": true,
+    "simplify@anthropics-claude-code": true,
+    "batch@anthropics-claude-code": true,
+    "mcp-builder@anthropics-claude-code": true,
+    "github@anthropics-claude-code": true,
+    "supabase@anthropics-claude-code": true,
+    "vercel@anthropics-claude-code": true,
+    "playwright@anthropics-claude-code": true,
+    "sentry@anthropics-claude-code": true,
+    "stripe@anthropics-claude-code": true,
+    "linear@anthropics-claude-code": true,
+    "postman@anthropics-claude-code": true,
+    "find-skills@vercel-labs-skills": true,
+    "vercel-react-best-practices@vercel-labs-skills": true,
+    "web-design-guidelines@vercel-labs-skills": true
+  }
+}
