@@ -206,13 +206,20 @@ These are surfaced in detail in **REFACTOR-ROADMAP.md** but live here as a check
 14. ✅ **Sofia voice mismatch in Twilio fallback** — TwiML no longer claims to be Sofia in Polly's voice.
 15. ✅ **House brand color defaulted to Bichi tropical** — onboarding default now correctly uses ALEVANT indigo `#3D4F8C`.
 
-### Findings revealed by Supabase type generation (2026-05-23, post-H-3)
+### Findings revealed by Supabase type generation (2026-05-23, post-H-3) — most resolved same day
 
-16. **16 tables in production have RLS disabled.** Reachable via the anon key (public). The list: `ai_capabilities` (96 rows), `ai_custom_rules`, `knowledge_collections` (16), `knowledge_entries` (41), `knowledge_files`, `florida_court_filings`, `florida_tax_records`, `florida_code_enforcement`, `florida_permits`, `florida_business_filings`, `florida_voter_roll_snapshots`, `property_visual_diffs`, `usps_ncoa_records`, `dmf_records`, `grid_model_registry`, `opportunity_stage_history`. The advisory blocks auto-fix because enabling RLS without policies would lock the app out — adding policies is a judgment call about who can read what. **Critical security issue.**
-17. **Schema drift — prod has tables that no migration creates.** `ai_capabilities`, `ai_custom_rules`, `knowledge_collections`, `knowledge_entries`, `knowledge_files`, `playbook_step_runs`. Routes under `api/settings/*` and `api/kb/*` and `api/playbook-step-runs/*` write to them. Re-derive the missing migrations from prod schema and check them in.
-18. **Column drift — prod has `workspaces.mls_safe_mode`** that no migration creates.
-19. **Migration `00000000000002a` (property_neighborhood) was never applied to prod** — the column is missing despite the migration file existing. `api/grid/score` and `api/grid/scan` both write to it, then any read fails. (Critical — applies the moment the C-1 migration is pushed; needs to be pushed together.)
-20. **Live database is named `alevant-prod`** in Supabase — confirming Open Question #6: this IS production. The dev/staging story (if any) is unclear.
+16. ✅ **16 tables had RLS disabled** — fixed via migrations `20260523194645_enable_rls_on_exposed_tables` (workspace-scoped policies for AI/KB tables, parent-FK-derived for opportunity_stage_history, public-read for grid_model_registry, service-role-only for Florida/vendor caches) and `20260523194813_harden_views_and_definer_functions` (recreated 3 views as SECURITY INVOKER, locked seed-playbook functions, pinned search_path, added missing policies on transaction_milestones).
+17. ✅ **Schema drift — 6 tables in prod not in any local migration file** — fixed by reconciling the 9 real prod migrations from `supabase_migrations.schema_migrations` into `web/supabase/migrations/` with their canonical `YYYYMMDDHHMMSS` filenames. Legacy `0000...` placeholder set archived to `_archive-bootstrap/`. Fresh-DB bootstrap now mirrors prod exactly.
+18. ✅ **Column drift — `workspaces.mls_safe_mode`** — captured in the reconciled `20260508182945_add_capabilities_custom_rules_knowledge_base` migration file.
+19. ✅ **`property_neighborhood` missing from prod** — applied as `20260523194535_add_property_neighborhood_to_grid_signals`. Grid scoring writes succeed again.
+20. **Live database is named `alevant-prod`** in Supabase — Open Question #6 answered: this IS production. The dev/staging story (if any) is unclear. There is no separate dev project visible in the same org.
+
+### Lower-priority advisories accepted as known (post-hardening, 2026-05-23)
+
+21. **`alevant_user_workspace_ids` is callable via REST by anon/authenticated.** Cannot revoke EXECUTE from PUBLIC because every RLS policy in the database calls it — that would lock every authenticated query out. The function returns only the caller's own workspace IDs (derivable from any authenticated query anyway); risk is minimal. (Supabase advisor: WARN.)
+22. **`vector` extension installed in the `public` schema.** Standard Supabase advisory recommending a dedicated `extensions` schema. Cosmetic; deferring. (WARN.)
+23. **HaveIBeenPwned leaked-password protection disabled in Auth.** One-click enable in Supabase dashboard → Auth → Policies. Defer until pricing review. (WARN.)
+24. **11 tables intentionally have RLS-on with no policies** (Florida raw caches, `dmf_records`, `usps_ncoa_records`, `property_visual_diffs`, `fairness_test_attributes`). Service role bypasses RLS; authenticated reads are correctly blocked because these tables either have no tenant ownership or are explicitly off-limits to the app role. (INFO.)
 
 ---
 
@@ -280,7 +287,7 @@ These accumulated during the audit. Answer them in batch — none of them block 
 3. **Brand palette — keep ALEVANT's Indigo `#3D4F8C` / Brass `#B5853E` (per README) or extend the Tigris Tech Labs family Neural Teal `#00C9B1`?** The README says Indigo. The Tigris family default is teal. Bichi's tenant overrides to Tropical Teal `#0E5560`. Three different teal/indigo/teal interpretations live in the repo. Pick one canonical.
 4. **JetBrains Mono — is the data-mono font supposed to be wired in?** README mentions it; no font import exists. Either wire it as the mono token across data tables / KPIs, or strike it from the brand doc.
 5. **Where does the brand asset library live?** `alevant-app/brand/` is empty in git. Are logos under git LFS elsewhere, or do we still need to bring them in from the brand-identity HTML?
-6. **Live `.env.local`** — `web/.env.local` is checked-out (not in git) and contains the real anon + service-role + Anthropic keys. Confirm this Supabase project (`xipmovjuppwjjutcwhym`) is the dev/staging project, not production. If it's prod, rotate the service-role key after the audit since it's been seen by the audit tooling.
+6. ✅ **Live `.env.local`** — confirmed: Supabase project `xipmovjuppwjjutcwhym` is named `alevant-prod` in the dashboard. The keys in `.env.local` ARE production. There is no separate dev/staging project. Recommendation: rotate the service-role key (it has been read by audit tooling), and create a dev project so local development isn't pointed at prod.
 7. **Mobile app timing** — `mobile/` is a README-only spec. Is the RN/Expo build slated for the Bichi pilot, or post-pilot once the web product proves out?
 8. **ML hazard model promotion path** — `ml/hazard_model/` runs on synthetic data. Confirm the "wait 6 months for real outcomes" plan vs. cold-starting on PRAIX-comparable transferred data.
 9. **Tenant for Karim himself** — `scripts/karim-setup.ts` and `scripts/seed-karim-workspace.ts` exist. Are these dev-only utilities, or is Karim's personal tenant also a real launch tenant?

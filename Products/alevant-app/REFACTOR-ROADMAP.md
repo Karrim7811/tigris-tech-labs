@@ -8,16 +8,27 @@ Effort calibration: a one-engineer-Claude pair sprint. Multiply by 1.5 for human
 
 ## STATUS — what's already shipped
 
-Foundation sprint (commits `a0f6442` → `b1855d8` on 2026-05-23) resolved:
-**C-1** (onboarded_at migration), **C-4** (sphere sweep auth + FK fix),
-**C-5** (vw_prospects band fix, partial C-2 hardening on `/api/contacts/[id]`),
-**M-1** (migration timestamp dedup), **M-8** (Sofia voice mismatch),
-**M-9** (default brand color), **L-2 + L-5** (already gitignored — no-op),
-**H-3 Phase A** (generated Database types + opt-in `lib/supabase/typed.ts` +
-`pnpm gen-types`). C-2 and C-3 still pending the systematic sweep — typed
-clients now exist to use during it.
+Foundation sprint (2026-05-23) resolved a large block in one sitting:
 
-The type generation surfaced **new findings** added below as C-6, C-7, C-8.
+**Code-only fixes (pushed to origin/master, Vercel auto-deploys):**
+- **C-1** (onboarded_at migration — local file; prod already had the column via a separately-applied migration)
+- **C-4** (sphere sweep auth + FK fix)
+- **C-5 + partial C-2** (vw_prospects band fix, workspace-scoped contact queries)
+- **M-1** (migration timestamp dedup)
+- **M-8** (Sofia voice mismatch)
+- **M-9** (default brand color)
+- **L-2 + L-5** (already gitignored — no-op)
+- **H-3 Phase A** (generated Database types + opt-in `lib/supabase/typed.ts` + `pnpm gen-types`)
+
+**Schema fixes applied to alevant-prod via Supabase MCP:**
+- **C-8** (`20260523194535` — `grid_signals.property_neighborhood` column + index; Grid scoring writes were silently failing)
+- **C-6** (`20260523194645` — enable RLS + per-table policies on the 16 exposed tables)
+- **C-6 hardening** (`20260523194813` — 3 views recreated as SECURITY INVOKER; seed-playbook functions locked from REST; `search_path` pinned; missing `transaction_milestones` policies added)
+- **C-7** (migration reconciliation — 9 prod-applied migrations pulled from `supabase_migrations.schema_migrations` into git with canonical filenames; legacy `0000...` set archived)
+
+**Supabase advisor delta**: critical `rls_disabled` (16 tables) gone; 3 ERROR-level `security_definer_view` gone; 3 `function_search_path_mutable` gone. Remaining issues are accepted documented exceptions (see CLAUDE.md §10 items 21-24) and the systematic C-2/C-3 sweep.
+
+**Still open:** C-2 (full tenant-isolation sweep), C-3 (move 95 authenticated routes off the service-role client), H-1 (membership-aware workspace lookups), H-2 (CI). These are the next session's work.
 
 ---
 
@@ -68,7 +79,7 @@ The type generation surfaced **new findings** added below as C-6, C-7, C-8.
 **Files.** `supabase/migrations/00000000000004_contacts_prospects.sql`.
 **Surfaced by.** supabase · code-review
 
-### C-6 · 16 tables in prod have RLS disabled — anon-key writeable
+### C-6 · 16 tables in prod have RLS disabled — anon-key writeable  ✅ SHIPPED
 **Description.** Supabase advisory flagged it during type-gen: `ai_capabilities`, `ai_custom_rules`, `knowledge_collections`, `knowledge_entries`, `knowledge_files`, all 8 Florida raw-cache tables, `property_visual_diffs`, `usps_ncoa_records`, `dmf_records`, `grid_model_registry`, `opportunity_stage_history`. Anyone with the anon key (which is publicly embedded in `NEXT_PUBLIC_SUPABASE_ANON_KEY`) can read or write every row. `knowledge_entries` has 41 rows of agent-personalized AI prompts; `grid_model_registry` has the live champion-model pointer (overwritable by anyone). The Florida raw caches are less sensitive but still a poisoning vector.
 
 **Why it matters.** Top-1 production security issue. The advisory deliberately does NOT auto-apply the fix because `alter table … enable row level security` without policies blocks the app from reading those tables — the right answer requires choosing per-table policies (workspace-scoped for AI/KB tables; public-read for Florida caches; service-role-only for the model registry).
@@ -77,7 +88,7 @@ The type generation surfaced **new findings** added below as C-6, C-7, C-8.
 **Files.** New `web/supabase/migrations/00000000000008_enable_missing_rls.sql`. Routes that read these tables: `api/settings/capabilities/route.ts`, `api/settings/custom-rules/route.ts`, `api/kb/*`, `api/playbook-step-runs/*`, every grid scraper.
 **Surfaced by.** supabase advisory · security-guidance
 
-### C-7 · Schema drift — six tables in prod aren't in any migration file
+### C-7 · Schema drift — six tables in prod aren't in any migration file  ✅ SHIPPED
 **Description.** Live prod has `ai_capabilities`, `ai_custom_rules`, `knowledge_collections`, `knowledge_entries`, `knowledge_files`, `playbook_step_runs`, plus column `workspaces.mls_safe_mode` — none of these appear in `web/supabase/migrations/`. Someone created them directly in the Supabase console. New environments (staging, QA, second pilot tenant) can never reproduce prod.
 
 **Why it matters.** The migration file is supposed to be the source of truth. Any disaster-recovery rebuild is broken until this is reconciled. Also blocks any meaningful schema review.
@@ -86,7 +97,7 @@ The type generation surfaced **new findings** added below as C-6, C-7, C-8.
 **Files.** New `web/supabase/migrations/00000000000009_reconcile_prod_schema.sql`.
 **Surfaced by.** supabase · code-review
 
-### C-8 · `00000000000002a` (property_neighborhood) was never applied to prod
+### C-8 · `00000000000002a` (property_neighborhood) was never applied to prod  ✅ SHIPPED
 **Description.** Migration file exists; the column doesn't. `api/grid/score` and `api/grid/scan` both insert `property_neighborhood` on every grid signal, and `vw_prospects` reads it. Either the migration was applied and the column got dropped, or it was never applied. The TS error chain in the typecheck revealed it.
 
 **Why it matters.** Every grid scoring INSERT writes a nonexistent column → write fails → no new signals get stored. The Grid is silently broken in prod for any property where the neighborhood is set.
