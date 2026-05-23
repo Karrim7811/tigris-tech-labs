@@ -30,6 +30,10 @@ Foundation sprint (2026-05-23) resolved a large block in one sitting:
 
 **Still open:** C-2 (full tenant-isolation sweep), C-3 (move 95 authenticated routes off the service-role client), H-1 (membership-aware workspace lookups), H-2 (CI). These are the next session's work.
 
+**Plumbing also surfaced (2026-05-23 deploy):**
+- **Vercel GitHub auto-deploy is broken.** Project's `"live": false`; no commit after `a45f88b` triggered a build. `git push origin master` does not deploy today. Worked around by deploying via local CLI from a `git worktree` of origin/master. Re-link or rotate the GitHub→Vercel webhook before relying on auto-deploy. (Roadmap: H-6.)
+- **Untracked WIP files break local `vercel deploy`.** `cinematic/Cinematic.tsx` and `cinematic/moments.tsx` (untracked, on the user's working tree) import `lenis` and `framer-motion` which are not in `package.json`. Any local deploy that includes the working tree fails. Either commit those files + add deps, or add a `.vercelignore` excluding them. (Roadmap: L-6.)
+
 ---
 
 ## CRITICAL — block Bichi launch
