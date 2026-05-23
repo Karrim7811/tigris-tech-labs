@@ -9,7 +9,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "seed:bichi": "tsx scripts/seed-bichi.ts",
-    "db:migrate": "supabase db push"
+    "db:migrate": "supabase db push",
+    "gen-types": "supabase gen types typescript --project-id xipmovjuppwjjutcwhym > src/lib/supabase/database.types.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
