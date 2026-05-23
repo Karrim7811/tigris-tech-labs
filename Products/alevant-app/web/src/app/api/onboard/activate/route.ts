@@ -71,8 +71,11 @@ export async function POST(req: Request) {
 
   // ── 1. brand_kit (UPDATE if linked, else INSERT + link) ─────────────
   let brandKitId = ws.brand_kit_id as string | null;
+  // House defaults are ALEVANT indigo + brass + parchment. Per-tenant brand
+  // kits (e.g. Bichi's tropical-teal) override these via the brand stage of the
+  // onboarding wizard.
   const brandPayload = {
-    primary_color: brand.primary_color || "#0E5560",
+    primary_color: brand.primary_color || "#3D4F8C",
     secondary_color: brand.secondary_color || "#E8DCC4",
     accent_color: brand.accent_color || "#B5853E",
     surface_color: "#FAFAF8",
