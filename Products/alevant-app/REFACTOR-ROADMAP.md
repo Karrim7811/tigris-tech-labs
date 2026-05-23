@@ -6,9 +6,24 @@ Effort calibration: a one-engineer-Claude pair sprint. Multiply by 1.5 for human
 
 ---
 
+## STATUS — what's already shipped
+
+Foundation sprint (commits `a0f6442` → `b1855d8` on 2026-05-23) resolved:
+**C-1** (onboarded_at migration), **C-4** (sphere sweep auth + FK fix),
+**C-5** (vw_prospects band fix, partial C-2 hardening on `/api/contacts/[id]`),
+**M-1** (migration timestamp dedup), **M-8** (Sofia voice mismatch),
+**M-9** (default brand color), **L-2 + L-5** (already gitignored — no-op),
+**H-3 Phase A** (generated Database types + opt-in `lib/supabase/typed.ts` +
+`pnpm gen-types`). C-2 and C-3 still pending the systematic sweep — typed
+clients now exist to use during it.
+
+The type generation surfaced **new findings** added below as C-6, C-7, C-8.
+
+---
+
 ## CRITICAL — block Bichi launch
 
-### C-1 · Add missing `workspace_memberships.onboarded_at` column
+### C-1 · Add missing `workspace_memberships.onboarded_at` column  ✅ SHIPPED
 **Description.** `api/onboard/activate/route.ts:220-223` writes `onboarded_at = now()` to `workspace_memberships`; `(app)/dashboard/page.tsx:230` reads it as the gate that lets users into the dashboard. The column is not defined in any migration. Activate silently fails → every dashboard load redirects to `/onboard` → wizard appears to be uncompletable.
 
 **Why it matters.** Bichi cannot complete onboarding today. End-to-end demo is broken.
@@ -35,7 +50,7 @@ Effort calibration: a one-engineer-Claude pair sprint. Multiply by 1.5 for human
 **Files.** All authenticated `/api/*/route.ts`, all `(app)/**/page.tsx`, `app/(app)/_lib/resolve-workspace.ts`.
 **Surfaced by.** security-guidance · supabase · code-review
 
-### C-4 · `/api/sphere/sweep` has zero auth + writes invalid FK
+### C-4 · `/api/sphere/sweep` has zero auth + writes invalid FK  ✅ SHIPPED
 **Description.** `web/src/app/api/sphere/sweep/route.ts` accepts unauthenticated POST/GET, iterates **every active workspace**, and inserts `sphere_signals` rows. It uses `tx.buyer_id` (an FK to `buyers`, which itself FKs to `contacts`) as `sphere_signals.contact_id` directly — that will FK-violate at scale.
 
 **Why it matters.** Anyone on the internet can trigger writes across every tenant. Even after auth is fixed, the FK bug means the sweep generates corrupt data.
@@ -44,13 +59,40 @@ Effort calibration: a one-engineer-Claude pair sprint. Multiply by 1.5 for human
 **Files.** `web/src/app/api/sphere/sweep/route.ts`, `web/src/app/api/cron/sphere-sweep/route.ts`.
 **Surfaced by.** security-guidance · code-review
 
-### C-5 · Migration 4 `vw_prospects` will fail to deploy on fresh DBs
+### C-5 · Migration 4 `vw_prospects` will fail to deploy on fresh DBs  ✅ SHIPPED
 **Description.** `supabase/migrations/00000000000004_contacts_prospects.sql:59` references `g.band as urgency_band`. There is no `band` column on `grid_signals` in any prior migration. `CREATE OR REPLACE VIEW` binds at definition time and will error. Production deploys only succeed today because migration 6 happens to replace the view in the same `db push`. Anyone who runs migrations one-at-a-time, or who creates a fresh DB and stops at migration 4, hits an error.
 
 **Why it matters.** First-time setup is brittle. Bootstrap will surprise the next person who tries it.
 
 **Effort.** XS — change migration 4 to compute the band inline (CASE on `motivation_score`) or drop the band column from the view entirely (since migration 6 supersedes it anyway).
 **Files.** `supabase/migrations/00000000000004_contacts_prospects.sql`.
+**Surfaced by.** supabase · code-review
+
+### C-6 · 16 tables in prod have RLS disabled — anon-key writeable
+**Description.** Supabase advisory flagged it during type-gen: `ai_capabilities`, `ai_custom_rules`, `knowledge_collections`, `knowledge_entries`, `knowledge_files`, all 8 Florida raw-cache tables, `property_visual_diffs`, `usps_ncoa_records`, `dmf_records`, `grid_model_registry`, `opportunity_stage_history`. Anyone with the anon key (which is publicly embedded in `NEXT_PUBLIC_SUPABASE_ANON_KEY`) can read or write every row. `knowledge_entries` has 41 rows of agent-personalized AI prompts; `grid_model_registry` has the live champion-model pointer (overwritable by anyone). The Florida raw caches are less sensitive but still a poisoning vector.
+
+**Why it matters.** Top-1 production security issue. The advisory deliberately does NOT auto-apply the fix because `alter table … enable row level security` without policies blocks the app from reading those tables — the right answer requires choosing per-table policies (workspace-scoped for AI/KB tables; public-read for Florida caches; service-role-only for the model registry).
+
+**Effort.** S — one migration, ~16 enable statements + ~16 policies. Plus testing each affected route.
+**Files.** New `web/supabase/migrations/00000000000008_enable_missing_rls.sql`. Routes that read these tables: `api/settings/capabilities/route.ts`, `api/settings/custom-rules/route.ts`, `api/kb/*`, `api/playbook-step-runs/*`, every grid scraper.
+**Surfaced by.** supabase advisory · security-guidance
+
+### C-7 · Schema drift — six tables in prod aren't in any migration file
+**Description.** Live prod has `ai_capabilities`, `ai_custom_rules`, `knowledge_collections`, `knowledge_entries`, `knowledge_files`, `playbook_step_runs`, plus column `workspaces.mls_safe_mode` — none of these appear in `web/supabase/migrations/`. Someone created them directly in the Supabase console. New environments (staging, QA, second pilot tenant) can never reproduce prod.
+
+**Why it matters.** The migration file is supposed to be the source of truth. Any disaster-recovery rebuild is broken until this is reconciled. Also blocks any meaningful schema review.
+
+**Effort.** S — dump the missing CREATE TABLE statements from prod, format as a new migration, sequence after the existing ones so it no-ops on prod (`if not exists`) and creates on fresh DBs.
+**Files.** New `web/supabase/migrations/00000000000009_reconcile_prod_schema.sql`.
+**Surfaced by.** supabase · code-review
+
+### C-8 · `00000000000002a` (property_neighborhood) was never applied to prod
+**Description.** Migration file exists; the column doesn't. `api/grid/score` and `api/grid/scan` both insert `property_neighborhood` on every grid signal, and `vw_prospects` reads it. Either the migration was applied and the column got dropped, or it was never applied. The TS error chain in the typecheck revealed it.
+
+**Why it matters.** Every grid scoring INSERT writes a nonexistent column → write fails → no new signals get stored. The Grid is silently broken in prod for any property where the neighborhood is set.
+
+**Effort.** XS — push the C-1 migration plus the 0000...02a migration to prod in one batch.
+**Files.** Just `supabase db push`.
 **Surfaced by.** supabase · code-review
 
 ---
@@ -75,7 +117,7 @@ Effort calibration: a one-engineer-Claude pair sprint. Multiply by 1.5 for human
 **Files.** `.github/workflows/ci.yml`, `package.json` scripts.
 **Surfaced by.** code-review · feature-dev
 
-### H-3 · Generate Supabase TypeScript types and use them everywhere
+### H-3 · Generate Supabase TypeScript types and use them everywhere  ⏳ PHASE A SHIPPED
 **Description.** Tables are referenced as `svc.from("contacts").select(...)` with no static type protection. Multiple `as any` casts in `dashboard/page.tsx` and elsewhere. Type drift between schema and code is invisible.
 
 **Why it matters.** The audit found at least three references to columns that don't exist (`g.band`, `workspace_memberships.onboarded_at`, `tx.buyer_id` as contact_id semantically). Generated types would have made all of these compile errors.
@@ -106,7 +148,7 @@ Effort calibration: a one-engineer-Claude pair sprint. Multiply by 1.5 for human
 
 ## MEDIUM — design debt, hygiene, future-proofing
 
-### M-1 · Collapse duplicate migration timestamp `00000000000002`
+### M-1 · Collapse duplicate migration timestamp `00000000000002`  ✅ SHIPPED
 **Description.** Both `00000000000002_market_intelligence_neighborhood.sql` and `00000000000002_news_intel.sql` share the timestamp. Supabase CLI alphabetizes, so `market_intelligence_neighborhood` (m < n) runs first by chance. Rename one to `00000000000002a_*` or push the news_intel migration to `0000000000000_2_5_*` to make ordering explicit.
 **Effort.** XS. **Files.** Rename one of the two SQL files. **Surfaced by.** supabase
 
@@ -134,11 +176,11 @@ Effort calibration: a one-engineer-Claude pair sprint. Multiply by 1.5 for human
 **Description.** `lib/stripe.ts` hardcodes `apiVersion: "2024-12-18.acacia"`. That's fine, but document the upgrade cadence and add a renewal reminder. Stripe quietly deprecates older versions.
 **Effort.** XS. **Files.** `lib/stripe.ts`, CLAUDE.md. **Surfaced by.** code-review
 
-### M-8 · Twilio incoming voice TwiML uses Polly.Joanna — but Sofia is a custom ElevenLabs voice
+### M-8 · Twilio incoming voice TwiML uses Polly.Joanna — but Sofia is a custom ElevenLabs voice  ✅ SHIPPED
 **Description.** `api/sofia/twilio-incoming/route.ts` is the "fallback when Retell isn't bound" path. The TwiML uses `<Say voice="Polly.Joanna">` saying "Hi, this is Sofia." That voice mismatch (Polly is not Sofia) breaks the brand promise. Either route to a pre-recorded Sofia ElevenLabs MP3 or remove the fallback entirely and surface "Sofia not yet provisioned" via an admin alert.
 **Effort.** XS. **Files.** `api/sofia/twilio-incoming/route.ts`. **Surfaced by.** code-review · brand-guidelines
 
-### M-9 · Onboarding wizard prefill defaults to PRAIX-tropical colors, not ALEVANT indigo
+### M-9 · Onboarding wizard prefill defaults to PRAIX-tropical colors, not ALEVANT indigo  ✅ SHIPPED
 **Description.** `api/onboard/activate/route.ts:78` defaults `primary_color` to `#0E5560` (Bichi's tropical teal) when the brand step is empty. That should default to ALEVANT's `#3D4F8C` indigo (the house default for unbranded tenants), with Bichi's color only applied to the seeded Bichi workspace.
 **Effort.** XS. **Files.** `api/onboard/activate/route.ts`. **Surfaced by.** brand-guidelines
 

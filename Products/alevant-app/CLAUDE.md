@@ -188,21 +188,31 @@ Local working tree at the monorepo root has 60+ unstaged files unrelated to alev
 
 ## 10. Known issues (from code + TODO/FIXME scan)
 
-These are surfaced in detail in **REFACTOR-ROADMAP.md** but live here as a checklist:
+These are surfaced in detail in **REFACTOR-ROADMAP.md** but live here as a checklist. Items marked ✅ have been resolved in the foundation sprint (2026-05-23).
 
-1. **Onboarding gate broken** — `workspace_memberships.onboarded_at` column missing from schema; activate is a no-op; dashboard loops. (Critical)
-2. **Service-role-everywhere** — RLS provides no defense-in-depth because every server route uses the service client to query tenant-scoped tables. (Critical)
+1. ✅ **Onboarding gate broken** — `workspace_memberships.onboarded_at` column added in migration 0000...07; backfills existing active memberships.
+2. **Service-role-everywhere** — RLS provides no defense-in-depth because every server route uses the service client to query tenant-scoped tables. (Critical — partial mitigation: typed opt-in clients now exist in `lib/supabase/typed.ts`; C-3 sweep migrates files in.)
 3. **Workspace lookups assume owner == user** — team members (members but not owners) get HTTP 404. The schema supports memberships but the helpers ignore them. (High)
-4. **Cross-tenant data leak risk in `/api/contacts/[id]`** — secondary queries (`grid_signals`, `sphere_signals`, `buyers`, `listings`) don't filter by `workspace_id`. (Critical)
-5. **`/api/sphere/sweep` has zero auth** — anyone can POST; also writes `tx.buyer_id` into `sphere_signals.contact_id` (FK violation). (Critical)
-6. **Migration 4 `vw_prospects` references nonexistent `g.band`** — deploy will fail unless 6 runs in sequence to replace. (High)
-7. **Duplicate migration timestamp `00000000000002`** — two files share the same prefix; Supabase CLI orders alphabetically but this is fragile. (Medium)
+4. **Cross-tenant data leak risk in API routes** — secondary queries pivot off a single FK without re-scoping to workspace_id. `/api/contacts/[id]` fixed; systematic sweep still pending. (Critical — partial)
+5. ✅ **`/api/sphere/sweep` has zero auth** + FK violation — both fixed; gated by CRON_SECRET, resolves buyer→contact correctly, idempotent on (workspace, contact, year).
+6. ✅ **Migration 4 `vw_prospects` references nonexistent `g.band`** — replaced with inline CASE on motivation_score.
+7. ✅ **Duplicate migration timestamp `00000000000002`** — smaller migration renamed to `00000000000002a_*`.
 8. **`getSupabaseServer()` doesn't refresh cookies** — `setAll` is a no-op outside middleware; session refresh only happens on requests that pass through middleware (most paths do, but server-action edge cases exist). (Medium)
-9. **Cron auth bypass in non-prod** — `CRON_SECRET` is only checked when `VERCEL_ENV === "production"`. Preview deploys are open. (Medium)
+9. **Cron auth bypass in non-prod** — `CRON_SECRET` is only checked when `VERCEL_ENV === "production"` in most cron routes. Preview deploys are open. (Medium — sphere sweep now uses fail-closed pattern; remaining crons not converted.)
 10. **TODO/FIXME spread** — 82 instances across 35 files; significant cluster in onboarding stage forms and contact panels. (Medium)
 11. **JetBrains Mono declared but not wired** — README references it; no font import in code. (Low)
 12. **Empty `brand/` and `scripts/` (top-level) directories** committed. (Low)
 13. **Hardcoded Bichi tenant assumption in places** — seed script + a few branding strings. Will need cleanup before second tenant. (Medium)
+14. ✅ **Sofia voice mismatch in Twilio fallback** — TwiML no longer claims to be Sofia in Polly's voice.
+15. ✅ **House brand color defaulted to Bichi tropical** — onboarding default now correctly uses ALEVANT indigo `#3D4F8C`.
+
+### Findings revealed by Supabase type generation (2026-05-23, post-H-3)
+
+16. **16 tables in production have RLS disabled.** Reachable via the anon key (public). The list: `ai_capabilities` (96 rows), `ai_custom_rules`, `knowledge_collections` (16), `knowledge_entries` (41), `knowledge_files`, `florida_court_filings`, `florida_tax_records`, `florida_code_enforcement`, `florida_permits`, `florida_business_filings`, `florida_voter_roll_snapshots`, `property_visual_diffs`, `usps_ncoa_records`, `dmf_records`, `grid_model_registry`, `opportunity_stage_history`. The advisory blocks auto-fix because enabling RLS without policies would lock the app out — adding policies is a judgment call about who can read what. **Critical security issue.**
+17. **Schema drift — prod has tables that no migration creates.** `ai_capabilities`, `ai_custom_rules`, `knowledge_collections`, `knowledge_entries`, `knowledge_files`, `playbook_step_runs`. Routes under `api/settings/*` and `api/kb/*` and `api/playbook-step-runs/*` write to them. Re-derive the missing migrations from prod schema and check them in.
+18. **Column drift — prod has `workspaces.mls_safe_mode`** that no migration creates.
+19. **Migration `00000000000002a` (property_neighborhood) was never applied to prod** — the column is missing despite the migration file existing. `api/grid/score` and `api/grid/scan` both write to it, then any read fails. (Critical — applies the moment the C-1 migration is pushed; needs to be pushed together.)
+20. **Live database is named `alevant-prod`** in Supabase — confirming Open Question #6: this IS production. The dev/staging story (if any) is unclear.
 
 ---
 
