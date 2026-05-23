@@ -29,11 +29,17 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
       svc.from("contacts").select("*").eq("id", id).eq("workspace_id", ws.id).maybeSingle(),
       svc
         .from("grid_signals")
-        .select("id, property_address, motivation_score, hazard_90d, band, refreshed_at")
-        .eq("contact_id", id),
-      svc.from("sphere_signals").select("*").eq("contact_id", id).order("detected_at", { ascending: false }),
-      svc.from("buyers").select("*").eq("contact_id", id),
-      svc.from("listings").select("*").eq("seller_contact_id", id),
+        .select("id, property_address, motivation_score, hazard_90d, refreshed_at")
+        .eq("contact_id", id)
+        .eq("workspace_id", ws.id),
+      svc
+        .from("sphere_signals")
+        .select("*")
+        .eq("contact_id", id)
+        .eq("workspace_id", ws.id)
+        .order("detected_at", { ascending: false }),
+      svc.from("buyers").select("*").eq("contact_id", id).eq("workspace_id", ws.id),
+      svc.from("listings").select("*").eq("seller_contact_id", id).eq("workspace_id", ws.id),
     ]);
 
   if (!contact) return NextResponse.json({ error: "not found" }, { status: 404 });

@@ -52,7 +52,11 @@ select
   g.property_zip as zip,
   g.owner_name as person_name,
   coalesce(g.hazard_90d * 100, g.motivation_score) as score,
-  g.band as urgency_band,
+  case
+    when g.motivation_score >= 80 then 'blazing'
+    when g.motivation_score >= 65 then 'hot'
+    when g.motivation_score >= 45 then 'warm'
+    else 'watch' end as urgency_band,
   g.reasons_summary as why,
   g.expires_at as expires_at,
   g.refreshed_at as detected_at,
