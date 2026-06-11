@@ -52,3 +52,16 @@ coverage/
 
 # --- Misc ---
 *.zip
+
+# --- Confidential / never commit to this PUBLIC repo ---
+PRAIX_Vault/
+Condo/
+
+# --- Local working folders (not part of the marketing site) ---
+Backups/
+Scraper/
+Vahn/
+3d-print/
+Ai Woerkshop/
+New Tigris logo/
+Products/
