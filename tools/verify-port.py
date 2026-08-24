@@ -22,9 +22,11 @@ comparison, which is the part that actually catches a bad port.
 Exits non-zero if anything fails, so it can gate a push.
 """
 import argparse
+import re
 import statistics
 import sys
 import tempfile
+import urllib.request
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
@@ -36,6 +38,71 @@ STEPS = [0, 6, 10, 18, 30, 44, 60]
 # paints randomised grain and particle "cuttings", so identical pages still
 # differ slightly; anything real lands far above this.
 MEAN_DIFF_TOLERANCE = 3.0
+
+# The no-JS fallback check compares against a fallback-only reference, and
+# neither render touches the canvas — a correct fallback matches exactly.
+# Measured: 0.000% when the fallback covers, 0.795% when the component
+# paints over it. This sits an order of magnitude below the failure.
+NOJS_PIXEL_TOLERANCE = 0.1
+
+
+def check_noscript(browser, url, out_dir):
+    """Prove the <noscript> fallback is what a JS-less visitor actually sees.
+
+    Presence in the DOM is not the same as being visible: the fallback and the
+    component root are both position:fixed, so without an explicit z-index the
+    component wins on DOM order and paints straight over it. That bug shipped
+    once already.
+
+    This cannot be checked by inspecting the DOM, because with scripting off
+    there is no way to run script in the page. So instead: render the page with
+    JS disabled, render a reference document containing only the fallback, and
+    compare pixels. If the fallback is covered, the two won't match.
+    """
+    html = urllib.request.urlopen(url, timeout=30).read().decode('utf-8', 'replace')
+    block = re.search(r'<noscript>([\s\S]*?)</noscript>', html)
+    if not block:
+        return None, []   # no fallback in this design; nothing to check
+
+    head = re.search(r'<head>([\s\S]*?)</head>', html)
+    reference = f'<!DOCTYPE html>\n<html lang="en">\n<head>{head.group(1) if head else ""}</head>\n' \
+                f'<body>\n{block.group(1)}\n</body>\n</html>'
+    ref_file = (out_dir / 'nojs_reference.html').resolve()
+    ref_file.write_text(reference, encoding='utf-8')
+
+    shots = {}
+    for tag, target, js_on in (('actual', url, False), ('reference', ref_file.as_uri(), True)):
+        ctx = browser.new_context(viewport={'width': 1440, 'height': 900}, java_script_enabled=js_on)
+        page = ctx.new_page()
+        page.goto(target)
+        page.wait_for_timeout(1800)
+        shots[tag] = out_dir / f'nojs_{tag}.png'
+        page.screenshot(path=str(shots[tag]))
+        ctx.close()
+
+    from PIL import Image, ImageChops
+    a = Image.open(shots['actual']).convert('RGB')
+    b = Image.open(shots['reference']).convert('RGB')
+    if a.size != b.size:
+        return None, [f'no-JS render size mismatch: {a.size} vs {b.size}']
+
+    # Mean difference is the wrong metric here. Both renders are mostly empty
+    # paper, so text bleeding through moves the mean by well under 1/255 —
+    # a covered fallback and a correct one score the same. Count how many
+    # pixels actually changed instead. Neither render involves the canvas, so
+    # a correct fallback matches its reference exactly: 0.000%.
+    px = list(ImageChops.difference(a, b).getdata())
+    changed = sum(1 for q in px if max(q) > 32) / len(px) * 100
+
+    problems = []
+    if changed > NOJS_PIXEL_TOLERANCE:
+        problems.append(
+            f'the <noscript> fallback is not what renders with JS disabled '
+            f'({changed:.3f}% of pixels differ from the fallback-only reference). '
+            f'Almost always a stacking bug: give the fallback a z-index above '
+            f'everything the component uses. Compare {shots["actual"].name} '
+            f'against {shots["reference"].name}.')
+    return changed, problems
 
 
 def descend(page, out_dir, tag):
@@ -118,6 +185,9 @@ def main():
         page.screenshot(path=str(out_dir / 'port_mobile.png'))
         page.close()
 
+        nojs_diff, nojs_problems = check_noscript(browser, args.ported, out_dir)
+        failures.extend(nojs_problems)
+
         original = None
         if args.original:
             opage = open_page(browser, args.original, orig_errors)
@@ -166,6 +236,12 @@ def main():
     # the getImageData hint is emitted by this harness, not by the page
     port_errors = [e for e in port_errors if 'willReadFrequently' not in e]
     orig_errors = [e for e in orig_errors if 'willReadFrequently' not in e]
+    if nojs_diff is None:
+        print('\n  no-JS         no <noscript> fallback in this build')
+    else:
+        print(f'\n  no-JS         fallback renders, {nojs_diff:.3f}% of pixels differ '
+              f'from the fallback-only reference (tolerance {NOJS_PIXEL_TOLERANCE}%)')
+
     print(f'\n  console       ported: {port_errors or "clean"}')
     if args.original:
         print(f'                original: {orig_errors or "clean"}')

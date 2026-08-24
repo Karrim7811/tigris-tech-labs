@@ -42,12 +42,32 @@ add one — the output is a single self-contained file.
 
    Drives both the ported page and the original prototype through the same
    scripted descent, compares the HUD readout and the rendered pixels at seven
-   positions, opens and closes every product panel, and checks a 390px
-   viewport. Exits non-zero on any failure, so it can gate a push.
+   positions, opens and closes every product panel, checks a 390px viewport,
+   and confirms the `<noscript>` fallback is what actually renders with
+   JavaScript disabled. Exits non-zero on any failure, so it can gate a push.
 
    Needs `pip install playwright pillow && playwright install chromium`.
 
 4. Commit and push. Vercel auto-deploys `master` to www.tigristechlabs.com.
+
+## Why the no-JS check is a pixel comparison
+
+Being in the DOM is not the same as being visible. The fallback and the
+component root are both `position:fixed`; with no explicit `z-index` they stack
+by DOM order and the component — which comes second — paints over the fallback.
+That shipped once. Nothing throws, and the element is right there in the markup,
+so every cheap check passes.
+
+It can't be caught by inspecting the DOM either: with scripting off there is no
+way to run script in the page. So the check renders the page with JS disabled,
+renders a reference document containing only the fallback, and compares. A
+covered fallback can't match.
+
+Mean pixel difference is the wrong metric for this — both renders are mostly
+empty paper, so text bleeding through moves the mean by less than 1/255 and a
+broken build scores the same as a correct one. It counts changed pixels
+instead. Measured on the real regression: 0.795% when the component paints
+over the fallback, 0.000% when it doesn't.
 
 ## Why the pixel comparison matters
 
