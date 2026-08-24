@@ -92,6 +92,21 @@ const jsBlock = src.match(/<script type="text\/x-dc"[^>]*>\n([\s\S]*?)\n<\/scrip
 if (!jsBlock) die('no <script type="text/x-dc"> block found');
 let js = jsBlock[1];
 
+/* Anything the design puts in <body> outside the <x-dc> element — a
+ * <noscript> fallback, say — is real page content and has to come with us.
+ * Slicing only the component would drop it silently, which is the worst
+ * possible failure here: the page still works, it just quietly loses a
+ * feature nobody notices is gone. */
+const XDC = /<x-dc>[\s\S]*?<\/x-dc>/;
+const SENTINEL = '@@X_DC_COMPONENT@@';
+const bodyBlock = src.match(/<body[^>]*>([\s\S]*?)<\/body>/);
+if (!bodyBlock) die('no <body> found');
+if (!XDC.test(bodyBlock[1])) die('could not locate <x-dc> inside <body>');
+const outside = bodyBlock[1]
+  .replace(XDC, SENTINEL)
+  .replace(/<script type="text\/x-dc"[\s\S]*?<\/script>/, '');
+const [preamble, postamble] = outside.split(SENTINEL).map(s => s.trim());
+
 /* ------------------------------------------------------------------ *
  * 2. markup: runtime bindings -> plain data attributes
  * ------------------------------------------------------------------ */
@@ -220,9 +235,9 @@ ${css}
 </style>
 </head>
 <body>
-
+${preamble ? `\n${preamble}\n` : ''}
 ${markup}
-
+${postamble ? `\n${postamble}\n` : ''}
 <script>
 ${script}
 </script>
@@ -236,6 +251,9 @@ console.log(`  source        ${path.relative(process.cwd(), input)}`);
 console.log(`  refs          ${refCount}`);
 console.log(`  handlers      ${handlerCount}${handlers.size ? ` (${[...handlers].join(', ')})` : ''}`);
 console.log(`  transforms    ${applied.join(', ')}`);
+const carried = [preamble && `${preamble.length}B before`, postamble && `${postamble.length}B after`]
+  .filter(Boolean).join(', ');
+console.log(`  outside <x-dc> ${carried || 'nothing'}`);
 console.log(`  syntax        ok`);
 console.log(`  size          ${out.length} bytes${prevSize ? ` (was ${prevSize})` : ''}`);
 
