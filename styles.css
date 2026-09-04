@@ -1,0 +1,583 @@
+/* ═══════════════════════════════════════════════════════════════════
+   TIGRIS TECH LABS — SECTION A–A′
+   Two fonts only: Newsreader (display/body), JetBrains Mono (instrument).
+   Everything colour-critical is driven per-frame from main.js:
+     --fg          body ink (inverts across the descent)
+     --plate       instrument panel fill
+     --plate-ink   instrument ink
+     --bg          page fill behind the canvas
+     --mpp         pixels per metre
+     --sight       sight-line offset in px (38% viewport height)
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --fg: #14120F;
+  --bg: #F2EFE7;
+  --plate: rgba(242, 239, 231, .88);
+  --plate-solid: rgb(242, 239, 231);
+  --plate-ink: #14120F;
+  --mpp: 320px;
+  --sight: 38vh;
+  --ruler-w: 64px;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --serif: "Newsreader", Georgia, serif;
+  --adapt: 1;            /* eye-adaptation multiplier on all ink layers */
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--serif);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+body { cursor: grab; }
+body.grabbing { cursor: grabbing; }
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+/* ── canvas: procedural geology only ───────────────────────────── */
+#geo {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+}
+
+/* ── the sight-line: "current depth" ──────────────────────────── */
+#sight {
+  position: fixed;
+  left: 0; right: 0;
+  top: var(--sight);
+  height: 0;
+  border-top: 1px solid var(--fg);
+  opacity: calc(.34 * var(--adapt));
+  z-index: 3;
+  pointer-events: none;
+}
+#sight::before {
+  content: "";
+  position: absolute;
+  left: var(--ruler-w); top: -3.5px;
+  width: 7px; height: 7px;
+  border: 1px solid var(--fg);
+  border-radius: 50%;
+  background: transparent;
+}
+
+/* ── the log (all copy) ───────────────────────────────────────── */
+#log {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.band {
+  position: absolute;
+  top: 0;
+  left: calc(var(--ruler-w) + 30px);
+  width: min(calc(34vw - var(--ruler-w) - 30px), 46ch);
+  min-width: 20ch;
+  will-change: transform, opacity;
+  opacity: 0;
+}
+.band a { pointer-events: auto; }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: .7em;
+  margin: 0 0 1.1em;
+  font-weight: 300;
+  font-size: clamp(19px, min(1.5vw, 2.6vh), 26px);
+}
+.mark { flex: none; overflow: visible; }
+.wordmark {
+  font-family: var(--serif);
+  font-weight: 300;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  font-size: 1em;
+  line-height: 1;
+}
+
+.mono {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin: 0;
+}
+@media (min-width: 1100px) { .mono { font-size: 11px; } }
+@media (min-width: 1700px) { .mono { font-size: 11.5px; } }
+
+.band .mono { opacity: calc(.88 * var(--adapt)); margin-bottom: 1.5em; }
+.band .note { text-transform: none; letter-spacing: .1em; line-height: 1.7; }
+.band .sheet { line-height: 1.9; }
+
+.display {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(34px, min(6.2vw, 9.4vh), 104px);
+  line-height: 1.02;
+  letter-spacing: -.018em;
+  text-wrap: balance;
+  margin: 0 0 .5em;
+}
+.display em { font-style: italic; font-weight: 300; }
+.display.biggest { font-size: clamp(42px, min(8.4vw, 12vh), 132px); }
+
+.body {
+  font-size: clamp(16px, min(1.15vw, 2.3vh), 19px);
+  line-height: 1.68;
+  max-width: 38ch;
+  margin: 0;
+  opacity: calc(.94 * var(--adapt));
+}
+
+.end-wordmark { font-size: clamp(20px, min(2vw, 3.4vh), 30px); margin: 0 0 1.4em; }
+.contact { margin: 1.6em 0 1.9em; }
+.contact a {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(19px, min(2vw, 3.3vh), 32px);
+  display: inline-block;
+  max-width: 100%;
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  line-height: 1.05;
+}
+.contact a:hover, .contact a:focus-visible { border-bottom-color: currentColor; }
+.disclaimer { opacity: calc(.72 * var(--adapt)); text-transform: none; letter-spacing: .1em; }
+
+/* field-log copy stays in the DOM for assistive tech; the visible
+   panel is a presentational mirror painted by main.js */
+.logs {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── the field: each product's log entry beside its core sample ──
+   In section mode these nodes live in #logfield and are positioned against
+   the painted swatches; in document mode they return to their article. */
+#logfield { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+#logfield .entry {
+  position: absolute;
+  top: 0; left: 0;
+  color: var(--fg);
+  will-change: transform, opacity;
+}
+#logfield .entry .name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 .7em;
+  align-items: baseline;
+  margin: 0 0 .42em;
+  padding-left: .6em;
+  border-left: 2px solid var(--core, currentColor);
+  font-size: 10px;
+  letter-spacing: .11em;
+  line-height: 1.5;
+  opacity: calc(.9 * var(--adapt));
+}
+#logfield .entry .name > * { white-space: nowrap; }
+#logfield .entry.flip .name {
+  padding-left: 0; padding-right: .6em;
+  border-left: 0;
+  border-right: 2px solid var(--core, currentColor);
+  flex-direction: row-reverse;
+}
+#logfield .entry .ind { display: none; }
+#logfield .entry .ecode { opacity: .62; }
+#logfield .entry .entrytext {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin: 0;
+  opacity: calc(.94 * var(--adapt));
+}
+
+/* ── depth ruler: the only navigational affordance ────────────── */
+#ruler {
+  position: fixed;
+  left: 0; top: 0;
+  width: var(--ruler-w);
+  height: 100%;
+  z-index: 5;
+  background: var(--plate);
+  color: var(--plate-ink);
+  border-right: 1px solid color-mix(in srgb, var(--plate-ink) 26%, transparent);
+  cursor: ns-resize;
+  overflow: hidden;
+  touch-action: none;
+}
+#ticks { position: absolute; left: 0; top: 0; width: 100%; height: 0; will-change: transform; }
+.tick {
+  position: absolute;
+  right: 0;
+  height: 0;
+  border-top: 1px solid currentColor;
+}
+.tick.t-minor { width: 7px; opacity: .38; }
+.tick.t-half  { width: 11px; opacity: .5; }
+.tick.t-major { width: 17px; opacity: .82; }
+.tick-label {
+  position: absolute;
+  right: 21px;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .06em;
+  opacity: .86;
+  font-variant-numeric: tabular-nums;
+}
+#cursor {
+  position: absolute;
+  left: 0; right: 0;
+  top: var(--sight);
+  height: 0;
+  border-top: 1.5px solid currentColor;
+}
+#cursor #cursorval {
+  position: absolute;
+  right: 3px; top: 4px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── plates (instrument panels) ───────────────────────────────── */
+.plate,
+#readout,
+#fieldlog,
+.legend-inner {
+  background: var(--plate);
+  color: var(--plate-ink);
+  border: 1px solid color-mix(in srgb, var(--plate-ink) 24%, transparent);
+}
+
+#readout {
+  position: fixed;
+  right: 18px; top: 16px;
+  z-index: 6;
+  padding: 11px 14px 12px;
+  min-width: 21ch;
+  line-height: 2.1;
+}
+#readout .mono { display: block; }
+#readout .mono span { float: right; margin-left: 2.2em; }
+#readout .num { font-variant-numeric: tabular-nums; }
+
+#docmode, #legendbtn {
+  position: fixed;
+  z-index: 6;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 7px 11px;
+  cursor: pointer;
+}
+#docmode { right: 18px; top: 150px; }
+#legendbtn { left: calc(var(--ruler-w) + 14px); bottom: 16px; }
+#docmode:hover, #legendbtn:hover { background: var(--plate-ink); color: var(--plate); }
+
+#descend {
+  position: fixed;
+  left: 50%; bottom: 20px;
+  transform: translateX(-50%);
+  z-index: 6;
+  color: var(--fg);
+  opacity: calc(.8 * var(--adapt));
+  transition: opacity .9s linear;
+  pointer-events: none;
+  animation: pulse 2.9s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: calc(.34 * var(--adapt)); } 50% { opacity: calc(.85 * var(--adapt)); } }
+#descend.gone { opacity: 0 !important; animation: none; }
+
+/* ── field log (focus state) ──────────────────────────────────── */
+#fieldlog {
+  position: fixed;
+  background: var(--plate-solid);
+  left: 78%;
+  right: 18px;
+  top: calc(var(--sight) - 2.4em);
+  z-index: 4;
+  padding: 12px 13px 14px;
+  max-width: 30ch;
+}
+#fieldlog .fl-head { line-height: 1.9; }
+#fieldlog .fl-head #fl-code { float: right; opacity: .74; }
+#fieldlog .fl-ind { opacity: .74; margin-bottom: 1.1em; line-height: 1.9; }
+#fieldlog .fl-text {
+  font-family: var(--serif);
+  font-size: 15.5px;
+  line-height: 1.6;
+  margin: 0;
+  text-transform: none;
+}
+#fieldlog::before {
+  content: "";
+  position: absolute;
+  left: -1px; top: -1px; bottom: -1px;
+  width: 3px;
+  background: var(--core, currentColor);
+}
+
+/* ── swatch hit targets (canvas paints them; these are the a11y layer) ── */
+#swatches { position: fixed; inset: 0; z-index: 3; pointer-events: none; }
+.swatch {
+  position: absolute;
+  width: 26px; height: 34px;
+  margin: 0; padding: 0;
+  background: transparent;
+  border: 0;
+  pointer-events: auto;
+  cursor: pointer;
+  font: inherit;
+  color: var(--fg);
+}
+.swatch:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+
+/* ── legend overlay ───────────────────────────────────────────── */
+#legend {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--bg) 62%, transparent);
+  backdrop-filter: none;
+}
+.legend-inner { padding: 22px 24px 18px; min-width: min(440px, 88vw); }
+.legend-title { margin-bottom: 1.6em; opacity: .8; }
+#legend ul { list-style: none; margin: 0 0 1.7em; padding: 0; }
+#legend li { margin: 0; }
+#legend button {
+  display: flex;
+  justify-content: space-between;
+  gap: 3em;
+  width: 100%;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  color: inherit;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 11px 2px;
+  cursor: pointer;
+  text-align: left;
+}
+#legend button:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
+#legend button .lg-depth { font-variant-numeric: tabular-nums; opacity: .74; text-align: right; }
+.legend-foot { opacity: .62; }
+
+/* ── responsive: narrow viewports ─────────────────────────────
+   Boreholes compress into the right of the plate and the type column
+   drops below the sight-line, so copy never crosses a shaft.        */
+@media (max-width: 900px) {
+  :root { --ruler-w: 52px; }
+  #readout { right: 12px; top: 12px; min-width: 0; }
+  #docmode { right: 12px; }
+  .band {
+    left: calc(var(--ruler-w) + 18px);
+    width: calc(100vw - var(--ruler-w) - 34px);
+  }
+  /* narrow: the field log is an instrument plate over the upper geology,
+     never over the type column */
+  #fieldlog {
+    left: calc(var(--ruler-w) + 18px);
+    right: 12px;
+    top: 118px;
+    bottom: auto;
+    max-width: none;
+  }
+  .body { max-width: 36ch; line-height: 1.62; }
+  .display { font-size: clamp(26px, min(7.4vw, 6.2vh), 42px); }
+  .display.biggest { font-size: clamp(30px, min(9vw, 7.4vh), 52px); }
+  .contact a { font-size: clamp(19px, 5.2vw, 28px); }
+}
+
+/* ── DOCUMENT MODE: a typeset paper document ──────────────────── */
+html[data-mode="doc"] {
+  overflow: auto;
+  height: auto;
+}
+body[data-mode="doc"] {
+  overflow: auto;
+  height: auto;
+  min-height: 100%;
+  cursor: auto;
+  touch-action: auto;
+  background: #F2EFE7;
+  color: #171410;
+  --fg: #171410;
+  --plate: rgba(242, 239, 231, .92);
+  --plate-ink: #171410;
+  --adapt: 1;
+}
+body[data-mode="doc"] #geo,
+body[data-mode="doc"] #ruler,
+body[data-mode="doc"] #sight,
+body[data-mode="doc"] #readout,
+body[data-mode="doc"] #legendbtn,
+body[data-mode="doc"] #descend,
+body[data-mode="doc"] #fieldlog,
+body[data-mode="doc"] #swatches { display: none !important; }
+
+body[data-mode="doc"] #docmode {
+  position: absolute;
+  right: 28px; top: 26px;
+}
+body[data-mode="doc"] #log {
+  position: static;
+  inset: auto;
+  pointer-events: auto;
+  display: block;
+  max-width: 66ch;
+  margin: 0 auto;
+  padding: clamp(64px, 11vh, 130px) 26px clamp(96px, 18vh, 220px);
+}
+body[data-mode="doc"] .band {
+  position: static;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  left: auto;
+  margin: 0 0 clamp(46px, 7vh, 86px);
+  padding-bottom: clamp(30px, 4vh, 52px);
+  border-bottom: 1px solid rgba(23, 20, 16, .14);
+}
+body[data-mode="doc"] .band:last-child { border-bottom: 0; }
+body[data-mode="doc"] .band.thin { margin-bottom: clamp(30px, 5vh, 60px); }
+body[data-mode="doc"] .display {
+  font-size: clamp(28px, 4.2vw, 46px);
+  line-height: 1.12;
+  margin: 0 0 .72em;
+  max-width: 34ch;
+}
+body[data-mode="doc"] .display.biggest { font-size: clamp(34px, 5.4vw, 62px); }
+body[data-mode="doc"] .display::after {
+  content: " " attr(data-range);
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  opacity: .62;
+  margin-top: 1.1em;
+}
+/* the depth range belongs above the headline, with the stratum name — never
+   orphaned underneath it. Bands that already carry a mono stratum label print
+   it there instead. */
+body[data-mode="doc"] .display::after { content: none; }
+body[data-mode="doc"] .band:not(:has(.mono.label)) .display::before {
+  content: attr(data-stratum) " · " attr(data-range);
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  opacity: .62;
+  margin-bottom: 1.5em;
+}
+body[data-mode="doc"] .ecode { display: block; opacity: .5; margin: .25em 0 0; }
+body[data-mode="doc"] .logs .entry { grid-template-columns: 14ch 1fr; }
+body[data-mode="doc"] .body {
+  font-size: 18.5px;
+  line-height: 1.72;
+  max-width: 66ch;
+  opacity: 1;
+}
+body[data-mode="doc"] .band .mono { opacity: .78; margin-bottom: 1.9em; }
+body[data-mode="doc"] .brand { margin-bottom: 1.6em; }
+body[data-mode="doc"] .band.thin .note {
+  border-left: 1px solid rgba(23, 20, 16, .3);
+  padding-left: 1.4em;
+  margin: 0;
+  opacity: .78;
+}
+/* field logs become a legible mono table in document mode */
+body[data-mode="doc"] .logs {
+  position: static !important;
+  width: auto; height: auto;
+  overflow: visible;
+  clip-path: none;
+  white-space: normal;
+  display: block;
+  margin-top: 2.6em;
+  border-top: 1px solid rgba(23, 20, 16, .14);
+}
+body[data-mode="doc"] .logs .entry {
+  display: grid;
+  grid-template-columns: 11ch 1fr;
+  gap: .3em 1.6em;
+  padding: 1.15em 0;
+  border-bottom: 1px solid rgba(23, 20, 16, .1);
+}
+body[data-mode="doc"] .logs .entry:last-child { border-bottom: 0; }
+body[data-mode="doc"] .logs .name { grid-column: 1; margin: 0; opacity: 1; }
+body[data-mode="doc"] .logs .ind {
+  grid-column: 1; margin: 0;
+  font-size: 10.5px; opacity: .6;
+  letter-spacing: .1em;
+}
+body[data-mode="doc"] .logs .entrytext {
+  grid-column: 2; grid-row: 1 / span 2;
+  margin: 0;
+  font-size: 16.5px;
+  line-height: 1.6;
+}
+body[data-mode="doc"] .contact a { font-size: clamp(26px, 3.6vw, 40px); }
+@media (max-width: 620px) {
+  body[data-mode="doc"] .logs .entry { grid-template-columns: 1fr; }
+  body[data-mode="doc"] .logs .entrytext { grid-column: 1; grid-row: auto; margin-top: .5em; }
+}
+
+/* ── reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  #descend { animation: none; opacity: calc(.8 * var(--adapt)); transition: none; }
+  #ruler, .band, #fieldlog { transition: none !important; }
+  html { scroll-behavior: auto; }
+}
