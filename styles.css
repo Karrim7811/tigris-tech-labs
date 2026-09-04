@@ -581,3 +581,28 @@ body[data-mode="doc"] .contact a { font-size: clamp(26px, 3.6vw, 40px); }
   #ruler, .band, #fieldlog { transition: none !important; }
   html { scroll-behavior: auto; }
 }
+
+/* ── the plain-reading offer, made at the surface ──────────────────
+   Document mode is the whole argument as ordinary prose. It should not
+   be reachable only by finding a plate in the corner or knowing "D".  */
+.offer {
+  margin: 1.9em 0 0;
+  opacity: calc(.72 * var(--adapt));
+}
+.offer .aslink {
+  pointer-events: auto;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--fg) 38%, transparent);
+  padding: 0 0 3px;
+  color: var(--fg);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.offer .aslink:hover,
+.offer .aslink:focus-visible { border-bottom-color: currentColor; }
+
+body[data-mode="doc"] .offer { display: none; }

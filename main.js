@@ -991,9 +991,15 @@ function toggleMode() {
   docBtn.setAttribute('aria-pressed', String(S.mode === 'doc'));
   docBtn.textContent = S.mode === 'doc' ? 'READ AS SECTION' : 'READ AS DOCUMENT';
   if (S.mode === 'doc') { S.focus = -1; relocateEntries(); scrollTo(0, 0); }
-  else { relocateEntries(); resize(); }
+  else { relocateEntries(); resize(); placeDocBtn(); }
 }
 docBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMode(); });
+/* the same offer, made in prose at the surface: a visitor who would rather
+   read than descend should not have to find the instrument plate first */
+document.querySelectorAll('[data-doc]').forEach((el) => {
+  el.addEventListener('click', (e) => { e.stopPropagation(); toggleMode(); });
+  el.addEventListener('pointerdown', (e) => e.stopPropagation());
+});
 
 /* ── 8. LOOP ──────────────────────────────────────────────────────── */
 
@@ -1026,6 +1032,10 @@ document.addEventListener('visibilitychange', () => {
 /* the document-mode toggle sits under the readout plate, whatever its height */
 function placeDocBtn() {
   const r = document.getElementById('readout').getBoundingClientRect();
+  /* the readout is display:none in document mode, and toggling modes changes
+     the scrollbar, which fires resize — measuring it then would pin the button
+     to the top of the viewport and leave it there over the plate on return */
+  if (!r.height) return;
   docBtn.style.top = Math.round(r.bottom + 10) + 'px';
 }
 addEventListener('resize', placeDocBtn);
