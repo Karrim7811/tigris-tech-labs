@@ -68,3 +68,8 @@ Products/
 
 # brainstorm visual-companion sessions (mockups, local only)
 .superpowers/
+
+# python bytecode
+__pycache__/
+*.pyc
+.pytest_cache/
