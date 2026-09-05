@@ -1,0 +1,66 @@
+[
+  {
+    "id": "cortex",
+    "canal": 1,
+    "name": "Cortex",
+    "industry": "Peptide research",
+    "url": "https://peptidecortex.com",
+    "colour": "#1A8A9E",
+    "colour_dark": "#1A8A9E",
+    "lead": "An educational reference for peptide research — compounds, evidence grades, and how a protocol fits together.",
+    "panel": {
+      "intro": "An educational intelligence platform for peptide research. Cortex helps people explore compounds, compare the research behind them, understand the important considerations, and see how the pieces of a protocol connect.",
+      "data": "92 compounds across 12 goal categories, each carrying its own evidence grade and cardiovascular rating.",
+      "language": "Four depths instead of a menu. You do not navigate pages — you zoom, and zooming out is back.",
+      "liability": "Educational reference for adults 18+, quoted verbatim. Where the record is unestablished, Cortex says so instead of paraphrasing."
+    }
+  },
+  {
+    "id": "alevant",
+    "canal": 2,
+    "name": "Alevant",
+    "industry": "Luxury real estate",
+    "url": "https://alevant.ai",
+    "colour": "#C4875A",
+    "colour_dark": "#E2B581",
+    "lead": "An AI platform for luxury real-estate professionals — inquiries, follow-up, market intelligence, and a campaign built around each listing.",
+    "panel": {
+      "intro": "An AI platform for luxury real-estate professionals. Alevant handles new inquiries, client follow-up and market intelligence, and builds a campaign around each listing — so every client feels remembered and every property gets attention.",
+      "data": "Live comps and market intelligence on demand, per listing and per submarket.",
+      "language": "An AI ISA across voice, SMS and DMs — answering in the register a luxury client expects, 24/7.",
+      "liability": "Cinematic marketing campaigns built per listing, and an agent's name on every one of them."
+    }
+  },
+  {
+    "id": "praix",
+    "canal": 3,
+    "name": "PRAIX",
+    "industry": "Commercial insurance",
+    "url": "https://praix.ai",
+    "colour": "#C4875A",
+    "colour_dark": "#E2B581",
+    "lead": "An AI-native CRM for commercial insurance producers — finds the right prospects, prepares the strategy, and hands over the next move.",
+    "panel": {
+      "intro": "An AI-native CRM and growth platform for commercial insurance. PRAIX helps producers find the right opportunities, understand a prospect before the first call, and manage the path from first signal to open quote. The intelligence work happens before the meeting, so the producer arrives with something worth saying.",
+      "data": "A property portfolio assembled from scattered record — loss runs, statements of value, and the flood and wind exposure under every address.",
+      "language": "SOV, TIV, x-date, hard market. The vocabulary a producer is judged by on the first call.",
+      "liability": "Invitation only, one book at a time. The agents do the intelligence work; the producer gets the action plan and signs it."
+    }
+  },
+  {
+    "id": "vitreon",
+    "canal": 4,
+    "name": "Vitreon",
+    "industry": "Local business",
+    "url": null,
+    "colour": "#6B4C9A",
+    "colour_dark": "#A98BD6",
+    "lead": "Vertical SaaS for local businesses — runs the website and marketing, reads real sales, and gives the owner a short daily queue to approve.",
+    "panel": {
+      "intro": "Vertical SaaS for local businesses. Vitreon is installed for a single business and handed over: it runs their website and marketing, reads their real sales to close the loop, and gives the owner a short daily queue to approve. Staff get operations screens; Tigris runs the console behind it.",
+      "data": "Bookings, walk-ins, returning customers and real sales — records most local businesses keep in a calendar, a phone, and one person's memory.",
+      "language": "A regular is not a customer. The owner already knows the name, the fit, and the last visit — the product has to as well.",
+      "liability": "The owner's name is on the door. Nothing goes out without their approval, and a bad week is felt the same week."
+    }
+  }
+]
