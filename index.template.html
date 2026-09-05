@@ -34,8 +34,7 @@
     <div style="max-width:600px;margin:0 auto;">
       <div style="font-family:monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(20,18,15,.6);margin-bottom:20px;">A Tigris Tech Labs story</div>
       <h1 style="font-family:Georgia,serif;font-weight:300;font-size:42px;margin-bottom:6px;">Tigris <small style="font-family:monospace;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:rgba(20,18,15,.5);">Tech Labs</small></h1>
-      <p style="font-size:16px;line-height:1.7;color:#3A362E;margin:28px 0 44px;">An AI-native product holding company, named for the plain that two rivers built. We build four products, each for a single industry — Cortex for peptide research, Alevant for luxury real estate, PRAIX for commercial insurance, Vitreon for local business — and we go deeper into each one instead of wider across more. This page is one continuous descent. There is only how far down you are willing to go.</p>
-<!--@@surface-rows@@-->
+      <p style="font-size:16px;line-height:1.7;color:#3A362E;margin:28px 0 44px;">An AI-native product holding company, named for the plain that two rivers built. We build products for single industries and go deeper into each one instead of wider across more. There is only how far down you are willing to go.</p>
       <h2 style="font-family:monospace;font-weight:400;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:rgba(20,18,15,.5);margin-bottom:20px;">The canals</h2>
 <!--@@noscript-products@@-->
       <p style="margin-top:44px;font-family:monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;">
@@ -103,7 +102,9 @@
         <h1 style="font-weight:200;font-size:clamp(62px,13vw,196px);line-height:.9;letter-spacing:-.01em;">Tigr<em style="font-style:italic;font-weight:200;color:#6B4C9A;">i</em>s<span data-markslot style="display:inline-block;width:.72em;height:.72em;margin-left:.24em;vertical-align:-.05em;"></span></h1>
         <div style="margin:calc(-1 * clamp(18px,2.4vw,42px)) 0 clamp(10px,1.4vh,20px) -0.14em;position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-size:clamp(12px,1.25vw,17px);letter-spacing:.34em;text-transform:uppercase;color:#6B6558;">Tech Labs</div>
         <div data-rule style="height:1px;background:#14120F;margin:34px 0 22px;max-width:460px;"></div>
-        <p style="max-width:520px;font-size:17px;line-height:1.75;color:#3A362E;">An AI-native product holding company, named for the plain that two rivers built. We build four products, each for a single industry — Cortex for peptide research, Alevant for luxury real estate, PRAIX for commercial insurance, Vitreon for local business — and we go deeper into each one instead of wider across more. This page is one continuous descent. There is only how far down you are willing to go.</p>
+        <p style="max-width:520px;font-size:17px;line-height:1.75;color:#3A362E;">An AI-native product holding company, named for the plain that two rivers built. We build products for single industries and go deeper into each one instead of wider across more. There is only how far down you are willing to go.</p>
+<!--@@surface-rows@@-->
+        <p data-surface-contact style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;max-width:620px;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;"><span>Open a canal to read its record</span><a href="mailto:hello@tigristechlabs.com" data-cta style="border:0;padding:0;color:inherit;text-decoration:none;border-bottom:1px solid currentColor;">hello@tigristechlabs.com →</a></p>
         <div data-cue style="margin-top:clamp(20px,3vh,58px);display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#6B6558;">
           <span style="animation:cueBob 2.4s ease-in-out infinite;">↓</span>
           <span>Scroll, drag, or arrow to descend</span>
@@ -457,6 +458,7 @@ class Instrument {
     if(this.moved>6) return;
     const g=e.target.closest('[data-goto]');
     if(g){ this.target=this.atBlock(parseFloat(g.getAttribute('data-goto'))); this.clamp(); this.jump(); return; }
+    if(e.target.closest('[data-open-index]')){ this.openBore('index'); return; }
     const b=e.target.closest('[data-bore]');
     if(b) this.openBore(b.getAttribute('data-bore'));
   };
@@ -681,7 +683,10 @@ class Instrument {
   overture(d,h){
     const O=this.overtureRef.current; if(!O) return;
     const span=-(this.minD||-560);
-    const u=cl((d-(this.minD||0))/span,0,1);
+    // with no overture the page opens already resolved: u=1 is the parked state
+    // (mark in the masthead slot, arcs faded, veil lifted) that the animation
+    // would otherwise reach at 0 m
+    const u=this.confluence?cl((d-(this.minD||0))/span,0,1):1;
     const ease=t=>1-Math.pow(1-t,3);
     const band=(p,a1,b1,c1,e1)=>{ if(p<a1||p>e1) return 0; if(p<b1) return (p-a1)/(b1-a1); if(p<c1) return 1; return 1-(p-c1)/(e1-c1); };
     // the ground may only fade up once the resolve has left the centre
@@ -939,7 +944,7 @@ class Instrument {
  * ------------------------------------------------------------------- */
 const INSTRUMENT_PROPS = {
   descentSpeed: 1,
-  showConfluence: true,
+  showConfluence: false,
   showGrain: true,
   accent: "#6B4C9A"
 };
