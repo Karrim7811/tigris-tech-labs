@@ -49,7 +49,7 @@ directory + story; it hosts no product pages.
 | D4 | The descent is the story. It may be as deep as the company is. |
 | D5 | Metaphor stays but stops explaining: plain headline first, metaphor as an italic gloss beneath. Wayfinding is literal. |
 | D6 | The name story is kept word for word and moved to the **bottom** of the descent, as the reward for descending rather than the toll for entering. |
-| D7 | The overture (the −1150 → 0 m "scroll to begin" screen) is removed. First paint is the surface. *Owner may veto in review; see §13.* |
+| D7 | ~~The overture is removed.~~ **Reversed by the owner, 2026-09-05.** The confluence opening stays: two currents braid, the mark parks in the masthead, and the descent hands off to the surface — which now carries the directory. |
 | D8 | Two new beats: **the river** (the shared layer / Tigris OS) after the products, and **the founder** before the name story. |
 | D9 | Vitreon is a product — vertical SaaS for local business — not the house studio. |
 | D10 | The spine of the descent is *listen → understand → build → remain*; "understand" is carried by data / language / liability, kept verbatim. |
@@ -233,7 +233,7 @@ Toggling back restores section mode at the same depth.
 | Per-product `status` | Unset — nothing renders. |
 | River cells (§6.1) | As written; strike any. |
 | Founder line (§6.2) | As written; name and "twenty years" from the owner's own notes. |
-| Overture removal (D7) | Removed. Veto restores `minD = −1150` and the "scroll to begin" screen. |
+| Overture removal (D7) | **Settled: kept.** `showConfluence: true`; `minD = −1150`. |
 
 ## 14. Out of scope
 
@@ -243,8 +243,9 @@ the Section A–A′ build (`section-aa` branch, parked).
 
 ## 15. Verification (definition of done)
 
-1. At 1280×800, without scrolling: wordmark, pattern paragraph, all canal rows
-   (≤ 6), contact and cue are visible. First paint is the surface (no overture).
+1. The overture plays from −1150 m and resolves at 0 m. At 1280×800 and 0 m,
+   without scrolling: wordmark, pattern paragraph, all canal rows (≤ 6),
+   contact and cue are visible.
 2. Height budgets: no fixed block overflows at 1280×800, 1440×900, 1920×1080.
 3. Add a fifth entry to `products.json`, build: a fifth row appears on the
    surface, in the deep rows, as a bore panel, in the fallback; every section

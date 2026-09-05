@@ -960,9 +960,9 @@ class Instrument {
   overture(d,h){
     const O=this.overtureRef.current; if(!O) return;
     const span=-(this.minD||-560);
-    // with no overture the page opens already resolved: u=1 is the parked state
-    // (mark in the masthead slot, arcs faded, veil lifted) that the animation
-    // would otherwise reach at 0 m
+    // showConfluence:false opens already resolved (u=1 is the parked state the
+    // animation would otherwise reach at 0 m); with it on, the two currents
+    // braid and the mark flies into the masthead slot as before
     const u=this.confluence?cl((d-(this.minD||0))/span,0,1):1;
     const ease=t=>1-Math.pow(1-t,3);
     const band=(p,a1,b1,c1,e1)=>{ if(p<a1||p>e1) return 0; if(p<b1) return (p-a1)/(b1-a1); if(p<c1) return 1; return 1-(p-c1)/(e1-c1); };
@@ -1221,7 +1221,7 @@ class Instrument {
  * ------------------------------------------------------------------- */
 const INSTRUMENT_PROPS = {
   descentSpeed: 1,
-  showConfluence: false,
+  showConfluence: true,
   showGrain: true,
   accent: "#6B4C9A"
 };

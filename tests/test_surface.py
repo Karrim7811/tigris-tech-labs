@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import build
-from conftest import open_page, probe
+from conftest import goto, open_page, probe
 
 ROOT = Path(__file__).resolve().parents[1]
 FX8 = ROOT / "tests" / "fixtures" / "products_8.json"
@@ -20,8 +20,12 @@ def test_render_surface_rows_caps_at_six_and_offers_all():
     assert "All 8 canals" in html and "data-open-index" in html
 
 
-def test_first_paint_shows_directory_without_scrolling(browser, site):
+def test_surface_shows_the_whole_directory_without_scrolling(browser, site):
+    """Once the overture has resolved at 0 m, the surface holds the wordmark,
+    the paragraph, every canal row, the contact line and the cue in one screen."""
     page = open_page(browser, site(), 1280, 800)
+    goto(page, 0)
+    page.wait_for_timeout(300)
     assert page.errors == []
     for sel in [
         '[data-surface-rows] [data-bore="cortex"]',
@@ -31,11 +35,11 @@ def test_first_paint_shows_directory_without_scrolling(browser, site):
     ]:
         box = page.locator(sel).first.bounding_box()
         assert box and 0 <= box["y"] and box["y"] + box["height"] <= 800, sel
-    assert probe(page, "a.depth") == 0
 
 
 def test_surface_row_opens_the_products_bore_panel(browser, site):
     page = open_page(browser, site())
+    goto(page, 0)
     page.evaluate(
         """() => document.querySelector('[data-surface-rows] [data-bore="praix"]')
         .dispatchEvent(new MouseEvent('click', {bubbles: true}))"""
@@ -54,6 +58,7 @@ def test_render_index_panel_lists_every_product():
 
 def test_all_canals_row_opens_index_overlay(browser, site):
     page = open_page(browser, site(FX8))
+    goto(page, 0)
     page.evaluate(
         """() => document.querySelector('[data-open-index]')
         .dispatchEvent(new MouseEvent('click', {bubbles: true}))"""
@@ -68,6 +73,7 @@ def test_all_canals_row_opens_index_overlay(browser, site):
 
 def test_status_renders_glyph_and_word_only_where_set(browser, site):
     page = open_page(browser, site(FXS))
+    goto(page, 0)
     rows = page.locator("[data-surface-rows] [data-bore]")
     assert rows.locator('[data-status="live"]').count() == 1
     assert rows.locator('[data-status="building"]').count() == 1
@@ -80,6 +86,7 @@ def test_status_renders_glyph_and_word_only_where_set(browser, site):
 
 def test_screen_image_only_where_provided(browser, site):
     page = open_page(browser, site(FXS))
+    goto(page, 0)
     assert page.locator('[data-panel="praix"] img').count() == 1
     assert page.locator('[data-panel="alevant"] img').count() == 0
     assert page.locator('[data-panel="praix"] img').get_attribute("src") == "assets/praix-screen.png"
@@ -87,4 +94,5 @@ def test_screen_image_only_where_provided(browser, site):
 
 def test_default_products_have_no_status_markup(browser, site):
     page = open_page(browser, site())
+    goto(page, 0)
     assert page.locator("[data-status]").count() == 0

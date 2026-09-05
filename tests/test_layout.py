@@ -2,7 +2,7 @@ import re
 import subprocess
 from pathlib import Path
 
-from conftest import open_page, probe
+from conftest import goto, open_page, probe
 
 ROOT = Path(__file__).resolve().parents[1]
 ORDER = [
@@ -141,16 +141,28 @@ def test_rail_click_lands_on_its_block(browser, site):
     assert abs(probe(page, "a.depth") - mid) < 30
 
 
-def test_no_overture_first_paint_is_the_surface(browser, site):
+def test_overture_plays_then_resolves_into_the_surface(browser, site):
+    """The confluence opens the page; descending to 0 m parks the mark in the
+    masthead and hands the page to the surface, rows and all."""
     page = open_page(browser, site(), 1280, 800)
-    assert probe(page, "a.minD") == 0 and probe(page, "a.depth") == 0
+    assert probe(page, "a.minD") < -900, "overture air is gone"
+    assert probe(page, "a.depth") == probe(page, "a.minD"), "should open at the top of the overture"
+    assert page.locator('[data-ref="hudDepthRef"]').inner_text().startswith("OVERTURE")
+    assert float(page.locator('[data-ref="overtureRef"]').evaluate("el => getComputedStyle(el).opacity")) > 0
+
+    goto(page, 0)
+    page.wait_for_timeout(400)
     assert page.locator('[data-ref="hudDepthRef"]').inner_text().startswith("DEPTH 0000")
     slot = page.locator("[data-markslot]").bounding_box()
     logo = page.locator('[data-ref="logoRef"]').bounding_box()
-    assert abs((slot["x"] + slot["width"] / 2) - (logo["x"] + logo["width"] / 2)) < 40
+    assert abs((slot["x"] + slot["width"] / 2) - (logo["x"] + logo["width"] / 2)) < 40, "mark did not park"
     assert float(page.locator('[data-ref="eyebrowRef"]').evaluate("el => getComputedStyle(el).opacity")) == 0
     op = float(page.locator('[data-stratum][data-id="surface"]').evaluate("el => getComputedStyle(el).opacity"))
     assert op > 0.9
+    for sel in ('[data-surface-rows] [data-bore="cortex"]', "[data-surface-contact]", "[data-cue]"):
+        box = page.locator(sel).first.bounding_box()
+        assert box and 0 <= box["y"] and box["y"] + box["height"] <= 800, sel
+    assert page.errors == []
 
 
 def test_mobile_390_loads_without_errors_and_rows_stack(browser, site):
@@ -167,5 +179,5 @@ def test_reduced_motion_path_lands_at_surface(browser, site):
     page.goto(site())
     page.wait_for_function("() => window.__tigris && window.__tigris.strataEls")
     page.wait_for_timeout(500)
-    assert page.evaluate("window.__tigris.depth") == 0
+    assert page.evaluate("window.__tigris.depth") == 0, "reduced motion should skip the overture"
     ctx.close()
