@@ -28,30 +28,38 @@ def test_load_products_sorted_by_canal(tmp_path):
 
 def test_deep_rows_carry_canal_number_name_industry_lead():
     html = build.render_deep_rows(build.load_products(PRODUCTS))
-    assert 'data-bore="praix"' in html and "CANAL 03" in html
-    assert "PRAIX" in html and "Commercial insurance" in html
-    assert "finds the right prospects" in html
+    products = build.load_products(PRODUCTS)
+    for pr in products:
+        assert f'data-bore="{pr["id"]}"' in html, pr["id"]
+        assert f'CANAL {pr["canal"]:02d}' in html, pr["id"]
+        assert pr["name"] in html and pr["industry"] in html and pr["lead"] in html
     assert "data-row" in html
     assert html.rstrip().endswith("</div>")
-    assert "border-bottom:1px solid" in html.split('data-bore="vitreon"')[1]
+    last = products[-1]["id"]
+    assert "border-bottom:1px solid" in html.split(f'data-bore="{last}"')[1], "last row needs the closing rule"
 
 
 def test_panels_one_per_product_with_three_cells_and_link():
-    html = build.render_panels(build.load_products(PRODUCTS))
-    assert html.count("data-panel=") == 4
-    praix = html.split('data-panel="praix"')[1].split("data-panel=")[0]
-    for cell in ("Data", "Language", "Liability"):
-        assert f">{cell}</div>" in praix
-    assert 'href="https://praix.ai"' in praix
-    vitreon = html.split('data-panel="vitreon"')[1]
-    assert "href=" not in vitreon  # no url -> no link
+    """Order lives in products.json, so this asserts per product, not by position."""
+    products = build.load_products(PRODUCTS)
+    html = build.render_panels(products)
+    assert html.count("data-panel=") == len(products)
+    for pr in products:
+        chunk = html.split(f'data-panel="{pr["id"]}"')[1].split("data-panel=")[0]
+        for cell in ("Data", "Language", "Liability"):
+            assert f">{cell}</div>" in chunk, (pr["id"], cell)
+        if pr["url"]:
+            assert f'href="{pr["url"]}"' in chunk, pr["id"]
+        else:
+            assert "href=" not in chunk, f'{pr["id"]} has no url but rendered a link'
 
 
-def test_noscript_lists_every_product_and_email():
-    html = build.render_noscript(build.load_products(PRODUCTS))
-    for name in ("Cortex", "Alevant", "PRAIX", "Vitreon"):
-        assert name in html
-    assert "CANAL 04 · LOCAL BUSINESS" in html
+def test_noscript_lists_every_product_with_its_canal_number():
+    products = build.load_products(PRODUCTS)
+    html = build.render_noscript(products)
+    for pr in products:
+        assert pr["name"] in html, pr["name"]
+        assert f'CANAL {pr["canal"]:02d} · {pr["industry"].upper()}' in html, pr["id"]
 
 
 def test_products_js_is_valid_json_array_in_a_const():
@@ -59,7 +67,9 @@ def test_products_js_is_valid_json_array_in_a_const():
     m = re.match(r"const PRODUCTS=(\[.*\]);$", html.strip(), re.S)
     assert m, html[:80]
     arr = json.loads(m.group(1))
-    assert [x["id"] for x in arr] == ["cortex", "alevant", "praix", "vitreon"]
+    expected = [x["id"] for x in build.load_products(PRODUCTS)]
+    assert [x["id"] for x in arr] == expected
+    assert [x["canal"] for x in arr] == sorted(x["canal"] for x in arr), "must be canal order"
 
 
 def test_build_fills_every_marker_and_is_idempotent():
