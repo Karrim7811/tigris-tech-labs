@@ -1048,6 +1048,10 @@ function boot(){
 
   app.mount();
 
+  // probe for headless tests and tools/verify.py — not used by the page itself
+  window.__tigris = app;
+  window.__tigris_colorAt = d => colorAt(d).map(v => v | 0);
+
   // rAF is throttled in background tabs; reset the clock so dt never spikes
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) { app.prev = 0; app.start(); }
