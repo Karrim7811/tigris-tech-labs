@@ -107,7 +107,8 @@ def render_surface_rows(products):
         )
         rows.append(
             f'          <div data-bore="{e(p["id"])}" data-row style="border-top:1px solid;padding:11px 0;display:flex;align-items:baseline;gap:18px;cursor:pointer;">\n'
-            f'            <span style="{MONO}font-size:8.5px;letter-spacing:.24em;min-width:56px;color:{e(p["colour"])};">{glyph(p, p["colour"])}{canal(p)}</span>\n'
+            f'            <span style="{MONO}font-size:8.5px;letter-spacing:.24em;min-width:56px;display:inline-flex;align-items:baseline;gap:7px;">'
+            f'{glyph(p, p["colour"])}<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:{e(p["colour"])};"></span>{canal(p)}</span>\n'
             f'            <span style="font-weight:300;font-size:22px;flex:1;line-height:1;">{e(p["name"])}</span>\n'
             f'            <span style="{MONO}font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:#6B6558;">{e(p["industry"])}{st}</span>\n'
             f'            <span style="{MONO}font-size:10px;color:#6B6558;">→</span>\n'

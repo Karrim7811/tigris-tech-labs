@@ -1,80 +1,40 @@
 # tools
 
-The homepage is authored in Claude Design and exported as a `.dc.html` handoff
-bundle. That export is a **prototype**, not shippable code: it runs on a
-proprietary in-browser runtime (`<x-dc>`, `<helmet>`, `{{ ref }}` bindings, a
-`DCLogic` base class from `support.js`), and the handoff README is explicit that
-none of that runtime may ship.
+The homepage is a single static `index.html`, **generated** from two sources:
 
-These two scripts are the pipeline from that export to the static `index.html`
-Vercel deploys. Nothing else in this repo has a build step, and this doesn't
-add one — the output is a single self-contained file.
+- `products.json` — the one product list (order = `canal`; `status` optional).
+- `index.template.html` — the page, with six stamp markers.
 
-## Updating the site from a new design export
+```
+python tools/build.py          # -> index.html
+python tools/verify.py         # drift + overlap + contrast + errors; gates a push
+python -m pytest               # the same checks as unit/browser tests, plus scaling fixtures
+```
 
-1. Unzip the bundle somewhere (these scripts don't read archives).
+## Adding a product
 
-2. Port it:
+1. Append an entry to `products.json` (copy an existing one; set `canal` to its
+   position; `url` may be `null`; `status` may be omitted).
+2. `python tools/build.py`
+3. `python tools/verify.py`
+4. Commit `products.json` **and** `index.html`. Vercel deploys `master`.
 
-   ```
-   node tools/port-design-bundle.mjs <bundle-dir-or-.dc.html>
-   ```
+The surface shows up to six rows and then `All N canals →`. The descent shows
+every row and grows to fit; everything below the rows is positioned from their
+measured height at load, so nothing needs re-numbering.
 
-   Writes `index.html`. Add `--dry-run` to see what it would do first. It
-   exits non-zero rather than emit a half-ported page, so if the design tool
-   changes its export shape you get a clear failure naming the transform that
-   no longer applies — not a silently broken homepage.
+## Editing copy
 
-   Site-level `<head>` (title, description, canonical, OG tags, favicon) lives
-   in the script, not in the design bundle, and survives every re-port. Edit it
-   there.
+Edit `index.template.html`, never `index.html`. Every stratum is
+`<div data-stratum data-id=… data-gap=… data-hud=… data-pattern=…>`; `data-gap`
+is the space (px = m) below the previous block; the depth in each label is
+written at load. Product copy lives in `products.json`.
 
-3. Verify — this is the step that makes the port trustworthy:
+The ground's colour stops are derived from the layout too — paper through the
+thesis, the stratum change is the turn, ink from the products block down — so
+moving a section moves the light with it.
 
-   ```
-   python -m http.server 8901 --bind 127.0.0.1                 # from the repo root
-   python -m http.server 8902 --bind 127.0.0.1                 # from the bundle dir
+## Legacy
 
-   python tools/verify-port.py \
-       --ported   http://127.0.0.1:8901/index.html \
-       --original http://127.0.0.1:8902/<bundle>.dc.html
-   ```
-
-   Drives both the ported page and the original prototype through the same
-   scripted descent, compares the HUD readout and the rendered pixels at seven
-   positions, opens and closes every product panel, checks a 390px viewport,
-   and confirms the `<noscript>` fallback is what actually renders with
-   JavaScript disabled. Exits non-zero on any failure, so it can gate a push.
-
-   Needs `pip install playwright pillow && playwright install chromium`.
-
-4. Commit and push. Vercel auto-deploys `master` to www.tigristechlabs.com.
-
-## Why the no-JS check is a pixel comparison
-
-Being in the DOM is not the same as being visible. The fallback and the
-component root are both `position:fixed`; with no explicit `z-index` they stack
-by DOM order and the component — which comes second — paints over the fallback.
-That shipped once. Nothing throws, and the element is right there in the markup,
-so every cheap check passes.
-
-It can't be caught by inspecting the DOM either: with scripting off there is no
-way to run script in the page. So the check renders the page with JS disabled,
-renders a reference document containing only the fallback, and compares. A
-covered fallback can't match.
-
-Mean pixel difference is the wrong metric for this — both renders are mostly
-empty paper, so text bleeding through moves the mean by less than 1/255 and a
-broken build scores the same as a correct one. It counts changed pixels
-instead. Measured on the real regression: 0.795% when the component paints
-over the fallback, 0.000% when it doesn't.
-
-## Why the pixel comparison matters
-
-The port rewrites the component shell and the ref plumbing, but leaves the
-animation logic verbatim — one canvas, one rAF loop, direct `el.style`
-mutation, no component state. A mistake there doesn't throw; it just renders
-subtly wrong. Comparing frames against the prototype is the only check that
-catches it. Expect a mean difference well under 1/255 — the residual is the
-randomised paper grain and particle cuttings, which differ run to run even
-between two loads of the same page.
+`port-design-bundle.mjs` / `verify-port.py` ported the original Claude Design
+export. The page is no longer re-ported; they are kept for history only.

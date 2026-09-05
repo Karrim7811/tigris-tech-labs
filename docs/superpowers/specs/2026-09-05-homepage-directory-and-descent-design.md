@@ -1,6 +1,6 @@
 # Tigris Tech Labs homepage — directory at the surface, descent as the story
 
-**Status:** design approved in brainstorm 2026-09-05, awaiting owner review of this document.
+**Status:** implemented on branch `copy-pass` (see plan 2026-09-05-homepage-directory-and-descent.md). Owner facts in §13 still default.
 **Branch:** `copy-pass` (off `master`). Supersedes the overture paragraph shipped in `563670e`.
 **Site:** `index.html` — "Sounding 01", the single-file depth instrument. This design keeps it.
 

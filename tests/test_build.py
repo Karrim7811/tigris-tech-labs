@@ -1,5 +1,7 @@
 import json
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 import build
@@ -70,3 +72,18 @@ def test_build_fills_every_marker_and_is_idempotent():
 
 def test_committed_index_matches_fresh_build():
     assert (ROOT / "index.html").read_text(encoding="utf-8") == build.build(PRODUCTS, TEMPLATE)
+
+
+def test_verify_passes_on_committed_site():
+    r = subprocess.run([sys.executable, "tools/verify.py"], cwd=ROOT, capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_verify_fails_on_drift(tmp_path):
+    drift = (ROOT / "index.html").read_text(encoding="utf-8").replace("Tigris Tech Labs", "Tigris Tech Lab", 1)
+    p = tmp_path / "index.html"
+    p.write_text(drift, encoding="utf-8")
+    r = subprocess.run(
+        [sys.executable, "tools/verify.py", "--index", str(p), "--no-browser"], cwd=ROOT, capture_output=True, text=True
+    )
+    assert r.returncode == 1 and "out of date" in r.stdout
