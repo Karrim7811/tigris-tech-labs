@@ -25,6 +25,21 @@
   a:hover{color:#A98BD6;}
   ::selection{background:#6B4C9A;color:#F2EFE7;}
   @keyframes cueBob{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(7px);opacity:1}}
+  body[data-mode="doc"]{overflow:auto;height:auto;background:#F2EFE7;color:#14120F;}
+  html[data-mode="doc"]{overflow:auto;height:auto;}
+  body[data-mode="doc"] [data-ref="rootRef"]{display:none;}
+  #doc{max-width:72ch;margin:0 auto;padding:64px 24px 120px;font-family:'Newsreader',Georgia,serif;font-weight:300;}
+  #doc [data-stratum]{position:static!important;opacity:1!important;transform:none!important;pointer-events:auto!important;max-height:none!important;padding:0!important;margin:0 0 72px;border-bottom:1px solid rgba(20,18,15,.18);padding-bottom:56px!important;}
+  #doc [data-stratum] p{color:#3A362E!important;}
+  #doc [data-accent]{color:#14120F!important;}
+  #doc [data-goto],#doc [data-goto-block],#doc [data-cue],#doc [data-markslot]{display:none!important;}
+  #doc [data-row]{border-color:rgba(20,18,15,.2)!important;}
+  #doc .doc-products{margin:0 0 72px;}
+  #doc .doc-products table{width:100%;border-collapse:collapse;font-size:14.5px;line-height:1.6;margin:18px 0 40px;}
+  #doc .doc-products th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#6B6558;padding:10px 12px 10px 0;vertical-align:top;width:11ch;}
+  #doc .doc-products td{padding:10px 0;border-top:1px solid rgba(20,18,15,.14);vertical-align:top;color:#3A362E;}
+  #doc .doc-products h3{font-weight:300;font-size:28px;margin:0 0 4px;}
+  #doc .doc-hud{position:fixed;right:24px;top:20px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;}
 </style>
 </head>
 <body>
@@ -268,7 +283,9 @@
 
   <div data-ref="hudRef" style="position:absolute;left:24px;right:24px;bottom:20px;z-index:30;display:flex;gap:16px 10px;flex-wrap:wrap;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;pointer-events:none;">
     <span data-ref="hudDepthRef" data-accent>Depth 0000</span>
-    <span data-ref="hudLithRef" style="opacity:.55;">Confluence · surface</span>
+    <span data-ref="hudLithRef" style="opacity:.55;">Surface</span>
+    <button type="button" data-hud-products data-on-click="toSurface" style="pointer-events:auto;background:none;border:0;padding:0;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;opacity:.85;">Products ↑</button>
+    <button type="button" data-hud-doc data-on-click="toggleDoc" aria-pressed="false" style="pointer-events:auto;background:none;border:0;padding:0;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;opacity:.85;">Read as one page</button>
     <span style="opacity:.4;">N / P · step stratum</span>
   </div>
 
@@ -279,6 +296,8 @@
 <!--@@index-panel@@-->
   </div>
 </div>
+
+<main id="doc" hidden></main>
 
 <script>
 const PAPER=[242,239,231], INK=[20,18,15], BONE=[242,239,231];
@@ -471,12 +490,14 @@ class Instrument {
   }
 
   onWheel = e => {
+    if(document.body.dataset.mode==='doc') return;
     if(this.boreOpen) return;
     e.preventDefault();
     // the overture is weighted: the hero descends slowly, the ground reads at speed
     this.target+=e.deltaY*(this.target<0?0.6:0.95)*this.speed; this.clamp(); this.jump();
   };
   onDown = e => {
+    if(document.body.dataset.mode==='doc') return;
     if(this.boreOpen) return;
     if(e.target.closest('[data-panel],a')) return;
     this.dragging=true; this.dy=e.clientY; this.moved=0; this.fling=0;
@@ -491,6 +512,8 @@ class Instrument {
     this.dragging=false; this.fling=0;
   };
   onKey = e => {
+    if(e.key==='d'||e.key==='D'){ e.preventDefault(); this.toggleDoc(); return; }
+    if(document.body.dataset.mode==='doc') return;
     if(e.key==='Escape'){ this.closeBore(); return; }
     if(this.boreOpen) return;
     if(e.key==='n'||e.key==='N'||e.key==='j'){ this.step(1); return; }
@@ -522,6 +545,59 @@ class Instrument {
     this.boreRef.current.style.opacity='1';
     this.boreRef.current.style.pointerEvents='auto';
   }
+  toSurface = () => {
+    if(document.body.dataset.mode==='doc'){ window.scrollTo(0,0); return; }
+    this.closeBore(); this.target=0; this.clamp(); this.jump();
+  };
+
+  /* Read as one page: the same nodes, moved (never copied) into a flowing
+     document, plus one table per product from PRODUCTS. Toggling back hands
+     the nodes to the shaft again and lands at the depth the reader left. */
+  toggleDoc = () => {
+    const doc=document.getElementById('doc'), body=document.body, html=document.documentElement;
+    const btn=this.hudRef.current.querySelector('[data-hud-doc]');
+    if(body.dataset.mode==='doc'){
+      for(const el of this.strataEls) this.shaftRef.current.appendChild(el);
+      doc.innerHTML=''; doc.hidden=true;
+      body.dataset.mode='section'; html.dataset.mode='section';
+      btn.setAttribute('aria-pressed','false'); btn.textContent='Read as one page';
+      this.resize(); this.lastDrawn=-999; this.frame(); this.start();
+      return;
+    }
+    this.closeBore();
+    body.dataset.mode='doc'; html.dataset.mode='doc';
+    btn.setAttribute('aria-pressed','true'); btn.textContent='Read as section';
+    const rowsIdx=this.strataEls.findIndex(e=>e.dataset.id==='rows');
+    this.strataEls.forEach((el,i)=>{
+      doc.appendChild(el);
+      if(i===rowsIdx) doc.appendChild(this.docProducts());
+    });
+    const hud=document.createElement('div'); hud.className='doc-hud';
+    const back=document.createElement('button'); back.type='button'; back.textContent='Read as section';
+    back.style.cssText='background:none;border:1px solid currentColor;padding:8px 12px;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;';
+    back.addEventListener('click',this.toggleDoc); hud.appendChild(back); doc.appendChild(hud);
+    doc.hidden=false; window.scrollTo(0,0);
+  };
+  docProducts(){
+    const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const wrap=document.createElement('div'); wrap.className='doc-products';
+    const panelText=(id,title)=>{
+      const pl=this.boreRef.current.querySelector('[data-panel="'+id+'"]'); if(!pl) return '';
+      const cell=Array.from(pl.querySelectorAll('div > div')).find(d=>d.textContent.trim()===title);
+      return cell&&cell.nextElementSibling?cell.nextElementSibling.textContent:'';
+    };
+    wrap.innerHTML=PRODUCTS.map(pr=>'\n      <section data-doc-product="'+esc(pr.id)+'">\n'
+      +'        <h3>'+esc(pr.name)+' <span style="font-family:\'JetBrains Mono\',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#6B6558;margin-left:10px;">'+esc(pr.industry)+(pr.status?' · '+esc(pr.status):'')+'</span></h3>\n'
+      +'        <p>'+esc(pr.lead)+'</p>\n'
+      +'        <table>\n'
+      +'          <tr><th>Data</th><td>'+esc(panelText(pr.id,'Data'))+'</td></tr>\n'
+      +'          <tr><th>Language</th><td>'+esc(panelText(pr.id,'Language'))+'</td></tr>\n'
+      +'          <tr><th>Liability</th><td>'+esc(panelText(pr.id,'Liability'))+'</td></tr>\n'
+      +(pr.url?'          <tr><th></th><td><a href="'+esc(pr.url)+'">'+esc(pr.url.replace('https://',''))+' →</a></td></tr>\n':'')
+      +'        </table>\n      </section>').join('');
+    return wrap;
+  }
+
   closeBore = () => {
     if(!this.boreOpen) return;
     this.boreOpen=null;
