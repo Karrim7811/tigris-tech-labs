@@ -83,17 +83,18 @@
 
   <div data-ref="shaftRef" data-on-click="onShaftClick" style="position:absolute;top:0;left:0;right:0;height:5600px;z-index:20;will-change:transform;">
 
-    <div data-goto="0" style="position:absolute;top:0px;left:118px;height:250px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">Confluence</div>
-    <div data-goto="320" style="position:absolute;top:320px;left:118px;height:280px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">Silt</div>
-    <div data-goto="640" style="position:absolute;top:640px;left:118px;height:480px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">The name</div>
-    <div data-goto="1200" style="position:absolute;top:1200px;left:118px;height:340px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">The company</div>
-    <div data-goto="1580" style="position:absolute;top:1580px;left:118px;height:700px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">Understand</div>
-    <div data-goto="2320" style="position:absolute;top:2320px;left:118px;height:260px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">Thesis</div>
-    <div data-goto="2720" style="position:absolute;top:2720px;left:118px;height:840px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">The canals</div>
-    <div data-goto="3620" style="position:absolute;top:3620px;left:118px;height:420px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">Philosophy</div>
-    <div data-goto="4100" style="position:absolute;top:4100px;left:118px;height:420px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">First record</div>
+    <div data-goto-block="surface" style="position:absolute;left:118px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">Surface</div>
+    <div data-goto-block="company" style="position:absolute;left:118px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">The company</div>
+    <div data-goto-block="learn-data" style="position:absolute;left:118px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">What we learn</div>
+    <div data-goto-block="thesis" style="position:absolute;left:118px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">Thesis</div>
+    <div data-goto-block="products" style="position:absolute;left:118px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">The products</div>
+    <div data-goto-block="river" style="position:absolute;left:118px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">The river</div>
+    <div data-goto-block="holding" style="position:absolute;left:118px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">Holding company</div>
+    <div data-goto-block="founder" style="position:absolute;left:118px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">The founder</div>
+    <div data-goto-block="name" style="position:absolute;left:118px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">The name</div>
+    <div data-goto-block="end" style="position:absolute;left:118px;writing-mode:vertical-rl;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;cursor:pointer;">First record</div>
 
-    <div data-stratum data-anchor="center" style="opacity:1;position:absolute;top:-300px;left:0;width:100%;">
+    <div data-stratum data-id="surface" data-anchor="center" style="opacity:1;position:absolute;top:-300px;left:0;width:100%;">
       <div style="max-width:820px;">
         <div data-accent style="display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;margin-bottom:30px;">
           <span data-dot style="display:block;width:5px;height:5px;border-radius:50%;background:#6B4C9A;"></span>
@@ -112,90 +113,102 @@
       </div>
     </div>
 
-    <div data-stratum style="opacity:0;position:absolute;top:360px;left:0;width:100%;">
-      <div style="max-width:780px;">
-        <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">0320 m — silt</div>
-        <h2 style="font-weight:200;font-size:clamp(30px,5vw,64px);line-height:1.04;letter-spacing:-.01em;margin-bottom:24px;">Technology is not the starting point.</h2>
-        <p style="max-width:520px;font-size:16px;line-height:1.8;color:#3A362E;">Most products begin with a new technology and then go looking for a reason to exist. A general model, a thin wrapper, a demo that survives exactly as long as the meeting — impressive at the surface, nothing underneath.</p>
-        <p style="max-width:540px;font-size:15px;line-height:1.7;font-style:italic;opacity:.62;margin-top:12px;">Loose silt. Nothing here has been under pressure long enough to hold anything up.</p>
-      </div>
-    </div>
-
-    <div data-stratum style="opacity:0;position:absolute;top:700px;left:0;width:100%;">
+    <div data-stratum data-id="company" data-gap="120" data-hud="THE COMPANY" data-pattern="hatch" style="opacity:0;position:absolute;left:0;width:100%;">
       <div style="max-width:820px;">
-        <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">0640 m — the name</div>
-        <h2 style="font-weight:200;font-size:clamp(28px,4.6vw,58px);line-height:1.05;letter-spacing:-.01em;margin-bottom:26px;">Two rivers met here, and somebody had to start <em style="font-style:italic;color:#6B4C9A;">keeping count</em>.</h2>
-        <p style="max-width:540px;font-size:16px;line-height:1.8;color:#3A362E;margin-bottom:18px;">The Tigris and the Euphrates made this plain fertile enough to be worth arguing over. Out of the argument came the first writing — not poetry: counts of grain, terms of trade, obligations that outlived the people who made them.</p>
-        <p style="max-width:540px;font-size:16px;line-height:1.8;color:#3A362E;margin-bottom:30px;">Accounting, contracts and written law were all cut into wet clay within sight of this water, and are still legible four thousand years later. That is the standard a record is held to.</p>
-        <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;">Three wedges, cut into the disc of the valley — the mark</div>
-      </div>
-    </div>
-
-    <div data-stratum style="opacity:0;position:absolute;top:1240px;left:0;width:100%;">
-      <div style="max-width:820px;">
-        <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">1200 m — the company</div>
+        <div data-accent data-depth-label data-label="the company" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">the company</div>
         <h2 style="font-weight:200;font-size:clamp(28px,4.4vw,56px);line-height:1.06;letter-spacing:-.01em;margin-bottom:26px;">An AI-native product <em style="font-style:italic;color:#6B4C9A;">holding company</em>.</h2>
         <p style="max-width:540px;font-size:16px;line-height:1.8;color:#3A362E;margin-bottom:18px;">We build AI platforms, one industry at a time. Before we build anything, we sit with the people who do the work — the ones leading it, the ones doing it every day, and the ones it lands on — and we stay until we understand what is missing.</p>
         <p style="max-width:540px;font-size:16px;line-height:1.8;color:#3A362E;">We do not enter a second industry to grow. We go further into the first one.</p>
+        <p style="max-width:540px;font-size:15px;line-height:1.7;font-style:italic;opacity:.62;margin-top:12px;">Loose silt. Nothing here has been under pressure long enough to hold anything up.</p>
         <p data-accent style="margin-top:22px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;"><a href="mailto:hello@tigristechlabs.com" style="color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px;">If you know an industry from the inside — hello@tigristechlabs.com →</a></p>
       </div>
+    
     </div>
 
-    <div data-stratum style="opacity:0;position:absolute;top:1620px;left:0;width:100%;">
+    <div data-stratum data-id="learn-data" data-gap="120" data-hud="WHAT WE LEARN · DATA" data-pattern="hatch" style="opacity:0;position:absolute;left:0;width:100%;">
       <div style="max-width:660px;">
-        <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:20px;">1580 m — what we learn first · I</div>
+        <div data-accent data-depth-label data-label="what we learn first · I" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">what we learn first · I</div>
         <h3 style="font-weight:300;font-size:clamp(26px,3.4vw,42px);line-height:1.05;margin-bottom:18px;">Its data</h3>
         <p style="max-width:470px;font-size:15.5px;line-height:1.8;color:#3A362E;">Not a benchmark set. The messy, partial, contradictory record an industry actually keeps — and the reasons it keeps it that way.</p>
       </div>
+    
     </div>
 
-    <div data-stratum style="opacity:0;position:absolute;top:1860px;left:0;width:100%;">
+    <div data-stratum data-id="learn-language" data-gap="90" data-hud="WHAT WE LEARN · LANGUAGE" data-pattern="hatch" style="opacity:0;position:absolute;left:0;width:100%;">
       <div style="max-width:720px;padding-left:clamp(0px,6vw,110px);">
-        <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:20px;">1820 m — what we learn first · II</div>
+        <div data-accent data-depth-label data-label="what we learn first · II" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">what we learn first · II</div>
         <h3 style="font-weight:300;font-size:clamp(26px,3.4vw,42px);line-height:1.05;margin-bottom:18px;">Its language</h3>
         <p style="max-width:470px;font-size:15.5px;line-height:1.8;color:#3A362E;">Every trade has a private vocabulary where one word carries a decade of precedent. Get it wrong and the product is instantly recognisable as an outsider.</p>
       </div>
+    
     </div>
 
-    <div data-stratum style="opacity:0;position:absolute;top:2100px;left:0;width:100%;">
+    <div data-stratum data-id="learn-liability" data-gap="90" data-hud="WHAT WE LEARN · LIABILITY" data-pattern="cross" style="opacity:0;position:absolute;left:0;width:100%;">
       <div style="max-width:780px;padding-left:clamp(0px,12vw,220px);">
-        <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:20px;">2060 m — what we learn first · III</div>
+        <div data-accent data-depth-label data-label="what we learn first · III" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">what we learn first · III</div>
         <h3 style="font-weight:300;font-size:clamp(26px,3.4vw,42px);line-height:1.05;margin-bottom:18px;">Its liability</h3>
         <p style="max-width:470px;font-size:15.5px;line-height:1.8;color:#3A362E;">Who signs. Who is exposed when the answer is wrong. This is the constraint that decides whether software is adopted or merely admired.</p>
       </div>
+    
     </div>
 
-    <div data-stratum style="opacity:0;position:absolute;top:2360px;left:0;width:100%;">
+    <div data-stratum data-id="thesis" data-gap="140" data-hud="THESIS" data-pattern="cross" style="opacity:0;position:absolute;left:0;width:100%;">
       <div style="max-width:900px;">
         <div data-rule style="height:1px;background:#14120F;max-width:170px;margin-bottom:34px;"></div>
         <h2 style="font-weight:200;font-size:clamp(38px,7vw,104px);line-height:.98;letter-spacing:-.015em;margin-bottom:20px;">Depth is the <em style="font-style:italic;color:#6B4C9A;">strategy</em>.</h2>
         <p style="max-width:520px;font-size:16px;line-height:1.8;color:#3A362E;">We build only what makes the work easier, clearer or faster, and we stay until the product belongs inside the industry. Breadth is easy to copy. A decade inside one industry's constraints is not.</p>
         <p style="max-width:540px;font-size:14.5px;line-height:1.6;font-style:italic;opacity:.62;margin-top:6px;">Below this line, the silt turns to tablet.</p>
       </div>
+    
     </div>
 
-    <div data-stratum style="opacity:0;position:absolute;top:2640px;left:0;width:100%;">
+    <div data-stratum data-id="change" data-gap="60" data-pattern="massive" style="opacity:0;position:absolute;left:0;width:100%;">
       <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;text-transform:uppercase;">2600 m — stratum change · the silt ends · entering the tablet beds</div>
     </div>
 
-    <div data-stratum style="opacity:0;position:absolute;top:2760px;left:0;width:100%;">
+    <div data-stratum data-id="products" data-gap="100" data-hud="THE PRODUCTS" data-pattern="dense" style="opacity:0;position:absolute;left:0;width:100%;">
       <div style="max-width:900px;">
-        <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">2720 m — the canals · four products, one industry each</div>
-        <h2 style="font-weight:200;font-size:clamp(28px,4.2vw,52px);line-height:1.06;margin-bottom:18px;">Four products. One industry each.</h2>
+        <div data-accent data-depth-label data-label="the products · one industry each" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">the products · one industry each</div>
+        <h2 style="font-weight:200;font-size:clamp(28px,4.2vw,52px);line-height:1.06;margin-bottom:18px;">One product per industry.</h2>
         <p style="max-width:520px;font-size:15.5px;line-height:1.8;color:#3A362E;">Each product enters a single industry and stays close to the people it serves. Open one to read how it meets that industry's data, its language, and its liability.</p>
-        <p style="max-width:540px;font-size:15px;line-height:1.7;font-style:italic;opacity:.62;margin-top:18px;">Four canals cut from the same river. Each carries the water in its own direction.</p>
+        <p style="max-width:540px;font-size:15px;line-height:1.7;font-style:italic;opacity:.62;margin-top:18px;">Canals cut from the same river. Each carries the water in its own direction.</p>
       </div>
+    
     </div>
 
-    <div data-stratum style="opacity:0;position:absolute;top:3060px;left:0;width:100%;">
+    <div data-stratum data-id="rows" data-gap="60" data-pattern="dense" style="opacity:0;position:absolute;left:0;width:100%;">
       <div style="max-width:860px;">
 <!--@@deep-rows@@-->
       </div>
+    
     </div>
 
-    <div data-stratum style="opacity:0;position:absolute;top:3660px;left:0;width:100%;">
+    <div data-stratum data-id="river" data-gap="160" data-hud="THE RIVER" data-pattern="dense" style="opacity:0;position:absolute;left:0;width:100%;">
       <div style="max-width:860px;">
-        <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">3620 m — philosophy</div>
+        <div data-accent data-depth-label data-label="the river · what the canals are cut from" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">the river · what the canals are cut from</div>
+        <h2 style="font-weight:200;font-size:clamp(28px,4.4vw,56px);line-height:1.06;letter-spacing:-.01em;margin-bottom:26px;">One river. <em style="font-style:italic;color:#6B4C9A;">Many canals.</em></h2>
+        <p style="max-width:540px;font-size:16px;line-height:1.8;color:#3A362E;margin-bottom:0;">Every Tigris product runs on the same shared layer — the model routing, memory, evaluation and security that Tigris builds once and every product inherits. It is not something we sell. It is how the products stay honest, fast, and cheap to run — and why the fifth canal costs less to cut than the first.</p>
+        <p style="max-width:540px;font-size:15px;line-height:1.7;font-style:italic;opacity:.62;margin-top:12px;">The canals differ. The water is the same.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;max-width:780px;margin-top:34px;">
+          <div>
+            <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;margin-bottom:12px;">01 — intelligence</div>
+            <p style="font-size:14.5px;line-height:1.75;color:#3A362E;">One model layer for every product, escalating to a frontier model only when it has to.</p>
+          </div>
+          <div>
+            <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;margin-bottom:12px;">02 — memory</div>
+            <p style="font-size:14.5px;line-height:1.75;color:#3A362E;">What one product learns, the layer keeps.</p>
+          </div>
+          <div>
+            <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;margin-bottom:12px;">03 — evaluation &amp; security</div>
+            <p style="font-size:14.5px;line-height:1.75;color:#3A362E;">One standard, applied to every product before it ships.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div data-stratum data-id="holding" data-gap="140" data-hud="HOLDING COMPANY" data-pattern="dense" style="opacity:0;position:absolute;left:0;width:100%;">
+      <div style="max-width:860px;">
+        <div data-accent data-depth-label data-label="why a holding company" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">why a holding company</div>
         <h2 style="font-weight:200;font-size:clamp(26px,4vw,48px);line-height:1.06;margin-bottom:22px;">What a holding company is <em style="font-style:italic;color:#6B4C9A;">for</em>.</h2>
         <p style="max-width:540px;font-size:16px;line-height:1.8;color:#3A362E;margin-bottom:34px;">Tigris does not build products and walk away. Each one gets the time, support and focus it needs to grow alongside the people it serves.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;max-width:780px;">
@@ -214,9 +227,29 @@
           </div>
         </div>
       </div>
+    
     </div>
 
-    <div data-stratum style="opacity:0;position:absolute;top:4140px;left:0;width:100%;">
+    <div data-stratum data-id="founder" data-gap="140" data-hud="THE FOUNDER" data-pattern="dense" style="opacity:0;position:absolute;left:0;width:100%;">
+      <div style="max-width:820px;">
+        <div data-accent data-depth-label data-label="the founder" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">the founder</div>
+        <h2 style="font-weight:200;font-size:clamp(28px,4.4vw,56px);line-height:1.06;letter-spacing:-.01em;margin-bottom:26px;">Built from the inside.</h2>
+        <p style="max-width:540px;font-size:16px;line-height:1.8;color:#3A362E;margin-bottom:0;">Tigris was founded by Karim Nasser after twenty years in commercial insurance and commercial real estate. PRAIX exists because he sat in the producer's chair. The method — listen, understand, build, remain — is how that experience becomes a product, and how the next one will.</p>
+      </div>
+    </div>
+
+    <div data-stratum data-id="name" data-gap="160" data-hud="THE NAME · TWO RIVERS" data-pattern="wedge" style="opacity:0;position:absolute;left:0;width:100%;">
+      <div style="max-width:820px;">
+        <div data-accent data-depth-label data-label="the name · the first record" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:22px;">the name · the first record</div>
+        <h2 style="font-weight:200;font-size:clamp(28px,4.6vw,58px);line-height:1.05;letter-spacing:-.01em;margin-bottom:26px;">Two rivers met here, and somebody had to start <em style="font-style:italic;color:#6B4C9A;">keeping count</em>.</h2>
+        <p style="max-width:540px;font-size:16px;line-height:1.8;color:#3A362E;margin-bottom:18px;">The Tigris and the Euphrates made this plain fertile enough to be worth arguing over. Out of the argument came the first writing — not poetry: counts of grain, terms of trade, obligations that outlived the people who made them.</p>
+        <p style="max-width:540px;font-size:16px;line-height:1.8;color:#3A362E;margin-bottom:30px;">Accounting, contracts and written law were all cut into wet clay within sight of this water, and are still legible four thousand years later. That is the standard a record is held to.</p>
+        <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;">Three wedges, cut into the disc of the valley — the mark</div>
+      </div>
+    
+    </div>
+
+    <div data-stratum data-id="end" data-gap="160" data-hud="THE FIRST RECORD" data-pattern="wedge" style="opacity:0;position:absolute;left:0;width:100%;">
       <div style="max-width:880px;">
         <div data-accent style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:26px;">4100 m — the first record · end of section</div>
         <h2 style="font-weight:200;font-size:clamp(30px,5.4vw,78px);line-height:1;letter-spacing:-.01em;margin-bottom:26px;">You reached the first record.<br>Most people stop in the silt.</h2>
@@ -229,6 +262,7 @@
           <span data-goto="0" data-accent style="cursor:pointer;">↑ Return to surface</span>
         </div>
       </div>
+    
     </div>
   </div>
 
@@ -249,20 +283,7 @@
 <script>
 const PAPER=[242,239,231], INK=[20,18,15], BONE=[242,239,231];
 const VIOLET=[107,76,154], VIOLET_HI=[169,139,214], CLAY=[196,135,90];
-const STRATA=[
-  {d:0,    n:'CONFLUENCE · SURFACE',       p:'dot'},
-  {d:320,  n:'SILT',                       p:'dot'},
-  {d:640,  n:'THE NAME · TWO RIVERS',      p:'wedge'},
-  {d:1200, n:'THE COMPANY',                p:'hatch'},
-  {d:1580, n:'WHAT WE LEARN · DATA',      p:'hatch'},
-  {d:1820, n:'WHAT WE LEARN · LANGUAGE',  p:'hatch'},
-  {d:2060, n:'WHAT WE LEARN · LIABILITY', p:'cross'},
-  {d:2320, n:'THESIS',                     p:'cross'},
-  {d:2600, n:'TABLET BEDS',                p:'massive'},
-  {d:2720, n:'THE CANALS',                 p:'dense'},
-  {d:3620, n:'PHILOSOPHY',                 p:'dense'},
-  {d:4100, n:'THE FIRST RECORD',           p:'wedge'}
-];
+const STRATA=[{d:0,n:'SURFACE',p:'dot'}];  // rebuilt from [data-stratum][data-hud] at layout
 const BORE_D=[];
 <!--@@products-js@@-->
 const STOPS=[[0,PAPER],[1500,[236,232,222]],[2300,[220,215,203]],[2600,[118,113,103]],[3060,[20,18,15]],[5600,[16,15,13]]];
@@ -308,8 +329,8 @@ class Instrument {
     this.ruleEls=Array.from(this.rootRef.current.querySelectorAll('[data-rule]'));
     this.rowEls=Array.from(this.rootRef.current.querySelectorAll('[data-row]'));
     this.dotEls=Array.from(this.rootRef.current.querySelectorAll('[data-dot]'));
-    this.bodyEls=Array.from(this.shaftRef.current.querySelectorAll('p, [data-goto], [data-cue] span'));
-    this.railEls=Array.from(this.shaftRef.current.querySelectorAll('[data-goto]')).filter(el=>el.style.writingMode);
+    this.bodyEls=Array.from(this.shaftRef.current.querySelectorAll('p, [data-goto], [data-goto-block], [data-cue] span'));
+    this.railEls=Array.from(this.shaftRef.current.querySelectorAll('[data-goto],[data-goto-block]')).filter(el=>el.style.writingMode);
     this.slotEl=this.shaftRef.current.querySelector('[data-markslot]');
     this.titleStratum=this.shaftRef.current.querySelector('[data-stratum][data-anchor="center"]');
     this.ctaEls=Array.from(this.rootRef.current.querySelectorAll('[data-cta]'));
@@ -324,6 +345,7 @@ class Instrument {
     this.resize();
     this.frame();
     this.start();
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>this.resize());
     this.stalled=false;
   }
   bind(){
@@ -374,28 +396,56 @@ class Instrument {
     this.strataEls.forEach(el=>{
       el.style.paddingLeft=px+'px'; el.style.paddingRight=pr+'px';
       el.style.maxHeight=Math.max(380,this.h-this.hudH-24)+'px';
-      if(el.getAttribute('data-anchor')==='center')
-        el.style.top=Math.round(-Math.max(el.offsetHeight,el.scrollHeight)/2)+'px';
-      const eh=Math.max(el.offsetHeight,el.scrollHeight);
-      el._top=parseFloat(el.style.top);
-      el._bot=el._top+eh;
-      el._mid=el._top+eh/2;
     });
-    Array.from(this.shaftRef.current.querySelectorAll('[data-goto]')).forEach(el=>{
+    this.layout();
+    Array.from(this.shaftRef.current.querySelectorAll('[data-goto],[data-goto-block]')).forEach(el=>{
       if(el.style.writingMode) el.style.display=this.narrow?'none':'block';
     });
     // register each bore tick to its actual canal row centre (1px = 1m)
-    const rows=Array.from(this.shaftRef.current.querySelectorAll('[data-row]'));
-    if(rows.length){
-      const blk=rows[0].closest('[data-stratum]'), bt=parseFloat(blk.style.top);
-      BORE_D.length=0;
-      rows.forEach(r=>BORE_D.push(Math.round(bt+r.offsetTop+r.offsetHeight/2)));
-    }
+    const rowsBlk=this.blockById('rows');
+    const rows=rowsBlk?Array.from(rowsBlk.querySelectorAll('[data-row][data-bore]')):[];
+    BORE_D.length=0;
+    rows.forEach(r=>BORE_D.push(Math.round(rowsBlk._top+r.offsetTop+r.offsetHeight/2)));
     this.maxD=Math.max(...this.strataEls.map(e=>e._mid));
     this.clamp();
     this.lastDrawn=-999;
     if(this.ctx) this.frame();
   };
+
+  blockById(id){ return this.strataEls.find(e=>e.dataset.id===id); }
+
+  /* Sequential layout: each stratum sits a designed gap (data-gap, px = m)
+     below the measured bottom of the one before it. Nothing about the page
+     assumes how many products there are or how tall a block renders. */
+  layout(){
+    const H=el=>Math.max(el.offsetHeight,el.scrollHeight);
+    let prevBot=null;
+    for(const el of this.strataEls){
+      el._id=el.dataset.id;
+      const eh=H(el);
+      if(el.getAttribute('data-anchor')==='center'){
+        el.style.top=Math.round(-eh/2)+'px';
+      }else{
+        const gap=parseFloat(el.dataset.gap||'120');
+        el.style.top=Math.round(prevBot+gap)+'px';
+      }
+      el._top=parseFloat(el.style.top); el._bot=el._top+eh; el._mid=el._top+eh/2;
+      prevBot=el._bot;
+      const lab=el.querySelector('[data-depth-label]');
+      if(lab) lab.textContent=String(Math.round(Math.max(0,el._top))).padStart(4,'0')+' m — '+lab.dataset.label;
+    }
+    // the shaft must be at least as deep as the last block plus one screen
+    this.shaftRef.current.style.height=Math.round(prevBot+this.h)+'px';
+    // HUD strata: surface, then one per block that names itself
+    STRATA.length=0; STRATA.push({d:0,n:'SURFACE',p:'dot'});
+    for(const el of this.strataEls) if(el.dataset.hud) STRATA.push({d:el._top,n:el.dataset.hud,p:el.dataset.pattern||'dense'});
+    // rail: each label spans its block (min 200 m so short blocks stay clickable)
+    for(const r of this.shaftRef.current.querySelectorAll('[data-goto-block]')){
+      const b=this.blockById(r.dataset.gotoBlock); if(!b) continue;
+      const top=Math.max(0,b._top), span=Math.max(200,b._bot-top);
+      r.style.top=Math.round(top)+'px'; r.style.height=Math.round(span)+'px';
+    }
+  }
 
   clamp(){ this.target=cl(this.target,this.minD||0,this.maxD||4300); this.dirty=true; }
   jump(){ if(this.stalled){ this.depth=this.target; this.lastDrawn=-999; this.frame(); } }
@@ -456,6 +506,8 @@ class Instrument {
 
   onShaftClick = e => {
     if(this.moved>6) return;
+    const gb=e.target.closest('[data-goto-block]');
+    if(gb){ const b=this.blockById(gb.dataset.gotoBlock); if(b){ this.target=b._mid; this.clamp(); this.jump(); } return; }
     const g=e.target.closest('[data-goto]');
     if(g){ this.target=this.atBlock(parseFloat(g.getAttribute('data-goto'))); this.clamp(); this.jump(); return; }
     if(e.target.closest('[data-open-index]')){ this.openBore('index'); return; }
