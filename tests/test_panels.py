@@ -13,17 +13,30 @@ def _open(page, pid="cortex"):
 def test_rows_link_straight_to_each_product_site(browser, site):
     page = open_page(browser, site())
     goto(page, 0)
+    import json as _json
+    from pathlib import Path as _Path
+
+    products = _json.loads((_Path(__file__).resolve().parents[1] / "products.json").read_text(encoding="utf-8"))
+    expected = [p["url"] for p in sorted(products, key=lambda p: p["canal"]) if p["url"]]
     hrefs = page.eval_on_selector_all(
         "[data-surface-rows] a[data-out]", "els => els.map(e => e.getAttribute('href'))"
     )
-    assert hrefs == ["https://praix.ai", "https://alevant.ai", "https://peptidecortex.com"]
+    assert hrefs == expected
     deep = page.eval_on_selector_all('[data-id="rows"] a[data-out]', "els => els.map(e => e.getAttribute('href'))")
     assert deep == hrefs
     for a in page.locator("[data-surface-rows] a[data-out]").all():
         assert a.get_attribute("target") == "_blank"
         assert "noopener" in (a.get_attribute("rel") or "")
-    # Vitreon has no site yet, so it gets no link
-    assert page.locator('[data-surface-rows] [data-bore="vitreon"] a').count() == 0
+
+
+def test_a_product_without_a_site_gets_no_link(browser, site):
+    """products_8.json carries entries with url:null — they show the bare arrow."""
+    from pathlib import Path as _Path
+
+    page = open_page(browser, site(_Path(__file__).resolve().parents[1] / "tests/fixtures/products_8.json"))
+    goto(page, 0)
+    assert page.locator('[data-id="rows"] [data-bore="p6"] a').count() == 0
+    assert page.locator('[data-id="rows"] [data-bore="p5"] a[data-out]').count() == 1
 
 
 def test_clicking_a_row_link_does_not_open_the_panel(browser, site):
