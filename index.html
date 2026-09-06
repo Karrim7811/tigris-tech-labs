@@ -16,12 +16,36 @@
 <canvas id="geo" aria-hidden="true"></canvas>
 <div id="sight" aria-hidden="true"></div>
 
+<!-- ══ OVERTURE — two currents, one confluence ══ -->
+<div id="overture" aria-hidden="true">
+  <div id="ov-logo">
+    <div id="ov-bloom"></div>
+    <svg viewBox="0 0 500 500">
+      <defs>
+        <linearGradient id="olC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E2B581"></stop><stop offset="1" stop-color="#C4875A"></stop></linearGradient>
+        <linearGradient id="olV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A98BD6"></stop><stop offset="1" stop-color="#6B4C9A"></stop></linearGradient>
+      </defs>
+      <path id="ov-arc-c" fill="none" stroke="url(#olC)" stroke-width="11" stroke-linecap="round" stroke-dasharray="472" stroke-dashoffset="472" d="M250,100 A150,150 0 0 0 250,400"></path>
+      <path id="ov-arc-v" fill="none" stroke="url(#olV)" stroke-width="11" stroke-linecap="round" stroke-dasharray="472" stroke-dashoffset="472" d="M250,100 A150,150 0 0 1 250,400"></path>
+      <circle id="ov-rider-c" r="10" cx="250" cy="100" fill="#E2B581" opacity="0"></circle>
+      <circle id="ov-rider-v" r="10" cx="250" cy="100" fill="#A98BD6" opacity="0"></circle>
+      <path id="ov-mark" fill-rule="evenodd" fill="#14120F" opacity="0" d="M 400 250 A 150 150 0 1 1 100 250 A 150 150 0 1 1 400 250 Z M 155 168 L 155 220 L 340 194 Z M 178 235 L 225 235 L 200 350 Z M 245 278 L 245 322 L 345 300 Z"></path>
+    </svg>
+  </div>
+  <div id="ov-eyebrow">A Tigris Tech Labs survey</div>
+  <div id="ov-resolve">
+    <div id="ov-head">Two currents, <em>one&nbsp;confluence</em>.</div>
+    <div id="ov-wordmark"><span></span><span>Tigris Tech Labs</span><span></span></div>
+  </div>
+  <div id="ov-cue"><span>↓</span><span>Scroll to begin</span></div>
+</div>
+
 <!-- ══ THE LOG: all copy lives here, in reading order ══ -->
 <main id="log">
 
   <article class="band" data-anchor="0.45" data-range="0.0 – 1.9 m" data-stratum="TOPSOIL">
     <h1 class="brand">
-      <svg class="mark" viewBox="0 0 24 24" width="34" height="34" role="img" aria-label="Tigris Tech Labs borehole mark" fill="none" stroke="currentColor" stroke-width="1.5">
+      <svg class="mark" data-mark-slot viewBox="0 0 24 24" width="34" height="34" role="img" aria-label="Tigris Tech Labs borehole mark" fill="none" stroke="currentColor" stroke-width="1.5">
         <path d="M3 8.5 H21"/>
         <path d="M12 2.2 V22.6"/>
         <circle cx="12" cy="8.5" r="2.15" fill="none"/>

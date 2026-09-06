@@ -124,7 +124,7 @@ const S = {
   L: 1, ink: INK_DARK, adapt: 1,
 };
 
-function setDepth(v) { S.d = clamp(v, -1.2, D_MAX + 1.2); }
+function setDepth(v) { S.d = clamp(v, OVERTURE_M, D_MAX + 1.2); }
 function firstTouch() {
   if (S.touched) return;
   S.touched = true;
@@ -157,7 +157,7 @@ function physics(now) {
   S.v *= FRICTION;
   if (Math.abs(S.v) < 0.00012) S.v = 0;
   // soft rubber-band clamp at both ends
-  if (S.d < 0) { S.d += (0 - S.d) * RUBBER; S.v *= 0.55; if (S.d > -0.0006) S.d = 0; }
+  if (S.d < OVERTURE_M) { S.d += (OVERTURE_M - S.d) * RUBBER; S.v *= 0.55; if (S.d > OVERTURE_M - 0.0006) S.d = OVERTURE_M; }
   else if (S.d > D_MAX) { S.d += (D_MAX - S.d) * RUBBER; S.v *= 0.55; if (S.d < D_MAX + 0.0006) S.d = D_MAX; }
 }
 
@@ -373,6 +373,242 @@ SHAFTS.forEach((s, si) => {
 
 const cv = document.getElementById('geo');
 const ctx = cv.getContext('2d', { alpha: false });
+
+/* ── OVERTURE ─────────────────────────────────────────────────────────
+   Nine metres of air above the ground. Two currents enter from the left,
+   braid at the confluence and leave as one; the mark draws itself in and
+   parks; at 0 m the section takes over. Depth drives it, not a clock, so
+   scrolling back up replays it exactly.                                */
+const OVERTURE_M = -9.0;
+const VIOLET = [0x6b, 0x4c, 0x9a], VIOLET_HI = [0xa9, 0x8b, 0xd6], CLAY = [0xc4, 0x87, 0x5a];
+const OV = { t: 0, pL: null, pR: null, pO: null, arcLen: 472, el: {} };
+const reduceMotionOv = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+/* 0 at the top of the overture, 1 once the ground is reached */
+const overtureU = (d) => clamp((d - OVERTURE_M) / -OVERTURE_M, 0, 1);
+const band01 = (q, a, b, c, e) => (q < a || q > e ? 0 : q < b ? (q - a) / (b - a) : q < c ? 1 : 1 - (q - c) / (e - c));
+
+function ovEl(id) { return (OV.el[id] || (OV.el[id] = document.getElementById(id))); }
+
+function drawConfluence(d, w, h) {
+  const u = overtureU(d);
+  const fade = band01(u, 0.03, 0.14, 0.94, 1.0);
+  if (fade <= 0.01) return;
+  if(!OV.pL){
+    const mk=()=>{const a=[];for(let i=0;i<30;i++)a.push({t:Math.random(),spd:0.05+Math.random()*0.06,sz:0.6+Math.random()*0.9,ph:Math.random()*6.28});return a;};
+    OV.pL=mk(); OV.pR=mk(); OV.pO=mk();
+  }
+  for(const arr of [OV.pL,OV.pR,OV.pO])
+    for(const pt of arr){ pt.t+=pt.spd*0.016; if(pt.t>1) pt.t-=1; }
+
+  const SQ=Math.min(w,h), bx=(w-SQ)/2, by=(h-SQ)/2, k=SQ/1080;
+  const X=v=>bx+v*SQ, Y=v=>by+v*SQ;
+  const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  const easeOut=t=>1-Math.pow(1-t,3);
+  const band=(q,a1,b1,c1,e1)=>{ if(q<a1||q>e1) return 0; if(q<b1) return (q-a1)/(b1-a1); if(q<c1) return 1; return 1-(q-c1)/(e1-c1); };
+  const p=ease(clamp((u-0.05)/0.70,0,1)), time=OV.t, alpha=fade;
+
+  const CXn=0.46, LY0=0.19, RY0=0.57, CYn=0.38;
+  const approach=easeOut(clamp(p/0.46,0,1));
+  const merge=ease(clamp((p-0.52)/0.20,0,1));
+  const braid=ease(clamp((p-0.60)/0.20,0,1));
+  const gapHalf=lerp(0.05,0,merge);
+  const hx=lerp(0.20,CXn,approach)+0.028*braid;
+  const ly=lerp(LY0,CYn,approach)+0.016*braid;
+  const ry=lerp(RY0,CYn,approach)-0.016*braid;
+  const lhx=hx-gapHalf*(1-merge), rhx=hx+gapHalf*(1-merge);
+  const amp=0.045*(1-merge*0.60);
+
+  const ptL=t=>{t=clamp(t,0,1);const e=t*t*(3-2*t);return {x:X(lhx*e),y:Y(lerp(LY0,ly,e)+Math.sin(t*Math.PI*2.2+time*1.1)*amp*(1-t*0.6))};};
+  const ptR=t=>{t=clamp(t,0,1);const e=t*t*(3-2*t);return {x:X(rhx*e),y:Y(lerp(RY0,ry,e)+Math.sin(t*Math.PI*2.2-time*1.1+1)*amp*(1-t*0.6))};};
+  const ptO=t=>{t=clamp(t,0,1);const e=t*t*(3-2*t);return {x:X(lerp(CXn,1.04,e)),y:Y(lerp(CYn,0.455,e)+Math.sin(t*Math.PI*1.1+time*0.7)*0.018*(1-t*0.4))};};
+
+  // thin at the source, full body mid-river, sharpening to a point at the head
+  const widthAt=t=>easeOut(clamp(t/0.10,0,1))*(1-Math.pow(clamp((t-0.72)/0.28,0,1),1.35)*0.99);
+  const mixc=(c1,c2,t)=>[lerp(c1[0],c2[0],t),lerp(c1[1],c2[1],t),lerp(c1[2],c2[2],t)];
+
+  const river=(fn2,col,hi,a,headT,tailFade,wScale,from)=>{
+    if(a<=0.01) return;
+    const N=64, base=Math.max(3,SQ*0.022)*(wScale||1), tf=tailFade||0;
+    ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.shadowColor=css(col); ctx.shadowBlur=SQ*0.024; ctx.strokeStyle=css(col);
+    for(let i=0;i<N;i++){
+      const t0=(i/N)*headT, t1=((i+1)/N)*headT, q0=fn2(t0), q1=fn2(t1);
+      const uu=((t0+t1)/2)/Math.max(headT,1e-4);
+      const wd=base*widthAt(uu), al=a*(1-tf*Math.pow(uu,1.15))*0.5;
+      if(wd<0.35||al<0.01) continue;
+      if(from) ctx.strokeStyle=css(mixc(from,col,clamp(uu/0.45,0,1)));
+      ctx.globalAlpha=al; ctx.lineWidth=wd;
+      ctx.beginPath(); ctx.moveTo(q0.x,q0.y); ctx.lineTo(q1.x,q1.y); ctx.stroke();
+    }
+    ctx.shadowBlur=SQ*0.009; ctx.strokeStyle=css(hi);
+    for(let i=0;i<N;i++){
+      const t0=(i/N)*headT, t1=((i+1)/N)*headT, q0=fn2(t0), q1=fn2(t1);
+      const uu=((t0+t1)/2)/Math.max(headT,1e-4);
+      const wd=2*k*(wScale||1)*widthAt(uu), al=a*(1-tf*Math.pow(uu,1.15));
+      if(wd<0.2||al<0.01) continue;
+      ctx.globalAlpha=al; ctx.lineWidth=wd;
+      ctx.beginPath(); ctx.moveTo(q0.x,q0.y); ctx.lineTo(q1.x,q1.y); ctx.stroke();
+    }
+    ctx.restore();
+  };
+  const wedges=(parts,fn2,col,a,headT)=>{
+    if(a<=0.01) return;
+    ctx.save(); ctx.fillStyle=css(col); ctx.shadowColor=css(col); ctx.shadowBlur=SQ*0.008;
+    for(const pt of parts){
+      const q=fn2(pt.t*headT), s2=k*(2.2+pt.sz*2.4)*widthAt(pt.t);
+      if(s2<0.4) continue;
+      ctx.globalAlpha=a;
+      ctx.save(); ctx.translate(q.x,q.y); ctx.rotate(pt.ph);
+      ctx.beginPath(); ctx.moveTo(-s2,-s2*0.7); ctx.lineTo(s2*1.4,0); ctx.lineTo(-s2,s2*0.7); ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+    ctx.restore();
+  };
+  const nodes=(parts,fn2,col,hi,a,headT,tailFade)=>{
+    if(a<=0.01) return;
+    const tf=tailFade||0;
+    ctx.save();
+    const pts=parts.map(pt=>fn2(pt.t*headT)).sort((m,n)=>m.x-n.x);
+    ctx.globalAlpha=a*0.4; ctx.strokeStyle=css(col); ctx.lineWidth=1;
+    for(let i=0;i<pts.length-1;i++){
+      const dx=pts[i+1].x-pts[i].x, dy=pts[i+1].y-pts[i].y;
+      if(Math.hypot(dx,dy)<SQ*0.10){ ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[i+1].x,pts[i+1].y); ctx.stroke(); }
+    }
+    ctx.fillStyle=css(hi); ctx.shadowColor=css(col); ctx.shadowBlur=SQ*0.01;
+    for(const pt of parts){
+      const q=fn2(pt.t*headT), r=k*(1.6+pt.sz*2.2)*widthAt(pt.t), al=a*(1-tf*Math.pow(pt.t,1.6));
+      if(r<0.3||al<0.01) continue;
+      ctx.globalAlpha=al;
+      ctx.beginPath(); ctx.arc(q.x,q.y,r,0,6.2832); ctx.fill();
+    }
+    ctx.restore();
+  };
+  // light bridge: soft halo, bright core filament, radial bloom. Not a scribble.
+  const bridge=(x1,y1,x2,y2,a)=>{
+    if(a<=0.01) return;
+    const mx=(x1+x2)/2, my=(y1+y2)/2, swell=Math.sin(time*2.1)*SQ*0.006;
+    ctx.save(); ctx.lineCap='round';
+    ctx.globalAlpha=a*0.35; ctx.strokeStyle=css(VIOLET_HI);
+    ctx.lineWidth=SQ*0.020; ctx.shadowColor=css(VIOLET_HI); ctx.shadowBlur=SQ*0.031;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.quadraticCurveTo(mx,my+swell,x2,y2); ctx.stroke();
+    ctx.globalAlpha=a*0.9; ctx.strokeStyle='#EDE4FA';
+    ctx.lineWidth=Math.max(1.2,2.4*k); ctx.shadowColor=css(VIOLET); ctx.shadowBlur=SQ*0.017;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.quadraticCurveTo(mx,my+swell,x2,y2); ctx.stroke();
+    const r=SQ*0.20*a+1, g=ctx.createRadialGradient(mx,my,0,mx,my,r);
+    g.addColorStop(0,rgba(VIOLET_HI,0.42*a));
+    g.addColorStop(0.45,rgba(VIOLET_HI,0.18*a));
+    g.addColorStop(1,rgba(VIOLET_HI,0));
+    ctx.globalAlpha=1; ctx.shadowBlur=0; ctx.fillStyle=g;
+    ctx.beginPath(); ctx.arc(mx,my,r,0,6.2832); ctx.fill();
+    ctx.restore();
+  };
+
+  const headT=clamp(0.12+easeOut(clamp(p/0.44,0,1))*0.88,0,1);
+  const side=(1-braid*0.18)*alpha;
+  river(ptL,CLAY,[226,181,129],side,headT);
+  river(ptR,VIOLET,VIOLET_HI,side,headT);
+  wedges(OV.pL,ptL,[200,160,106],side,headT);
+  nodes(OV.pR,ptR,VIOLET,VIOLET_HI,side,headT);
+
+  const br=band(p,0.44,0.56,0.72,0.86)*alpha;
+  if(br>0.01){ const a1=ptL(headT), a2=ptR(headT); bridge(a1.x,a1.y,a2.x,a2.y,br); }
+
+  const out=clamp((p-0.70)/0.18,0,1)*alpha;
+  if(out>0.01){
+    const oT=easeOut(clamp((p-0.70)/0.24,0,1));
+    river(ptO,VIOLET,VIOLET_HI,out,oT,0.90,0.95,CLAY);
+    nodes(OV.pO,ptO,VIOLET_HI,VIOLET_HI,out*0.8,oT,0.90);
+  }
+
+  const glow=Math.max(out*0.9,br*0.5);
+  if(glow>0.01){
+    const gx2=X(CXn), gy2=Y(CYn), r=SQ*0.24;
+    const g=ctx.createRadialGradient(gx2,gy2,0,gx2,gy2,r);
+    g.addColorStop(0,rgba(VIOLET_HI,0.26*glow)); g.addColorStop(1,rgba(VIOLET_HI,0));
+    ctx.save(); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(gx2,gy2,r,0,6.2832); ctx.fill(); ctx.restore();
+  }
+}
+
+/* The DOM half: arcs draw, riders run, the mark lights and parks beside
+   the masthead, the headline resolves and hands off to the section. */
+function overtureDom(d) {
+  const root = ovEl('overture'); if (!root) return;
+  const u = overtureU(d);
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const far = d > 1.2;
+  root.style.display = far ? 'none' : 'block';
+  if (far) return;
+
+  const park = u >= 0.84;
+  const draw = park ? ease(clamp((u - 0.855) / 0.10, 0, 1)) : ease(clamp((u - 0.03) / 0.20, 0, 1));
+  const arcFade = park ? clamp((u - 0.965) / 0.035, 0, 1) : clamp((u - 0.24) / 0.07, 0, 1);
+  const off = OV.arcLen * (1 - draw), arcOp = (1 - arcFade).toFixed(3);
+  for (const id of ['ov-arc-c', 'ov-arc-v']) {
+    const a = ovEl(id); a.style.strokeDashoffset = off.toFixed(1); a.style.opacity = arcOp;
+  }
+  const riderVis = (draw > 0.02 && draw < 0.97 ? 1 : 0) * (1 - arcFade);
+  for (const [rid, aid] of [['ov-rider-c', 'ov-arc-c'], ['ov-rider-v', 'ov-arc-v']]) {
+    const rider = ovEl(rid), arc = ovEl(aid);
+    if (riderVis <= 0.001) { rider.style.opacity = '0'; continue; }
+    try {
+      const q = arc.getPointAtLength(OV.arcLen * clamp(draw, 0, 1));
+      rider.setAttribute('cx', q.x.toFixed(1)); rider.setAttribute('cy', q.y.toFixed(1));
+    } catch (e) {}
+    rider.style.opacity = riderVis.toFixed(3);
+  }
+
+  const pulse = park ? Math.sin(clamp((u - 0.90) / 0.10, 0, 1) * Math.PI) : Math.sin(clamp((u - 0.06) / 0.22, 0, 1) * Math.PI);
+  const markP = park ? clamp((u - 0.905) / 0.05, 0, 1) : 1;
+  const mark = ovEl('ov-mark');
+  mark.style.opacity = markP.toFixed(3);
+  mark.style.transform = 'scale(' + (0.9 + 0.1 * ease(markP)).toFixed(3) + ')';
+  mark.style.filter = 'drop-shadow(0 0 ' + (8 + 16 * pulse).toFixed(1) + 'px rgba(169,139,214,' + (0.45 + 0.4 * pulse).toFixed(2) + '))';
+
+  const bloomP = park ? Math.max(band01(u, 0.88, 0.955, 0.985, 1.0) * 0.6, 0.34)
+                      : Math.max(band01(u, 0.15, 0.26, 0.34, 0.44) * 0.6, 0.30);
+  const bloom = ovEl('ov-bloom');
+  bloom.style.opacity = bloomP.toFixed(3);
+  bloom.style.transform = 'scale(' + (0.85 + 0.2 * ease(clamp((u - 0.05) / 0.85, 0, 1))).toFixed(3) + ')';
+
+  ovEl('ov-eyebrow').style.opacity = park ? '0' : (1 - clamp((u - 0.26) / 0.10, 0, 1)).toFixed(3);
+
+  const headIn = clamp((u - 0.68) / 0.11, 0, 1), headOut = clamp((u - 0.90) / 0.08, 0, 1);
+  const res = ovEl('ov-resolve');
+  res.style.opacity = (headIn * (1 - headOut)).toFixed(3);
+  res.style.transform = 'translateY(' + ((1 - headIn) * 14).toFixed(1) + 'px)';
+  ovEl('ov-wordmark').style.opacity = (clamp((u - 0.77) / 0.09, 0, 1) * (1 - headOut)).toFixed(3);
+  ovEl('ov-cue').style.opacity = (1 - clamp(u / 0.10, 0, 1)).toFixed(3);
+
+  /* the instruments belong to the survey, not to the overture: they arrive
+     as the ground does, so the opening reads as a plate and not a dashboard */
+  document.documentElement.style.setProperty('--chrome', clamp((u - 0.86) / 0.14, 0, 1).toFixed(3));
+  document.documentElement.style.setProperty('--chrome-events', u > 0.94 ? 'auto' : 'none');
+
+  placeOvMark(u);
+}
+
+/* the mark travels from the centre of the confluence into the masthead */
+function placeOvMark(u) {
+  const L = ovEl('ov-logo'); if (!L) return;
+  const base = L.offsetWidth || 150;
+  const ax = S.w * 0.5, ay = S.h * 0.38;
+  let tx = ax, ty = S.h * 0.9, sc = 0.4;
+  const slot = document.querySelector('[data-mark-slot]');
+  if (slot) {
+    const r = slot.getBoundingClientRect();
+    if (r.width > 2) { tx = r.left + r.width / 2; ty = r.top + r.height / 2; sc = r.height / base; }
+  }
+  const tr = ((t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2))(clamp((u - 0.84) / 0.16, 0, 1));
+  const ox = tx, oy = ty - S.h * 0.26, os = sc * 1.55;
+  const x = u < 0.5 ? ax : lerp(ox, tx, tr), y = u < 0.5 ? ay : lerp(oy, ty, tr), s2 = u < 0.5 ? 1 : lerp(os, sc, tr);
+  L.style.left = '0px'; L.style.top = '0px';
+  L.style.transform = 'translate(' + (x - base / 2).toFixed(1) + 'px,' + (y - base / 2).toFixed(1) + 'px) scale(' + s2.toFixed(4) + ')';
+  /* the seal appears for its flight and dissolves as it arrives — the
+     masthead carries its own mark, so two marks never sit on one spot */
+  const inn = clamp((u - 0.83) / 0.04, 0, 1), out = clamp((u - 0.94) / 0.06, 0, 1);
+  L.style.opacity = (inn * (1 - out)).toFixed(3);
+}
+
 
 function resize() {
   S.w = innerWidth; S.h = innerHeight;
@@ -632,6 +868,9 @@ function paint() {
   vg.addColorStop(1, `rgba(6,5,4,${lerp(0.16, 0.82, 1 - L)})`);
   ctx.fillStyle = vg;
   ctx.fillRect(0, 0, w, h);
+
+  // the overture rides above the ground, on the same canvas
+  if (S.d < 1.2) drawConfluence(S.d, w, h);
 }
 
 /* ── 6. DOM: bands, ruler ticks, readout ──────────────────────────── */
@@ -1016,11 +1255,13 @@ let raf = null;
 function frame(now) {
   raf = requestAnimationFrame(frame);
   if (S.mode !== 'section') return;
+  OV.t = (now || 0) / 1000;
   physics(now);
   S.L = lightness(clamp(S.d, 0, D_MAX));
   S.ink = inkFor(S.L);
   S.adapt = adaptation(clamp(S.d, 0, D_MAX));
   updateDom();
+  overtureDom(S.d);
   if (!document.hidden) paint();
 }
 
@@ -1041,6 +1282,11 @@ function placeDocBtn() {
 addEventListener('resize', placeDocBtn);
 
 relocateEntries();
+/* open at the top of the overture; a reduced-motion visitor starts on the
+   ground, past the animation, exactly as the section's own bands do */
+S.d = S.target = reduceMotionOv.matches ? 0 : OVERTURE_M;
+try { const arc = document.getElementById('ov-arc-c'); if (arc) OV.arcLen = arc.getTotalLength(); } catch (e) {}
+
 resize();
 placeDocBtn();
 document.fonts && document.fonts.ready.then(() => { resize(); placeDocBtn(); });
