@@ -378,6 +378,7 @@ class Instrument {
     window.addEventListener('pointerup',this.onUp);
     window.addEventListener('pointercancel',this.onUp);
     window.addEventListener('keydown',this.onKey);
+    window.addEventListener('popstate',this.onPop);
   }
   unbind(){
     if(!this.bound) return;
@@ -389,6 +390,7 @@ class Instrument {
     window.removeEventListener('pointerup',this.onUp);
     window.removeEventListener('pointercancel',this.onUp);
     window.removeEventListener('keydown',this.onKey);
+    window.removeEventListener('popstate',this.onPop);
   }
   start(){ cancelAnimationFrame(this.raf); this.prev=0; this.raf=requestAnimationFrame(this.rafTick); }
   rafTick = t => { this.usingRaf=true; this.tick(t); };
@@ -538,8 +540,12 @@ class Instrument {
     e.preventDefault(); this.clamp(); this.jump();
   };
 
+  onPop = () => { if(this.boreOpen) this.closeBore(true); };
+
   onShaftClick = e => {
     if(this.moved>6) return;
+    // a product link on a row goes to the product, not to its panel
+    if(e.target.closest('a')) return;
     const gb=e.target.closest('[data-goto-block]');
     if(gb){ const b=this.blockById(gb.dataset.gotoBlock); if(b){ this.target=b._mid; this.clamp(); this.jump(); } return; }
     const g=e.target.closest('[data-goto]');
@@ -553,8 +559,18 @@ class Instrument {
       p.style.display=p.getAttribute('data-panel')===id?'flex':'none';
     });
     this.boreOpen=id; this.dragging=false;
+    /* a panel is a place, so give it a history entry: the browser's Back — and
+       the mouse's back button — closes the panel instead of leaving the site */
+    try{ history.pushState({tigrisBore:id},''); }catch(err){}
     this.boreRef.current.style.opacity='1';
     this.boreRef.current.style.pointerEvents='auto';
+    if(!this.boreBackdropBound){
+      this.boreBackdropBound=true;
+      this.boreRef.current.addEventListener('click',ev=>{
+        // the panel fills the layer, so "outside" means its own padding
+        if(ev.target===this.boreRef.current||ev.target.hasAttribute('data-panel')) this.closeBore();
+      });
+    }
   }
   toSurface = () => {
     if(document.body.dataset.mode==='doc'){ window.scrollTo(0,0); return; }
@@ -609,9 +625,11 @@ class Instrument {
     return wrap;
   }
 
-  closeBore = () => {
+  closeBore = (fromPop) => {
     if(!this.boreOpen) return;
     this.boreOpen=null;
+    // keep the history stack level: only pop when the user didn't already
+    if(fromPop!==true){ try{ if(history.state&&history.state.tigrisBore) history.back(); }catch(err){} }
     this.boreRef.current.style.opacity='0';
     this.boreRef.current.style.pointerEvents='none';
   };

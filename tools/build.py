@@ -70,6 +70,19 @@ def glyph(p, colour):
     return f'<span data-status="{s}" style="{base}{st}"></span>'
 
 
+def domain(p):
+    """The product's own site, shown on the row so a visitor can go straight
+    there. Products without a site keep the bare arrow into their panel."""
+    if not p.get("url"):
+        return f'<span style="{MONO}font-size:12px;color:#6B6558;">→</span>'
+    host = p["url"].replace("https://", "").replace("http://", "").rstrip("/")
+    return (
+        f'<a href="{e(p["url"])}" target="_blank" rel="noopener" data-out '
+        f'style="{MONO}font-size:10px;letter-spacing:.14em;color:{e(p["colour"])};text-decoration:none;'
+        f'border-bottom:1px solid currentColor;padding-bottom:1px;white-space:nowrap;">{e(host)} →</a>'
+    )
+
+
 def render_deep_rows(products):
     rows = []
     n = len(products)
@@ -88,7 +101,7 @@ def render_deep_rows(products):
             f'          <div style="flex:1;"><div style="font-weight:300;font-size:clamp(26px,3.2vw,40px);">{e(p["name"])}</div>'
             f'<p style="max-width:520px;font-size:14px;line-height:1.55;margin-top:6px;">{e(p["lead"])}</p></div>\n'
             f'          <span style="{MONO}font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#6B6558;">{e(p["industry"])}{st}</span>\n'
-            f'          <span style="{MONO}font-size:12px;color:#6B6558;">→</span>\n'
+            f"          {domain(p)}\n"
             f"        </div>"
         )
     return "\n".join(rows)
@@ -111,7 +124,7 @@ def render_surface_rows(products):
             f'{glyph(p, p["colour"])}<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:{e(p["colour"])};"></span>{canal(p)}</span>\n'
             f'            <span style="font-weight:300;font-size:22px;flex:1;line-height:1;">{e(p["name"])}</span>\n'
             f'            <span style="{MONO}font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:#6B6558;">{e(p["industry"])}{st}</span>\n'
-            f'            <span style="{MONO}font-size:10px;color:#6B6558;">→</span>\n'
+            f"            {domain(p)}\n"
             f"          </div>"
         )
     if len(products) > SURFACE_CAP:
