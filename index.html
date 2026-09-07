@@ -25,6 +25,12 @@
   a:hover{color:#A98BD6;}
   ::selection{background:#6B4C9A;color:#F2EFE7;}
   @keyframes cueBob{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(7px);opacity:1}}
+  /* Tech Labs tucks up against the Tigris baseline only where the headline is wide
+     enough that the mono line ends before the descender of the g. Narrower than that
+     the headline hits its 62px floor while the mono line holds its 12px floor, so the
+     tuck would draw the g straight through the word — there it sits clear below. */
+  [data-wordmark-sub]{margin-top:clamp(9px,1.82vw,27px);}
+  @media (min-width:1000px){[data-wordmark-sub]{margin-top:calc(-1 * clamp(18px,2.4vw,42px));}}
   body[data-mode="doc"]{overflow:auto;height:auto;background:#F2EFE7;color:#14120F;}
   html[data-mode="doc"]{overflow:auto;height:auto;}
   body[data-mode="doc"] [data-ref="rootRef"]{display:none;}
@@ -142,7 +148,7 @@
           <span>Sounding 01 · two currents, one confluence</span>
         </div>
         <h1 style="font-weight:200;font-size:clamp(62px,13vw,196px);line-height:.9;letter-spacing:-.01em;">Tigr<em style="font-style:italic;font-weight:200;color:#6B4C9A;">i</em>s<span data-markslot style="display:inline-block;width:.72em;height:.72em;margin-left:.24em;vertical-align:-.05em;"></span></h1>
-        <div style="margin:calc(-1 * clamp(18px,2.4vw,42px)) 0 clamp(10px,1.4vh,20px) -0.14em;position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-size:clamp(12px,1.25vw,17px);letter-spacing:.34em;text-transform:uppercase;color:#6B6558;">Tech Labs</div>
+        <div data-wordmark-sub style="margin-bottom:clamp(10px,1.4vh,20px);margin-left:-0.14em;position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-size:clamp(12px,1.25vw,17px);letter-spacing:.34em;text-transform:uppercase;color:#6B6558;">Tech Labs</div>
         <div data-rule style="height:1px;background:#14120F;margin:34px 0 22px;max-width:460px;"></div>
         <p style="max-width:520px;font-size:17px;line-height:1.75;color:#3A362E;">An AI-native product holding company, named for the plain that two rivers built. We build products for single industries and go deeper into each one instead of wider across more. There is only how far down you are willing to go.</p>
         <div data-surface-rows data-row style="max-width:620px;margin-top:22px;border-bottom:1px solid;">
